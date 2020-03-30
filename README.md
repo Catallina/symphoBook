@@ -9,7 +9,7 @@ Ionic:
 				
 Packages: 
 
-		angular: https://www.npmjs.com/package/@ionic/angular
+	angular: https://www.npmjs.com/package/@ionic/angular
 
 More Info: 
   https://github.com/ionic-team/ionic
