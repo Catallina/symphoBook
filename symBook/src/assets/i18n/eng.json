@@ -1,0 +1,8 @@
+{
+    "authPage": {
+        "library": "Library",
+        "wishlist": "Wishlist",
+        "login": "Login",
+        "logout": "Logout"
+    }
+}
