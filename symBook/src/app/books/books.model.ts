@@ -1,12 +1,10 @@
-export class Book {
+export class BookModel {
   id: string;
   title: string;
   description: string;
   imageUrl: string;
-  price: number;
-  availableFrom: Date;
-  availableTo: Date;
-  userId: string;
+  author: string;
+  date: Date;
 
   constructor(values: Object = {}) {
     Object.assign(this, values);

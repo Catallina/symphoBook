@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { takeWhile } from 'rxjs/operators';
+
+import { BookDetailsFacade } from '@syb/books/store/book-details/book-details.facade';
 
 @Component({
   selector: 'syb-places',
@@ -6,10 +9,16 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./books.page.scss'],
 })
 export class BooksPage implements OnInit {
+  public isAlive: boolean = false;
 
-  constructor() { }
+  constructor(
+    private bookFacade: BookDetailsFacade,
+  ) { }
 
   ngOnInit() {
+    this.isAlive = true;
+    this.bookFacade.getBookDetails();
+
   }
 
 }

@@ -1,5 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { takeWhile } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
 
 import {
@@ -9,11 +10,13 @@ import {
   LoadingController
 } from '@ionic/angular';
 
+import { BookDetailsFacade } from '@syb/books/store/book-details/book-details.facade';
+
 import { AuthService } from '@syb/auth/auth.service';
 import { BooksService } from '@syb/books/books.service';
 import { WishlistService } from '@syb/wishlist/wishlist.service';
 
-import { Book } from '@syb/books/books.model';
+import { BookModel } from '@syb/books/books.model';
 import { CreateWishlistComponent } from '@syb/wishlist/create-wishlist/create-wishlist.component';
 
 @Component({
@@ -22,7 +25,9 @@ import { CreateWishlistComponent } from '@syb/wishlist/create-wishlist/create-wi
   styleUrls: ['./book-detail.page.scss']
 })
 export class BookDetailPage implements OnInit, OnDestroy {
-  book: Book;
+  public isAlive: boolean = false;
+
+  book: BookModel;
   isBookable = false;
   private bookSub: Subscription;
 
@@ -35,21 +40,27 @@ export class BookDetailPage implements OnInit, OnDestroy {
     private booksService: BooksService,
     private route: ActivatedRoute,
     private wishlistService: WishlistService,
+    private bookFacade: BookDetailsFacade,
   ) {}
 
   ngOnInit() {
-    this.route.paramMap.subscribe(paramMap => {
-      if (!paramMap.has('bookId')) {
-        this.navCtrl.navigateBack('/books/tabs/discover');
-        return;
-      }
-      this.bookSub = this.booksService
-        .getBook(paramMap.get('bookId'))
-        .subscribe(book => {
-          this.book = book;
-          this.isBookable = book.userId !== this.authService.userId;
-        });
+    this.isAlive = true;
+
+    this.bookFacade.getStoreBookDetails$().pipe(takeWhile(() => this.isAlive)).subscribe((book) => {
+      console.log(book);
     });
+    // this.route.paramMap.subscribe(paramMap => {
+    //   if (!paramMap.has('bookId')) {
+    //     this.navCtrl.navigateBack('/books/tabs/discover');
+    //     return;
+    //   }
+    //   this.bookSub = this.booksService
+    //     .getBook(paramMap.get('bookId'))
+    //     .subscribe(book => {
+    //       this.book = book;
+    //       this.isBookable = book.userId !== this.authService.userId;
+    //     });
+    // });
   }
 
   onWishBook() {
@@ -118,8 +129,6 @@ export class BookDetailPage implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    if (this.bookSub) {
-      this.bookSub.unsubscribe();
-    }
+    this.isAlive = false;
   }
 }

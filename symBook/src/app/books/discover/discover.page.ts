@@ -5,8 +5,9 @@ import { MenuController } from '@ionic/angular';
 import { SegmentChangeEventDetail } from '@ionic/core';
 
 import { AuthService } from '@syb/auth/auth.service';
-import { Book } from '@syb/books/books.model';
-import { BooksService } from '@syb/books/books.service';
+import { BookModel } from '@syb/books/books.model';
+import { BookDetailsFacade } from '@syb/books/store/book-details/book-details.facade';
+import { takeWhile } from 'rxjs/operators';
 
 @Component({
   selector: 'syb-discover',
@@ -14,40 +15,50 @@ import { BooksService } from '@syb/books/books.service';
   styleUrls: ['./discover.page.scss']
 })
 export class DiscoverPage implements OnInit, OnDestroy {
-  loadedBooks: Book[];
-  listedLoadedBooks: Book[];
-  relevantBooks: Book[];
+  public isAlive: boolean = false;
+
+  public bookDetails: BookModel[];
+
+  loadedBooks: BookModel[];
+  listedLoadedBooks: BookModel[];
+  relevantBooks: BookModel[];
   private BooksSub: Subscription;
 
   constructor(
-    private booksService: BooksService,
+    private bookFacade: BookDetailsFacade,
     private menuCtrl: MenuController,
     private authService: AuthService
   ) {}
 
   ngOnInit() {
-    this.BooksSub = this.booksService.Books.subscribe(Books => {
-      this.loadedBooks = Books;
-      this.relevantBooks = this.loadedBooks;
-      this.listedLoadedBooks = this.relevantBooks.slice(1);
+
+    this.isAlive = true;
+
+    this.bookFacade.getStoreBookDetails$().pipe(takeWhile(() => this.isAlive)).subscribe((book: BookModel[]) => {
+      this.bookDetails = book;
     });
+    // this.BooksSub = this.booksService.Books.subscribe(Books => {
+    //   this.loadedBooks = Books;
+    //   this.relevantBooks = this.loadedBooks;
+    //   this.listedLoadedBooks = this.relevantBooks.slice(1);
+    // });
   }
 
   onOpenMenu() {
     this.menuCtrl.toggle();
   }
 
-  onFilterUpdate(event: CustomEvent<SegmentChangeEventDetail>) {
-    if (event.detail.value === 'all') {
-      this.relevantBooks = this.loadedBooks;
-      this.listedLoadedBooks = this.relevantBooks.slice(1);
-    } else {
-      this.relevantBooks = this.loadedBooks.filter(
-        place => place.userId !== this.authService.userId
-      );
-      this.listedLoadedBooks = this.relevantBooks.slice(1);
-    }
-  }
+  // onFilterUpdate(event: CustomEvent<SegmentChangeEventDetail>) {
+  //   if (event.detail.value === 'all') {
+  //     this.relevantBooks = this.loadedBooks;
+  //     this.listedLoadedBooks = this.relevantBooks.slice(1);
+  //   } else {
+  //     this.relevantBooks = this.loadedBooks.filter(
+  //       place => place.userId !== this.authService.userId
+  //     );
+  //     this.listedLoadedBooks = this.relevantBooks.slice(1);
+  //   }
+  // }
 
   ngOnDestroy() {
     if (this.BooksSub) {

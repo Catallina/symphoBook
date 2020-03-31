@@ -1,0 +1,32 @@
+{
+    "data": {
+        "attributes": {
+            "books": [
+                {
+                    "id": "1",
+                    "title": "Broken Stars: Contemporary Chinese Science Fiction in Translation",
+                    "description": "Sixteen short stories from China's groundbreaking science fiction writers, edited and translated by award-winning author Ken Liu.",
+                    "imageUrl": "https://images-na.ssl-images-amazon.com/images/I/4173%2BqsXLDL._SX322_BO1,204,203,200_.jpg",
+                    "author": "Ken Liu",
+                    "date": "12/02/2019"
+                },
+                {
+                    "id": "2",
+                    "title": "Waste Tide",
+                    "description": "Award-winning author Chen Qiufan's Waste Tide is a thought-provoking vision of the future.",
+                    "imageUrl": "https://images-na.ssl-images-amazon.com/images/I/5147TzBKyIL.jpg",
+                    "author": "Chen Qiufan",
+                    "date": "12/02/2019"
+                },
+                {
+                    "id": "3",
+                    "title": "Miranda in Milan",
+                    "description": "With Miranda in Milan, debut author Katharine Duckett reimagines the consequences of Shakespeare’s The Tempest, casting Miranda into a Milanese pit of vipers and building a queer love story that lifts off the page in whirlwinds of feeling.",
+                    "imageUrl": "https://images-na.ssl-images-amazon.com/images/I/61iYPvyiK-L.jpg",
+                    "author": " Katharine Duckett",
+                    "date": "12/02/2019"
+                }
+            ]
+        }  
+    }
+}

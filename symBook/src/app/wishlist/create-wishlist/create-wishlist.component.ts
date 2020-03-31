@@ -2,7 +2,7 @@ import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { NgForm } from '@angular/forms';
 
-import { Book } from './../../books/books.model';
+import { BookModel } from '@syb/books/books.model';
 
 @Component({
   selector: 'app-create-booking',
@@ -10,7 +10,7 @@ import { Book } from './../../books/books.model';
   styleUrls: ['./create-wishlist.component.scss']
 })
 export class CreateWishlistComponent implements OnInit {
-  @Input() selectedBook: Book;
+  @Input() selectedBook: BookModel;
   @Input() selectedMode: 'select' | 'random';
   @ViewChild('f', { static: false }) form: NgForm;
   startDate: string;
@@ -19,25 +19,25 @@ export class CreateWishlistComponent implements OnInit {
   constructor(private modalCtrl: ModalController) {}
 
   ngOnInit() {
-    const availableFrom = new Date(this.selectedBook.availableFrom);
-    const availableTo = new Date(this.selectedBook.availableTo);
-    if (this.selectedMode === 'random') {
-      this.startDate = new Date(
-        availableFrom.getTime() +
-          Math.random() *
-            (availableTo.getTime() -
-              7 * 24 * 60 * 60 * 1000 -
-              availableFrom.getTime())
-      ).toISOString();
+    // const availableFrom = new Date(this.selectedBook.availableFrom);
+    // const availableTo = new Date(this.selectedBook.availableTo);
+    // if (this.selectedMode === 'random') {
+    //   this.startDate = new Date(
+    //     availableFrom.getTime() +
+    //       Math.random() *
+    //         (availableTo.getTime() -
+    //           7 * 24 * 60 * 60 * 1000 -
+    //           availableFrom.getTime())
+    //   ).toISOString();
 
-      this.endDate = new Date(
-        new Date(this.startDate).getTime() +
-          Math.random() *
-            (new Date(this.startDate).getTime() +
-              6 * 24 * 60 * 60 * 1000 -
-              new Date(this.startDate).getTime())
-      ).toISOString();
-    }
+    //   this.endDate = new Date(
+    //     new Date(this.startDate).getTime() +
+    //       Math.random() *
+    //         (new Date(this.startDate).getTime() +
+    //           6 * 24 * 60 * 60 * 1000 -
+    //           new Date(this.startDate).getTime())
+    //   ).toISOString();
+    // }
   }
 
   onCancel() {

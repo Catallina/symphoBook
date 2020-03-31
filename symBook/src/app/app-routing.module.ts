@@ -5,16 +5,20 @@ import { AuthGuard } from '@syb/auth/auth.guard';
 
 const routes: Routes = [
   { path: '', redirectTo: 'books', pathMatch: 'full' },
-  { path: 'auth', loadChildren: () => import('./auth/auth.module').then(m => m.AuthPageModule) },
+  { path: 'auth', loadChildren: () => import('@syb/auth/auth.module').then(m => m.AuthPageModule) },
   {
     path: 'books',
-    loadChildren: () => import('./books/books.module').then(m => m.PlacesPageModule),
+    loadChildren: () => import('@syb/books/books.module').then(m => m.PlacesPageModule),
     canLoad: [AuthGuard]
   },
   {
     path: 'wishlist',
-    loadChildren: () => import('./wishlist/wishlist.module').then(m => m.WishlistPageModule),
+    loadChildren: () => import('@syb/wishlist/wishlist.module').then(m => m.WishlistPageModule),
     canLoad: [AuthGuard]
+  },
+  {
+    path: '**',
+    loadChildren: () => import('@syb/not-found/not-found.module').then(m => m.NotFoundModule),
   },
 ];
 

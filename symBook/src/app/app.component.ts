@@ -11,7 +11,7 @@ import { AuthService } from '@syb/auth/auth.service';
   selector: 'syb-root',
   templateUrl: 'app.component.html'
 })
-export class AppComponent implements OnInit{
+export class AppComponent implements OnInit {
 
   constructor(
     private platform: Platform,
