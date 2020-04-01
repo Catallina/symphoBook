@@ -1,9 +1,16 @@
-<ion-header>
+<ion-header translucent>
   <ion-toolbar>
     <ion-buttons slot="start">
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
-    <ion-title>Discover Books</ion-title>
+    <ion-row class="ion-justify-content-between">
+      <ion-col>
+        <ion-title>Discover Books</ion-title>
+      </ion-col>
+      <ion-col class="ion-text-end ion-margin-end">
+        <ion-icon class="ion-search" name="search-outline"></ion-icon>
+      </ion-col>
+    </ion-row>
   </ion-toolbar>
 </ion-header>
 
@@ -57,18 +64,18 @@
           [items]="bookDetails"
           approxItemHeight="70px"
         >
-          <ion-item
+          <ion-card
             detail
             *virtualItem="let book"
           >
-            <ion-thumbnail slot="start">
-              <ion-img [src]="book.imageUrl"></ion-img>
-            </ion-thumbnail>
-            <ion-label>
-              <h2>{{ book.title }}</h2>
-              <p>{{ book.description }}</p>
-            </ion-label>
-          </ion-item>
+          <ion-img [src]="book.imageUrl" class="ion-padding-top"></ion-img>
+            <ion-card-header>
+              <ion-card-title>{{ book.title }}</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+              {{ book.description }}
+            </ion-card-content>
+          </ion-card>
         </ion-virtual-scroll>
       </ion-col>
     </ion-row>
