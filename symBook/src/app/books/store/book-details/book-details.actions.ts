@@ -1,31 +1,40 @@
 import { Action } from '@ngrx/store';
 
-import { BookModel } from '@syb/books/books.model';
+import { BookGroupModel } from '@syb/books/models/book-group.model';
+import { BookListModel } from '@syb/books/models/book-list.model';
 
 export enum BookDetailsActionType {
-  GET_BOOK_DETAILS = '[BOOK][BookDetails] get book details',
-  GET_BOOK_DETAILS_SUCCESS = '[BOOK][BookDetails] get book details success',
-  GET_BOOK_DETAILS_ERROR = '[BOOK][BookDetails] get book details error',
+  GET_BOOK_GROUP = '[BOOK][BookDetails] get book group',
+  GET_BOOK_GROUP_SUCCESS = '[BOOK][BookDetails] get book group success',
+  GET_BOOK_GROUP_ERROR = '[BOOK][BookDetails] get book group error',
+
+  SELECTED_BOOK = '[BOOK][BookDetails] selected book',
 
   RESET = '[BOOK][BookDetails] reset'
 }
 
-export class GetBookDetailsAction implements Action {
-  readonly type = BookDetailsActionType.GET_BOOK_DETAILS;
+export class GetBookGroupAction implements Action {
+  readonly type = BookDetailsActionType.GET_BOOK_GROUP;
 
   constructor() {}
 }
 
-export class GetBookDetailsSuccessAction implements Action {
-  readonly type = BookDetailsActionType.GET_BOOK_DETAILS_SUCCESS;
+export class GetBookGroupSuccessAction implements Action {
+  readonly type = BookDetailsActionType.GET_BOOK_GROUP_SUCCESS;
 
-  constructor(public payload: { bookDetails: BookModel[] }) {}
+  constructor(public payload: { bookGroup: BookGroupModel[] }) {}
 }
 
-export class GetBookDetailsErrorAction implements Action {
-  readonly type = BookDetailsActionType.GET_BOOK_DETAILS_ERROR;
+export class GetBookGroupErrorAction implements Action {
+  readonly type = BookDetailsActionType.GET_BOOK_GROUP_ERROR;
 
   constructor() {}
+}
+
+export class SelectedBookAction implements Action {
+  readonly type = BookDetailsActionType.SELECTED_BOOK;
+
+  constructor(public payload: { bookDetails: BookListModel }) {}
 }
 
 export class ResetAction implements Action {
@@ -35,8 +44,10 @@ export class ResetAction implements Action {
 }
 
 export type BookDetailsActions =
-  | GetBookDetailsAction
-  | GetBookDetailsSuccessAction
-  | GetBookDetailsErrorAction
+  | GetBookGroupAction
+  | GetBookGroupSuccessAction
+  | GetBookGroupErrorAction
+
+  | SelectedBookAction
 
   | ResetAction;

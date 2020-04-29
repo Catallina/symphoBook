@@ -13,11 +13,20 @@ const routes: Routes = [
         children: [
           {
             path: '',
-            loadChildren: () => import('../books/discover/discover.module').then(m => m.DiscoverPageModule)
+            loadChildren: () => import('@syb/books/discover/discover.module').then(m => m.DiscoverPageModule)
           },
           {
             path: ':bookId',
-            loadChildren: () => import('../books/discover/book-detail/book-detail.module').then(m => m.BookDetailPageModule)
+            loadChildren: () => import('@syb/books/discover/book-detail/book-detail.module').then(m => m.BookDetailPageModule)
+          }
+        ]
+      },
+      {
+        path: 'new-book',
+        children: [
+          {
+            path: '',
+            loadChildren: () => import('@syb/books/new-book/new-book.module').then(m => m.NewBookPageModule)
           }
         ]
       },
@@ -32,7 +41,7 @@ const routes: Routes = [
     path: '',
     redirectTo: '/books/tabs/discover',
     pathMatch: 'full'
-  }
+  },
 ];
 
 @NgModule({

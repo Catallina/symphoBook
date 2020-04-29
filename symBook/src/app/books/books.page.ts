@@ -17,7 +17,7 @@ export class BooksPage implements OnInit {
 
   ngOnInit() {
     this.isAlive = true;
-    this.bookFacade.getBookDetails();
+    this.bookFacade.getBookGroup();
 
   }
 

@@ -17,6 +17,14 @@ const routes: Routes = [
     canLoad: [AuthGuard]
   },
   {
+    path: 'profile',
+    loadChildren: () => import('@syb/profile/profile.module').then( m => m.ProfilePageModule)
+  },
+  {
+    path: 'books-journal',
+    loadChildren: () => import('@syb/books-journal/books-journal.module').then( m => m.BooksJournalPageModule)
+  },
+  {
     path: '**',
     loadChildren: () => import('@syb/not-found/not-found.module').then(m => m.NotFoundModule),
   },

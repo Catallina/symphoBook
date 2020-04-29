@@ -10,7 +10,12 @@ export const busyState = createSelector(
     (state: BookState) => state.bookDetails.busy
 );
 
-export const bookDetailsState = createSelector(
+export const bookGroupState = createSelector(
     bookStore,
-    (state: BookState) => state.bookDetails.bookDetails
+    (state: BookState) => state.bookDetails.bookGroup
+);
+
+export const selectedBookIdState = createSelector(
+    bookStore,
+    (state: BookState) => state.bookDetails.selectedBook
 );

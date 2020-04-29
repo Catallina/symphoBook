@@ -1,7 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { takeWhile } from 'rxjs/operators';
-import { Subscription } from 'rxjs';
 
 import {
   NavController,
@@ -12,11 +11,9 @@ import {
 
 import { BookDetailsFacade } from '@syb/books/store/book-details/book-details.facade';
 
-import { AuthService } from '@syb/auth/auth.service';
-import { BooksService } from '@syb/books/books.service';
 import { WishlistService } from '@syb/wishlist/wishlist.service';
-
-import { BookModel } from '@syb/books/books.model';
+import { BookListModel } from '@syb/books/models/book-list.model';
+import { BookGroupModel } from '@syb/books/models/book-group.model';
 import { CreateWishlistComponent } from '@syb/wishlist/create-wishlist/create-wishlist.component';
 
 @Component({
@@ -27,17 +24,10 @@ import { CreateWishlistComponent } from '@syb/wishlist/create-wishlist/create-wi
 export class BookDetailPage implements OnInit, OnDestroy {
   public isAlive: boolean = false;
 
-  book: BookModel;
-  isBookable = false;
-  private bookSub: Subscription;
+  public bookDetails: BookListModel;
 
   constructor(
-    private actionSheetCtrl: ActionSheetController,
-    private authService: AuthService,
-    private loadingCtrl: LoadingController,
-    private modalCtrl: ModalController,
     private navCtrl: NavController,
-    private booksService: BooksService,
     private route: ActivatedRoute,
     private wishlistService: WishlistService,
     private bookFacade: BookDetailsFacade,
@@ -46,86 +36,10 @@ export class BookDetailPage implements OnInit, OnDestroy {
   ngOnInit() {
     this.isAlive = true;
 
-    this.bookFacade.getStoreBookDetails$().pipe(takeWhile(() => this.isAlive)).subscribe((book) => {
-      console.log(book);
+    this.bookFacade.getStoreBook$().pipe(takeWhile(() => this.isAlive)).subscribe((book: BookListModel) => {
+      this.bookDetails = book;
+      console.warn(book);
     });
-    // this.route.paramMap.subscribe(paramMap => {
-    //   if (!paramMap.has('bookId')) {
-    //     this.navCtrl.navigateBack('/books/tabs/discover');
-    //     return;
-    //   }
-    //   this.bookSub = this.booksService
-    //     .getBook(paramMap.get('bookId'))
-    //     .subscribe(book => {
-    //       this.book = book;
-    //       this.isBookable = book.userId !== this.authService.userId;
-    //     });
-    // });
-  }
-
-  onWishBook() {
-    this.actionSheetCtrl
-      .create({
-        header: 'Choose an Action',
-        buttons: [
-          {
-            text: 'Select Date',
-            handler: () => {
-              this.openBookingModal('select');
-            }
-          },
-          {
-            text: 'Random Date',
-            handler: () => {
-              this.openBookingModal('random');
-            }
-          },
-          {
-            text: 'Cancel',
-            role: 'cancel'
-          }
-        ]
-      })
-      .then(actionSheetEl => {
-        actionSheetEl.present();
-      });
-  }
-
-  openBookingModal(mode: 'select' | 'random') {
-    // console.log(mode);
-    this.modalCtrl
-      .create({
-        component: CreateWishlistComponent,
-        componentProps: { selectedBook: this.book, selectedMode: mode }
-      })
-      .then(modalEl => {
-        modalEl.present();
-        return modalEl.onDidDismiss();
-      })
-      .then(resultData => {
-        if (resultData.role === 'confirm') {
-          this.loadingCtrl
-            .create({ message: 'Booking book...' })
-            .then(loadingEl => {
-              loadingEl.present();
-              const data = resultData.data.bookingData;
-              // this.wishlistService
-              //   .addBooking(
-              //     this.book.id,
-              //     this.book.title,
-              //     this.book.imageUrl,
-              //     data.firstName,
-              //     data.lastName,
-              //     data.guestNumber,
-              //     data.startDate,
-              //     data.endDate
-              //   )
-              //   .subscribe(() => {
-              //     loadingEl.dismiss();
-              //   });
-            });
-        }
-      });
   }
 
   ngOnDestroy() {

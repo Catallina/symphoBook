@@ -8,22 +8,28 @@ export function bookDetailsReducer(
 ) {
   switch (action.type) {
 
-    case BookDetailsActionType.GET_BOOK_DETAILS: {
+    case BookDetailsActionType.GET_BOOK_GROUP: {
       return newState(state, {
           busy: true,
       });
     }
 
-    case BookDetailsActionType.GET_BOOK_DETAILS_SUCCESS: {
+    case BookDetailsActionType.GET_BOOK_GROUP_SUCCESS: {
       return newState(state, {
           busy: false,
-          bookDetails: action.payload.bookDetails
+          bookGroup: action.payload.bookGroup
       });
     }
 
-    case BookDetailsActionType.GET_BOOK_DETAILS_ERROR: {
+    case BookDetailsActionType.GET_BOOK_GROUP_ERROR: {
       return newState(state, {
           busy: false,
+      });
+    }
+
+    case BookDetailsActionType.SELECTED_BOOK: {
+      return newState(state, {
+        selectedBook: action.payload.bookDetails,
       });
     }
 
