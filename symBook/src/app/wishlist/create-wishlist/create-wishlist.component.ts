@@ -2,7 +2,7 @@ import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { NgForm } from '@angular/forms';
 
-import { BookModel } from '@syb/books/books.model';
+import { BookListModel } from '@syb/books/models/book-list.model';
 
 @Component({
   selector: 'app-create-booking',
@@ -10,7 +10,7 @@ import { BookModel } from '@syb/books/books.model';
   styleUrls: ['./create-wishlist.component.scss']
 })
 export class CreateWishlistComponent implements OnInit {
-  @Input() selectedBook: BookModel;
+  @Input() selectedBook: BookListModel;
   @Input() selectedMode: 'select' | 'random';
   @ViewChild('f', { static: false }) form: NgForm;
   startDate: string;

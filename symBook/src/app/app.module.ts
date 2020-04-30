@@ -18,7 +18,7 @@ import { createTranslateLoader } from '@syb/shared/helper/helper';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
   ],
   entryComponents: [],
   imports: [

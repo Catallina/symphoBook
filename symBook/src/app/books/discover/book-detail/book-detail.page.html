@@ -1,32 +1,34 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-back-button defaultHref="/books/tabs/discover"></ion-back-button>
-    </ion-buttons>
-    <ion-title>{{ book.title }}</ion-title>
-  </ion-toolbar>
-</ion-header>
+    <ion-toolbar>
+        <ion-buttons slot="start">
+        <ion-back-button defaultHref="/books/tabs/discover"></ion-back-button>
+        </ion-buttons>
+        <ion-title>Book</ion-title>
+    </ion-toolbar>
+    </ion-header>
 
-<ion-content>
-  <ion-grid class="ion-no-padding">
-    <ion-row>
-      <ion-col size-sm="6" offset-sm="3" class="ion-no-padding">
-        <ion-img [src]="book.imageUrl"></ion-img>
-      </ion-col>
-    </ion-row>
-    <ion-row>
-      <ion-col size-sm="6" offset-sm="3" class="ion-text-center" class="ion-padding">
-        <p>{{ book.description }}</p>
-      </ion-col>
-    </ion-row>
-    <ion-row *ngIf="isBookable">
-      <ion-col size-sm="6" offset-sm="3" class="ion-text-center">
-        <ion-button 
-          color="primary"  
-          class="ion-margin" 
-          (click)="onWishBook()">
-          Book</ion-button>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
+    <ion-content fullscreen>
+    <ion-grid *ngIf="bookDetails" class="ion-no-padding">
+        <ion-row class="img-details">
+            <ion-col size-sm="6" offset-sm="3">
+                <img [src]="bookDetails.imageUrl"/>
+            </ion-col>
+        </ion-row>
+        <ion-row>
+            <ion-col size-sm="6" offset-sm="3" class="ion-text-center" class="ion-padding">
+                <p>Author: {{ bookDetails.author }}</p>
+                <p>Title: {{ bookDetails.title }}</p>
+                <p>Description: {{ bookDetails.description }}</p>
+            </ion-col>
+        </ion-row>
+        <!-- <ion-row *ngIf="isBook">
+        <ion-col size-sm="6" offset-sm="3" class="ion-text-center">
+            <ion-button 
+            color="primary"  
+            class="ion-margin" 
+            (click)="onWishBook()">
+            Book</ion-button>
+        </ion-col>
+        </ion-row>-->
+    </ion-grid>
 </ion-content>

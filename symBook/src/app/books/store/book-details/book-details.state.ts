@@ -1,11 +1,14 @@
-import { BookModel } from '@syb/books/books.model';
+import { BookGroupModel } from '@syb/books/models/book-group.model';
+import { BookListModel } from '@syb/books/models/book-list.model';
 
 export interface BookDetailsState {
     busy: boolean;
-    bookDetails: BookModel[];
+    bookGroup: BookGroupModel[];
+    selectedBook: BookListModel;
 }
 
 export const initialBookDetailsState: BookDetailsState = {
     busy: false,
-    bookDetails: null,
+    bookGroup: null,
+    selectedBook: null,
 };
