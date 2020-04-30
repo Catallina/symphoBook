@@ -38,11 +38,14 @@ export class BookDetailPage implements OnInit, OnDestroy {
 
     this.bookFacade.getStoreBook$().pipe(takeWhile(() => this.isAlive)).subscribe((book: BookListModel) => {
       this.bookDetails = book;
-      console.warn(book);
     });
   }
 
   ngOnDestroy() {
     this.isAlive = false;
+  }
+
+  public onWishBook(event: Event) {
+    event.stopPropagation();
   }
 }

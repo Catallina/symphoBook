@@ -1,0 +1,48 @@
+// .profile-bg {
+//     position: fixed;
+//     left: 0;
+//     top: -9.375rem;
+//     width: 100%;
+//     height: 100px;
+//     background-size: 100%;
+//     background-position: 50% 20%;
+//     background-repeat: no-repeat;
+//     text-align: center;
+// }
+
+.content {
+    position: relative;
+    margin-top: 6.25rem;
+    background-color: white;
+    box-shadow: 0px -1px 10px rgba(0,0,0,0.4);
+    padding-top: 12rem;
+
+    .profile-info {
+        position: absolute;
+        top: -6.25rem;
+        width: 100%;
+        z-index: 2;
+        text-align: center;
+    }
+    
+    .profile-name {
+        color: #444;
+        font-size: 1.75rem;
+    }
+
+    .profile-image {
+        display: block;
+        border-radius: 6.25rem;
+        border: 1px solid #fff;
+        width: 8rem;
+        height: 8rem;
+        margin: 2rem auto 0;
+        box-shadow: 0px 0px 4px rgba(0,0,0,0.7);
+    }
+
+    .profile-description {
+        font-size: 1rem;
+        color: #888;
+    }
+    
+}
