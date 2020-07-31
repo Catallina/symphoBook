@@ -1,7 +1,7 @@
 import { Action } from '@ngrx/store';
 
 import { BookGroupModel } from '@syb/books/models/book-group.model';
-import { BookListModel } from '@syb/books/models/book-list.model';
+import { BookListModel } from '@syb/shared/models/book-list.model';
 
 export enum BookDetailsActionType {
   GET_BOOK_GROUP = '[BOOK][BookDetails] get book group',

@@ -9,7 +9,6 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
 
 import { TranslateModule } from '@ngx-translate/core';
 
-import { AppComponent } from '@syb/app.component';
 import { AppRoutingModule } from '@syb/app-routing.module';
 
 @NgModule({
@@ -30,6 +29,5 @@ import { AppRoutingModule } from '@syb/app-routing.module';
     SplashScreen,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
-  bootstrap: [AppComponent]
 })
-export class AppModule {}
+export class SharedModule { }

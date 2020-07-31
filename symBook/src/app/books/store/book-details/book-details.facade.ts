@@ -9,7 +9,7 @@ import {
     selectedBookIdState,
 } from '@syb/books/store/book-details/book-details.selectors';
 import { BookDetailsState } from '@syb/books/store/book-details/book-details.state';
-import { BookListModel } from '@syb/books/models/book-list.model';
+import { BookListModel } from '@syb/shared/models/book-list.model';
 import { BookGroupModel } from '@syb/books/models/book-group.model';
 
 @Injectable({

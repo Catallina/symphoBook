@@ -3,33 +3,48 @@
     <ion-buttons slot="start">
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
-    <ion-title>Profile</ion-title>
+    <ion-title>My profile</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content has-header="true">
   <div class="profile-bg"></div>
-  <div class="content">
+  <div class="content" *ngIf="profileDetails">
     <div class="profile-info">
       <img class="profile-image" src="assets/image/profil.jpg">
-      <h3 class="profile-name">Max</h3>
-      <span class="profile-description">Artist student, I like macarons and play to guitar</span>
+      <h3 class="profile-name">{{ profileDetails.name }}</h3>
+      <span class="profile-description">{{ profileDetails.description }}</span>
     </div>
     <ion-list>
       <ion-item>
         <ion-label>
-          <ion-text color="primary">Birthday: </ion-text> 12 mai 1990
+          <ion-text color="primary">Birthday: </ion-text>
         </ion-label>
+        <ion-note slot="end">{{ profileDetails.birthday }}</ion-note>
       </ion-item>
       <ion-item>
         <ion-label>
-          <ion-text color="primary">Love: </ion-text> cats
+          <ion-text color="primary">Phone number: </ion-text>
         </ion-label>
+        <ion-note slot="end">{{ profileDetails.phoneNumber }}</ion-note>
       </ion-item>
       <ion-item>
         <ion-label>
-          <ion-text color="primary">Favorite books: </ion-text> Ikigai - Hector Garcia (Kirai) si Francesc Miralles
+          <ion-text color="primary">Job title: </ion-text> 
         </ion-label>
+        <ion-note slot="end">{{ profileDetails.jobTitle }}</ion-note>
+      </ion-item>
+      <ion-item>
+        <ion-label>
+          <ion-text color="primary">Love: </ion-text>
+        </ion-label>
+        <ion-note slot="end">{{ profileDetails.aboutMe }}</ion-note>
+      </ion-item>
+      <ion-item>
+        <ion-label>
+          <ion-text color="primary">Favorite books: </ion-text> 
+        </ion-label>
+        <ion-note slot="end">{{ profileDetails.favoriteBook }}</ion-note>
       </ion-item>
     </ion-list>
   </div>

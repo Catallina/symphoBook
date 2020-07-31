@@ -4,7 +4,7 @@ import { takeWhile } from 'rxjs/operators';
 import { BookDetailsFacade } from '@syb/books/store/book-details/book-details.facade';
 
 import { AuthService } from '@syb/auth/auth.service';
-import { BookListModel } from '@syb/books/models/book-list.model';
+import { BookListModel } from '@syb/shared/models/book-list.model';
 import { BookGroupModel } from '@syb/books/models/book-group.model';
 
 @Component({

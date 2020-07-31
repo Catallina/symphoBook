@@ -1,19 +1,52 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
-import { take, tap, delay } from 'rxjs/operators';
+import { HttpClient } from '@angular/common/http';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { take, tap, delay, map } from 'rxjs/operators';
 
 import { AuthService } from '@syb/auth/auth.service';
-import { Wishlist } from '@syb/wishlist//wishlist.model';
+import { BookListModel } from '@syb/shared/models/book-list.model';
 
 @Injectable({ providedIn: 'root' })
 export class WishlistService {
-  private wishlist = new BehaviorSubject<Wishlist[]>([]);
+
+  private book = new BehaviorSubject<BookListModel[]>([]);
 
   get bookings() {
-    return this.wishlist.asObservable();
+    return this.book.asObservable();
   }
 
-  constructor(private authService: AuthService) {}
+  constructor(
+    private authService: AuthService,
+    private http: HttpClient,
+  ) {}
+
+  public mapToBookDetailsPayload(list): BookListModel[] {
+    const details: BookListModel[] = [];
+    for ( const element  in list) {
+      if (list.hasOwnProperty(element)) {
+        const bookList = new BookListModel({
+          element,
+          author: list[element].author,
+          date: list[element].date,
+          description: list[element].description,
+          imageUrl: list[element].imageUrl,
+          title: list[element].title,
+        });
+        details.push(bookList);
+      }
+    }
+    return details;
+  }
+
+  public getWishBook$(): Observable<BookListModel[]> {
+    return this.http
+      .get<{[key: string]: BookListModel }>('https://symphobook.firebaseio.com/book.json')
+      .pipe(
+        map(response => {
+          return this.mapToBookDetailsPayload(response);
+        })
+      );
+  }
 
   // addBooking(
   //   placeId: string,
@@ -46,12 +79,13 @@ export class WishlistService {
   //   );
   // }
 
-  cancelBook(bookingId: string) {
-    return this.bookings.pipe(
+  deleteBook(bookId: string) {
+    return this.book.pipe(
       take(1),
       delay(1000),
-      tap(bookings => {
-        this.wishlist.next(bookings.filter(b => b.id !== bookingId));
+      tap(bookList => {
+        console.warn(bookList);
+        this.book.next(bookList.filter(book => book.id !== bookId));
       })
     );
   }
