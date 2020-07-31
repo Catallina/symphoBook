@@ -6,6 +6,9 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
 
+import { LoggerModule } from 'ngx-logger';
+import { environment } from '@env/environment';
+
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
@@ -15,6 +18,8 @@ import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { AppComponent } from '@syb/app.component';
 import { AppRoutingModule } from '@syb/app-routing.module';
 import { createTranslateLoader } from '@syb/shared/helper/helper';
+import { SharedModule } from '@syb/shared/shared.module';
+import { appReducers, metaReducers } from './store/app.reducers';
 
 @NgModule({
   declarations: [
@@ -37,6 +42,14 @@ import { createTranslateLoader } from '@syb/shared/helper/helper';
 
     StoreModule.forRoot({}),
     EffectsModule.forRoot([]),
+
+    LoggerModule.forRoot({
+      level: environment.logLevel
+    }),
+
+    StoreModule.forRoot(appReducers, { metaReducers }),
+
+    SharedModule,
   ],
   providers: [
     StatusBar,

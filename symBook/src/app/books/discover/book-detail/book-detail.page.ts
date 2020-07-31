@@ -12,7 +12,8 @@ import {
 import { BookDetailsFacade } from '@syb/books/store/book-details/book-details.facade';
 
 import { WishlistService } from '@syb/wishlist/wishlist.service';
-import { BookListModel } from '@syb/books/models/book-list.model';
+import { BookListModel } from '@syb/shared/models/book-list.model';
+import { BooksService } from '@syb/books/books.service';
 import { BookGroupModel } from '@syb/books/models/book-group.model';
 import { CreateWishlistComponent } from '@syb/wishlist/create-wishlist/create-wishlist.component';
 
@@ -30,6 +31,9 @@ export class BookDetailPage implements OnInit, OnDestroy {
     private navCtrl: NavController,
     private route: ActivatedRoute,
     private wishlistService: WishlistService,
+    private bookService: BooksService,
+    private modalCtrl: ModalController,
+    private loadingCtrl: LoadingController,
     private bookFacade: BookDetailsFacade,
   ) {}
 
@@ -47,5 +51,17 @@ export class BookDetailPage implements OnInit, OnDestroy {
 
   public onWishBook(event: Event) {
     event.stopPropagation();
+
+    this.modalCtrl.dismiss(
+      this.loadingCtrl
+      .create({ message: 'Book added...' })
+      .then(loadingEl => {
+        loadingEl.present();
+        this.bookService.storeWishBook$(this.bookDetails)
+          .subscribe(() => {
+            loadingEl.dismiss();
+          });
+      })
+    );
   }
 }

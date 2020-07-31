@@ -1,9 +1,9 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { LoadingController, IonItemSliding } from '@ionic/angular';
 
-import { Wishlist } from '@syb/wishlist//wishlist.model';
-import { Subscription } from 'rxjs';
+import { BookListModel } from '@syb/shared/models/book-list.model';
 import { WishlistService } from './wishlist.service';
+import { takeWhile } from 'rxjs/operators';
 
 @Component({
   selector: 'syb-wishlist',
@@ -11,8 +11,8 @@ import { WishlistService } from './wishlist.service';
   styleUrls: ['./wishlist.page.scss'],
 })
 export class WishlistPage implements OnInit, OnDestroy {
-  loadedBook: Wishlist[];
-  private bookingSub: Subscription;
+  private isAlive: boolean = false;
+  public loadedBook: any;
 
   constructor(
     private wishlistService: WishlistService,
@@ -20,25 +20,25 @@ export class WishlistPage implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.wishlistService.bookings.subscribe(book => {
+    this.isAlive = true;
+
+    this.wishlistService.getWishBook$().pipe(takeWhile(() => this.isAlive)).subscribe(book => {
       this.loadedBook = book;
     });
   }
 
-  onCancelBook(bookId: string, slidingEl: IonItemSliding) {
+  ngOnDestroy() {
+    this.isAlive = false;
+  }
+
+  onDeleteBook(bookId: string, slidingEl: IonItemSliding) {
     slidingEl.close();
-    this.loadingCtrl.create({ message: 'Cancelling...' }).then(loadingEl => {
+    this.loadingCtrl.create({ message: 'Deleting...' }).then(loadingEl => {
       loadingEl.present();
-      this.wishlistService.cancelBook(bookId).subscribe(() => {
+      this.wishlistService.deleteBook(bookId).subscribe(() => {
         loadingEl.dismiss();
       });
     });
-  }
-
-  ngOnDestroy() {
-    if (this.bookingSub) {
-      this.bookingSub.unsubscribe();
-    }
   }
 
 }
