@@ -26,5 +26,11 @@ public class CreateUserController {
 		return newUser.newAccount(Email,Password,PhoneNumber, DisplayName);
 	}
 	
+	@PostMapping("/users/adddetails")
+	Boolean addDetails (@RequestParam String Description, @RequestParam String Love, @RequestParam String Birthday, @RequestParam String Favorites)
 	
+	{
+		return newUser.addDetailsforAccount(Description, Love, Birthday, Favorites);
+		
+	}
 }

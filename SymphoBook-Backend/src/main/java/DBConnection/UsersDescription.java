@@ -3,12 +3,13 @@ package DBConnection;
 import java.util.HashMap;
 import java.util.Map;
 
-public class UsersDescription extends users{
+public class UsersDescription {
 
 	String description;
 	String love;
 	String birthday;
 	String favorites;
+	users us;
 	Map<String, Object> UserMapDescription ;
 	
 	
@@ -65,6 +66,9 @@ public class UsersDescription extends users{
 		return (HashMap<String, Object>) UserMapDescription;
 	}
 
-	
+	  @Override
+	    public String toString() { 
+	        return String.format("DisplayName="+us.getUserDisplayName()+" Email="+us.getUserEmail()+" PhoneNumber="+us.getUserPhoneNumber()+" Description="+description+" Love="+love+" Birthday="+birthday+" Favorites"+favorites); 
+	    } 
 	
 }

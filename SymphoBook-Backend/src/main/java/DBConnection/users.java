@@ -1,11 +1,19 @@
 package DBConnection;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class users {
 
 	public String DisplayName;
 	public String Email;
 	public String Password;
 	public String PhoneNumber;
+	public String description;
+	public String love;
+	public String birthday;
+	public String favorites;
+	public Map<String, Object> UserMapDescription ;
 	
 	
 	
@@ -24,6 +32,16 @@ public class users {
 		this.Password=Password;
 		this.PhoneNumber=PhoneNumber;
 		
+	}
+	public users (String DisplayName, String Email,String Password, String PhoneNumber, String description, String love, String birthday, String favorites)
+	{
+		this.Email=Email;
+		this.Password=Password;
+		this.PhoneNumber=PhoneNumber;
+		this.description=description;
+		this.love=love;
+		this.birthday=birthday;
+		this.favorites=favorites;
 	}
 	public void  setUserDisplayName(String DisplayName)
 	{
@@ -59,6 +77,49 @@ public class users {
 	{
 		return PhoneNumber;
 	}
+
+	public void  setDescription(String description)
+	{
+		this.description=description;
+	}
+	public String getDescription() {
+		return description;
+	}
+	public void setLove(String love)
+	{
+		this.love=love;
+	}
+	public String getLove()
+	{
+		return love;
+	}
+	public void setBirthday(String birthday)
+	{
+		this.birthday=birthday;
+	}
+	public String getBirthday()
+	{
+		return birthday;
+	}
+	public void setFavorites(String favorites)
+	{
+		this.favorites=favorites;
+	}
+	public String getFavorites()
+	{
+		return favorites;
+	}
+	public HashMap<String,Object> getUserMapDescription()
+
+	{
+		UserMapDescription = new HashMap<String, Object>();
+		UserMapDescription.put("Description", description);
+		UserMapDescription.put("Love", love);
+	UserMapDescription.put("Birthday", birthday);
+	UserMapDescription.put("Favorites", favorites);
+		return (HashMap<String, Object>) UserMapDescription;
+	}
+
 	  @Override
 	    public String toString() { 
 	        return String.format("DisplayName="+DisplayName+" Email="+Email+" PhoneNumber="+PhoneNumber); 
