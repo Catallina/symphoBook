@@ -15,20 +15,27 @@
             </ion-col>
         </ion-row>
         <ion-row>
+        <ion-col size-sm="6" offset-sm="3" class="ion-text-right">
+            <ion-button 
+                color="success"  
+                (click)="play()">
+                <ion-icon name="play-outline"></ion-icon>
+            </ion-button>   
+
+            <ion-button 
+                color="primary"  
+                class="ion-margin" 
+                (click)="onWishBook($event)">
+                <ion-icon name="heart-outline"></ion-icon>
+            </ion-button>  
+        </ion-col>
+        </ion-row>
+        <ion-row>
             <ion-col size-sm="6" offset-sm="3" class="ion-text-center" class="ion-padding">
                 <p><ion-text color="primary">Author: </ion-text>{{ bookDetails.author }}</p>
                 <p><ion-text color="primary">Title: </ion-text>{{ bookDetails.title }}</p>
                 <p><ion-text color="primary">Description: </ion-text>{{ bookDetails.description }}</p>
             </ion-col>
-        </ion-row>
-        <ion-row>
-        <ion-col size-sm="6" offset-sm="3" class="ion-text-right">
-            <ion-button 
-                color="primary"  
-                class="ion-margin" 
-                (click)="onWishBook($event)">
-                Add to Wishlist</ion-button>
-        </ion-col>
         </ion-row>
     </ion-grid>
 </ion-content>

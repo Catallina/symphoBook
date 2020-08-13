@@ -1,11 +1,12 @@
-import { NgModule } from '@angular/core';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Routes, RouterModule } from '@angular/router';
 
 import { IonicModule } from '@ionic/angular';
 
 import { DiscoverPage } from '@syb/books/discover/discover.page';
+import { FooterComponent } from '@syb/shared/footer/footer.component';
 
 const routes: Routes = [
   {
@@ -19,9 +20,17 @@ const routes: Routes = [
     CommonModule,
     FormsModule,
     IonicModule,
+    ReactiveFormsModule,
     RouterModule.forChild(routes)
   ],
-  declarations: [DiscoverPage],
+  schemas: [
+    CUSTOM_ELEMENTS_SCHEMA,
+    NO_ERRORS_SCHEMA,
+  ],
+  declarations: [
+    DiscoverPage,
+    FooterComponent,
+  ],
   entryComponents: []
 })
 export class DiscoverPageModule {}

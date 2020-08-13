@@ -7,10 +7,10 @@ export const environment = {
   production: false,
   logLevel: NgxLoggerLevel.DEBUG,
   firebase: {
-    apiKey: '',
+    apiKey: 'AIzaSyCWEMwrS9Al5a_p0YUps-ezxL8_0LPh7io',
     authDomain: '',
     databaseURL: '',
-    projectId: '',
+    projectId: 'symphobook-43327',
     storageBucket: '',
     messagingSenderId: '',
     appId: ''

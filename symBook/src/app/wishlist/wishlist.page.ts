@@ -35,8 +35,12 @@ export class WishlistPage implements OnInit, OnDestroy {
     slidingEl.close();
     this.loadingCtrl.create({ message: 'Deleting...' }).then(loadingEl => {
       loadingEl.present();
+
       this.wishlistService.deleteBook(bookId).subscribe(() => {
-        loadingEl.dismiss();
+        this.wishlistService.books.subscribe((b) => {
+          this.loadedBook = b;
+          loadingEl.dismiss();
+        });
       });
     });
   }

@@ -11,7 +11,7 @@ export class WishlistService {
 
   private book = new BehaviorSubject<BookListModel[]>([]);
 
-  get bookings() {
+  get books() {
     return this.book.asObservable();
   }
 
@@ -26,6 +26,7 @@ export class WishlistService {
       if (list.hasOwnProperty(element)) {
         const bookList = new BookListModel({
           element,
+          id: element,
           author: list[element].author,
           date: list[element].date,
           description: list[element].description,
@@ -43,12 +44,13 @@ export class WishlistService {
       .get<{[key: string]: BookListModel }>('https://symphobook.firebaseio.com/book.json')
       .pipe(
         map(response => {
+          this.book.next(this.mapToBookDetailsPayload(response));
           return this.mapToBookDetailsPayload(response);
         })
       );
   }
 
-  // addBooking(
+  // addBook(
   //   placeId: string,
   //   placeTitle: string,
   //   placeImage: string,
@@ -83,9 +85,8 @@ export class WishlistService {
     return this.book.pipe(
       take(1),
       delay(1000),
-      tap(bookList => {
-        console.warn(bookList);
-        this.book.next(bookList.filter(book => book.id !== bookId));
+      tap(books => {
+        this.book.next(books.filter(book => book.id !== bookId ));
       })
     );
   }

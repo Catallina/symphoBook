@@ -1,3 +1,4 @@
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
@@ -19,7 +20,7 @@ import { AppComponent } from '@syb/app.component';
 import { AppRoutingModule } from '@syb/app-routing.module';
 import { createTranslateLoader } from '@syb/shared/helper/helper';
 import { SharedModule } from '@syb/shared/shared.module';
-import { appReducers, metaReducers } from './store/app.reducers';
+import { appReducers, metaReducers } from '@syb/store/app.reducers';
 
 @NgModule({
   declarations: [
@@ -28,6 +29,7 @@ import { appReducers, metaReducers } from './store/app.reducers';
   entryComponents: [],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     HttpClientModule,
     IonicModule.forRoot(),
     AppRoutingModule,
@@ -40,7 +42,6 @@ import { appReducers, metaReducers } from './store/app.reducers';
       }
     }),
 
-    StoreModule.forRoot({}),
     EffectsModule.forRoot([]),
 
     LoggerModule.forRoot({

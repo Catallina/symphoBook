@@ -16,6 +16,7 @@ import { BookListModel } from '@syb/shared/models/book-list.model';
 import { BooksService } from '@syb/books/books.service';
 import { BookGroupModel } from '@syb/books/models/book-group.model';
 import { CreateWishlistComponent } from '@syb/wishlist/create-wishlist/create-wishlist.component';
+import { AudioService } from '@syb/books/audio/audio.service';
 
 @Component({
   selector: 'app-book-detail',
@@ -27,10 +28,12 @@ export class BookDetailPage implements OnInit, OnDestroy {
 
   public bookDetails: BookListModel;
 
+  public playing;
+
   constructor(
     private navCtrl: NavController,
     private route: ActivatedRoute,
-    private wishlistService: WishlistService,
+    private audioService: AudioService,
     private bookService: BooksService,
     private modalCtrl: ModalController,
     private loadingCtrl: LoadingController,
@@ -42,6 +45,7 @@ export class BookDetailPage implements OnInit, OnDestroy {
 
     this.bookFacade.getStoreBook$().pipe(takeWhile(() => this.isAlive)).subscribe((book: BookListModel) => {
       this.bookDetails = book;
+      console.warn(book);
     });
   }
 
@@ -63,5 +67,58 @@ export class BookDetailPage implements OnInit, OnDestroy {
           });
       })
     );
+  }
+
+  play() {
+    this.playStream(this.bookDetails.url);
+    this.audioService.play();
+
+    this.bookFacade.selectedBook(this.bookDetails);
+  }
+
+  resetState() {
+    this.audioService.stop();
+    //this.bookFacade.reset();
+  }
+
+
+  playStream(url) {
+    this.resetState();
+
+    this.audioService.playStream(url).subscribe(event => {
+      const audioObj = event.target;
+
+      switch (event.type) {
+        case 'canplay':
+          return this.bookFacade.setCanplay(true);
+
+        case 'loadedmetadata':
+          const data = {
+            time: this.audioService.formatTime(
+              audioObj.duration * 1000,
+              'HH:mm:ss'
+            ),
+            timeSec: audioObj.duration,
+            mediaType: 'mp3'
+          };
+          return this.bookFacade.setLoadedMetaData(true, data);
+
+        case 'playing':
+          return this.bookFacade.setPlaying(true);
+
+        case 'pause':
+          return this.bookFacade.setPlaying(false);
+
+        case 'timeupdate':
+          const time = this.audioService.formatTime(
+            audioObj.currentTime * 1000,
+            'HH:mm:ss'
+          );
+          return this.bookFacade.setTimeUpdate(time, audioObj.currentTime);
+
+        case 'loadstart':
+          return this.bookFacade.setLoadStart(true);
+      }
+    });
   }
 }

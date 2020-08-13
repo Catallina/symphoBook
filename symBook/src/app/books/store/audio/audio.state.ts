@@ -1,11 +1,4 @@
-import { BookGroupModel } from '@syb/books/models/book-group.model';
-import { BookListModel } from '@syb/shared/models/book-list.model';
-
-export interface BookDetailsState {
-    busy: boolean;
-    bookGroup: BookGroupModel[];
-    selectedBook: BookListModel;
-
+export interface AudioState {
     canplay: boolean;
     loadedmetadata: any;
     duration: string;
@@ -18,11 +11,7 @@ export interface BookDetailsState {
     loading: boolean;
 }
 
-export const initialBookDetailsState: BookDetailsState = {
-    busy: false,
-    bookGroup: null,
-    selectedBook: null,
-
+export const initialAudioState: AudioState = {
     canplay: false,
     loadedmetadata: null,
     duration: null,

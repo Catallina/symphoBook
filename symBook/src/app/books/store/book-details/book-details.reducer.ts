@@ -33,6 +33,46 @@ export function bookDetailsReducer(
       });
     }
 
+    case BookDetailsActionType.AUDIO: {
+      return newState(state, {
+        loading: false
+      });
+    }
+
+    case BookDetailsActionType.CANPLAY: {
+      return newState(state, {
+        canplay: action.payload.value
+      });
+    }
+
+    case BookDetailsActionType.LOADEDMETADATA: {
+      return newState(state, {
+        loadedmetadata: action.payload.value,
+        duration: action.payload.data.time,
+        durationSec: action.payload.data.timeSec,
+        mediaType: action.payload.data.mediaType,
+      });
+    }
+
+    case BookDetailsActionType.PLAYING: {
+      return newState(state, {
+        playing: action.payload.value
+      });
+    }
+
+    case BookDetailsActionType.TIMEUPDATE: {
+      return newState(state, {
+        time: action.payload.time,
+        timeSec: action.payload.timeSec
+      });
+    }
+
+    case BookDetailsActionType.LOADSTART: {
+      return newState(state, {
+        loadstart: action.payload.value,
+      });
+    }
+
     case BookDetailsActionType.RESET: {
       return newState(state, {
           ...initialBookDetailsState
