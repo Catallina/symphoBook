@@ -1,0 +1,37 @@
+package com.example.demo;
+
+import java.util.List;
+
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+public class CreateUserController {
+	
+	private final CreateAccount newUser;
+	CreateUserController(){}
+	CreateUserController(CreateAccount newUser)
+	{
+		this.newUser=newUser;
+	}
+	
+	@PostMapping("/users/createaccount") // POST /users/createaccount?Email=a@b.com&Password=abc&PhoneNumber=123&DisplayName=a
+	Boolean createaccount(@RequestParam String Email, @RequestParam String Password, @RequestParam String PhoneNumber, @RequestParam String DisplayName)
+	{
+		return newUser.newAccount(Email,Password,PhoneNumber, DisplayName);
+	}
+	
+	@PostMapping("/users/adddetails")
+	Boolean addDetails (@RequestParam String Description, @RequestParam String Love, @RequestParam String Birthday, @RequestParam String Favorites)
+	
+	{
+		return newUser.addDetailsforAccount(Description, Love, Birthday, Favorites);
+		
+	}
+}
