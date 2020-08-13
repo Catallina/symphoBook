@@ -1,75 +1,38 @@
-import { Component, OnInit, OnDestroy, ViewChild, SimpleChanges } from '@angular/core';
-import { FormControl } from '@angular/forms';
-import { Store } from '@ngrx/store';
-import { takeWhile } from 'rxjs/operators';
-import { filter, map, distinctUntilChanged } from 'rxjs/operators';
-import {trigger, state, style, animate, transition } from '@angular/animations';
-
 import { BookDetailsFacade } from '@syb/books/store/book-details/book-details.facade';
-
-import { AuthService } from '@syb/auth/auth.service';
-import { BookListModel } from '@syb/shared/models/book-list.model';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { takeWhile, filter, distinctUntilChanged, map } from 'rxjs/operators';
+import { AudioService } from '@syb/books/audio/audio.service';
+import { IonRange } from '@ionic/angular';
 import { BookGroupModel } from '@syb/books/models/book-group.model';
 
-
-import { BooksService } from '@syb/books/books.service';
-import { NavController, LoadingController, IonRange } from '@ionic/angular';
-import { AudioService } from '@syb/books/audio/audio.service';
-
 @Component({
-  selector: 'syb-discover',
-  templateUrl: './discover.page.html',
-  styleUrls: ['./discover.page.scss'],
-  animations: [
-    trigger('showHide', [
-      state(
-        'active',
-        style({
-          opacity: 1
-        })
-      ),
-      state(
-        'inactive',
-        style({
-          opacity: 0
-        })
-      ),
-      transition('inactive => active', animate('250ms ease-in')),
-      transition('active => inactive', animate('250ms ease-out'))
-    ])
-  ]
+  selector: 'syb-footer',
+  templateUrl: './footer.component.html',
+  styleUrls: ['./footer.component.scss'],
 })
-export class DiscoverPage implements OnInit, OnDestroy {
+export class FooterComponent implements OnInit {
   @ViewChild('range', {static: false}) range: IonRange;
 
   public isAlive: boolean = false;
 
   public seekbar = 0;
 
-  public bookDetails: BookGroupModel[];
-
   public files: any = [];
   public currentFile: any = {};
-  public onSeekState: boolean;
   public displayFooter: string = 'inactive';
+  public onSeekState: boolean;
+
+  public bookDetails;
 
   public durationSec: any;
   public duration: any;
-  public playing = true;
+  public playing: any;
   public time: any;
-
-  state: any = {};
 
   constructor(
     private bookFacade: BookDetailsFacade,
-    private authService: AuthService,
-    private booksService: BooksService,
-    public navCtrl: NavController,
     public audioService: AudioService,
-    public loadingCtrl: LoadingController,
-  ) {
-    this.getDocuments();
-  }
+  ) { }
 
   ngOnInit() {
     this.isAlive = true;
@@ -77,14 +40,6 @@ export class DiscoverPage implements OnInit, OnDestroy {
     this.bookFacade.getStoreBookGroup$().pipe(takeWhile(() => this.isAlive)).subscribe((book: BookGroupModel[]) => {
       this.bookDetails = book;
     });
-  }
-
-  ngOnDestroy() {
-    this.isAlive = false;
-  }
-
-  public onSelectedBook(bookDetails: BookListModel): void {
-    this.bookFacade.selectedBook(bookDetails);
   }
 
   public onGetTime() {
@@ -105,18 +60,6 @@ export class DiscoverPage implements OnInit, OnDestroy {
     return this.duration;
   }
 
-  getDocuments() {
-    this.loadingCtrl.create({
-      message: 'Loading Content. Please Wait...'
-    }).then(loadingEl => {
-      loadingEl.present();
-      this.booksService.getFiles().subscribe(files => {
-        this.files = files;
-        loadingEl.dismiss();
-      });
-    });
-  }
-
   openFile(file, index) {
     this.currentFile = { index, file };
     this.playStream(file.url);
@@ -125,15 +68,13 @@ export class DiscoverPage implements OnInit, OnDestroy {
 
   resetState() {
     this.audioService.stop();
-    //this.bookFacade.reset();
-    this.bookFacade.setCanplay(false);
-    this.bookFacade.setPlaying(false);
-    this.bookFacade.setPause(false);
-    this.bookFacade.setLoadStart(false);
+    this.bookFacade.reset();
   }
 
   playStream(url) {
     this.resetState();
+
+    console.warn(this.playing)
 
     this.audioService.playStream(url).subscribe(event => {
       const audioObj = event.target;
@@ -271,9 +212,10 @@ export class DiscoverPage implements OnInit, OnDestroy {
     return this.durationSec;
   }
 
-  // reset() {
-  //   this.resetState();
-  //   this.currentFile = {};
-  //   this.displayFooter = 'inactive';
-  // }
+  reset() {
+    this.resetState();
+    this.currentFile = {};
+    this.displayFooter = 'inactive';
+  }
+
 }

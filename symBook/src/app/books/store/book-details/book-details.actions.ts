@@ -10,6 +10,13 @@ export enum BookDetailsActionType {
 
   SELECTED_BOOK = '[BOOK][BookDetails] selected book',
 
+  AUDIO = '[BOOK][Audio] Audio',
+  CANPLAY = '[BOOK][Audio] Canplay',
+  LOADEDMETADATA = '[BOOK][Audio] Loaded media data',
+  PLAYING = '[BOOK][Audio] Playing',
+  TIMEUPDATE = '[BOOK][Audio] Time update',
+  LOADSTART = '[BOOK][Audio] Loads start',
+
   RESET = '[BOOK][BookDetails] reset'
 }
 
@@ -37,6 +44,40 @@ export class SelectedBookAction implements Action {
   constructor(public payload: { bookDetails: BookListModel }) {}
 }
 
+export class AudioAction implements Action {
+  readonly type = BookDetailsActionType.AUDIO;
+}
+
+export class CanplayAction implements Action {
+    readonly type = BookDetailsActionType.CANPLAY;
+
+    constructor(public payload: { value }) {}
+}
+
+export class LoadMetaDataAction implements Action {
+  readonly type = BookDetailsActionType.LOADEDMETADATA;
+
+  constructor(public payload: { value , data: { time, timeSec, mediaType } }) {}
+}
+
+export class PlayingAction implements Action {
+  readonly type = BookDetailsActionType.PLAYING;
+
+  constructor(public payload: { value }) {}
+}
+
+export class TimeUpdateAction implements Action {
+  readonly type = BookDetailsActionType.TIMEUPDATE;
+
+  constructor(public payload: { time, timeSec }) {}
+}
+
+export class LoadStartAction implements Action {
+  readonly type = BookDetailsActionType.LOADSTART;
+
+  constructor(public payload: { value }) {}
+}
+
 export class ResetAction implements Action {
   readonly type = BookDetailsActionType.RESET;
 
@@ -49,5 +90,12 @@ export type BookDetailsActions =
   | GetBookGroupErrorAction
 
   | SelectedBookAction
+
+  | AudioAction
+  | CanplayAction
+  | LoadMetaDataAction
+  | PlayingAction
+  | TimeUpdateAction
+  | LoadStartAction
 
   | ResetAction;

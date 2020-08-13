@@ -5,21 +5,6 @@ import { StoreConstants } from '@syb/shared/constants/store.constants';
 
 export const bookStore  = createFeatureSelector<BookState>(StoreConstants.booksStore);
 
-export const busyState = createSelector(
-    bookStore,
-    (state: BookState) => state.bookDetails.busy
-);
-
-export const bookGroupState = createSelector(
-    bookStore,
-    (state: BookState) => state.bookDetails.bookGroup
-);
-
-export const selectedBookIdState = createSelector(
-    bookStore,
-    (state: BookState) => state.bookDetails.selectedBook
-);
-
 export const canplayState = createSelector(
     bookStore,
     (state: BookState) => state.audio.canplay

@@ -10,7 +10,6 @@ export const newState = (state, newData) => {
     return Object.assign({}, state, newData);
 };
 
-
 export const helper = {
     createTranslateLoader,
     newState,

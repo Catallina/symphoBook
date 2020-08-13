@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { HttpClient, HttpHeaders } from '@angular/common/http';
@@ -7,8 +7,6 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BookListModel } from '@syb/shared/models/book-list.model';
 import { BookGroupModel } from '@syb/books/models/book-group.model';
 import {
-  BookDetailsPayload,
-  BookGroupItem,
   BookListItem,
 } from '@syb/books/interfaces/book-details-payload.interface';
 import { BookGroupDetails } from '@syb/books/interfaces/book-group-details.interface';
@@ -23,19 +21,23 @@ export class BooksService {
   public mapToBookList(bookList: any): BookListModel[] {
     const mappedList: BookListModel[] = [];
 
-    if (bookList && bookList.length > 0) {
-      bookList.forEach((book: BookListModel) => {
-        mappedList.push(
-          new BookListModel({
-            id: book.id,
-            title: book.title,
-            description: book.description,
-            imageUrl: book.imageUrl,
-            author: book.author,
-            date: book.date
-          })
-        );
-      });
+    if (bookList) {
+      for ( const element in bookList) {
+        if (bookList.hasOwnProperty(element)) {
+          mappedList.push(
+            new BookListModel({
+              element,
+              id: bookList[element].id,
+              title: bookList[element].title,
+              description: bookList[element].description,
+              imageUrl: bookList[element].imageUrl,
+              author: bookList[element].author,
+              date: bookList[element].date,
+              url: bookList[element].url,
+            })
+          );
+        }
+      }
     }
 
     return mappedList;
@@ -44,21 +46,19 @@ export class BooksService {
   public mapToBookGroup(data: any): BookGroupModel[] {
     const mappedGroup: BookGroupModel[] = [];
 
-    if (data && data.attributes && data.attributes.group.length > 0) {
-      data.attributes.group.forEach((group: BookGroupModel) => {
-        mappedGroup.push(
-          new BookGroupModel({
-            title: group.title,
-            bookList: this.mapToBookList(group.bookList),
-          })
-        );
-      });
+    if (data && data.attributes && data.attributes.group) {
+      mappedGroup.push(
+        new BookGroupModel({
+          title: data.attributes.group.title,
+          bookList: this.mapToBookList(data.attributes.group.bookList),
+        })
+      );
     }
     return mappedGroup;
   }
 
   public getBook$(): Observable<BookGroupModel[]> {
-    return this.http.get<any>('assets/mocks/book.json')
+    return this.http.get<any>('https://symphobook.firebaseio.com/books.json')
       .pipe(
         map(response => {
           return this.mapToBookGroup(response.data);
@@ -109,6 +109,25 @@ export class BooksService {
     .pipe(
       map(response => response)
     );
+  }
+
+  files: any = [
+    { 
+      url: 'https://ia802602.us.archive.org/9/items/pride_and_prejudice_librivox/prideandprejudice_01-03_austen.mp3', 
+      name: 'Pride and Prejudice by Jane Austen'
+    },
+    {
+      url: 'https://ia600305.us.archive.org/17/items/adventures_holmes/adventureholmes_01_doyle_64kb.mp3',
+      name: 'The Adventures of Sherlock Holmes by Doyle, Sir Arthur Conan'
+    },
+    { 
+      url: 'https://ia800301.us.archive.org/14/items/art_of_war_librivox/art_of_war_01-02_sun_tzu.mp3',
+      name: 'Art of war by Sun Tzu'
+    }
+  ];
+
+  getFiles() {
+    return of(this.files);
   }
 
 }

@@ -5,6 +5,7 @@ export class BookListModel {
   imageUrl: string;
   author: string;
   date: Date;
+  url: string;
 
   constructor(values: Object = {}) {
     Object.assign(this, values);

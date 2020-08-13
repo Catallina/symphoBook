@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { EffectsModule } from '@ngrx/effects';
@@ -11,8 +11,12 @@ import { BookReducers } from '@syb/books/store/book.reducers';
 import { BooksPage } from '@syb/books/books.page';
 import { BooksRoutingModule } from '@syb/books/books-routing.module';
 import { StoreConstants } from '@syb/shared/constants/store.constants';
+import { mediaStateReducer } from '@syb/books/store/audio/audio.reducer';
 
 @NgModule({
+  declarations: [
+    BooksPage
+  ],
   imports: [
     CommonModule,
     IonicModule,
@@ -23,8 +27,9 @@ import { StoreConstants } from '@syb/shared/constants/store.constants';
       BookDetailsEffects,
     ]),
   ],
-  declarations: [
-    BooksPage
-  ]
+  schemas: [
+    CUSTOM_ELEMENTS_SCHEMA,
+    NO_ERRORS_SCHEMA,
+  ],
 })
 export class PlacesPageModule {}
