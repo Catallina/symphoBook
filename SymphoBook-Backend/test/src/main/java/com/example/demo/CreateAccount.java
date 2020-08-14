@@ -19,9 +19,9 @@ public class CreateAccount {
 
 	CreateAccountActivity createAccountActivityInstance;
 	/*1*/FireBaseService fbs = ConnectToBd.Connection();
-
+	Map<String, String> errors = new HashMap<String,String>();
 	public CreateAccount() {}
-	public Boolean newAccount(String Email, String Password, String PhoneNumber, String DisplayName)
+	public String newAccount(String Email, String Password, String PhoneNumber, String DisplayName)
 	{
 		
 		
@@ -31,14 +31,46 @@ public class CreateAccount {
 		
 		try {
 			createAccountActivityInstance.CreateNewAccount(Email, Password, PhoneNumber, DisplayName);
-		} catch (FirebaseAuthException e) {
-		//	TODO Auto-generated catch block
-			e.printStackTrace();
+		}  catch (FirebaseAuthException e1) {
+			
+			errors.put(e1.getErrorCode(), e1.getLocalizedMessage());
 		}
+	catch (IllegalArgumentException e2)
+		
+		{
+	
+			errors.put("password too short", e2.getMessage());
+		}
+		
+
+		String errorMessage="Created";
+		if(errors.containsKey("email-already-exists"))
+		{
+			errorMessage=errors.get("email-already-exists");
+	
+		}
+		else
+			if(errors.containsKey("internal-error"))
+			{
+				errorMessage=errors.get("internal-error");
+			
+			}
+			else
+				if(errors.containsKey("password too short"))
+				{
+					
+					errorMessage=errors.get("password too short");
+					
+				}
+		if(errorMessage=="Created")
+		{
 		DatabaseReference refAddUser = fbs.getDb().getReference("users");
 		  refAddUser.child(createAccountActivityInstance.getUserRecord().getUid()).setValueAsync(createAccountActivityInstance.getUserMap());
 		  
-		  return (createAccountActivityInstance.getUserRecord()!=null);
+		}
+		  
+		  //return (createAccountActivityInstance.getUserRecord()!=null);
+		  return errorMessage;
 	}
 	
     public Boolean addDetailsforAccount(String Description,String Love, String Birthday,  String Favorites)
@@ -50,7 +82,10 @@ public class CreateAccount {
   	  refAddUserDescription.child(createAccountActivityInstance.getUserRecord().getUid()).updateChildrenAsync(userDescription.getUserMapDescription());
   	  return (createAccountActivityInstance.getUserRecord()!=null);
     }
-	
+    
+    
+    
+	//p
     public Boolean addDetailsforAccountAfter(String Description,String Love, String Birthday,  String Favorites, String email) throws FirebaseAuthException
     {
     	  UsersDescription userDescription=new UsersDescription(Description,Love,Birthday,Favorites);
