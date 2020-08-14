@@ -6,6 +6,7 @@ import { ProfileModel } from '@syb/profile/profile.model';
 import { environment } from '@env/environment';
 import { ProfileStore } from '@syb/profile/store/profile.store';
 import { map } from 'rxjs/operators';
+import { ApiEndpointsUrl } from '@syb/shared/api.constants';
 
 @Injectable({
   providedIn: 'root'
@@ -23,14 +24,14 @@ export class ProfileService {
     if (profileDetails) {
       mappedList = new ProfileModel({
         id: profileDetails.id,
-        name: profileDetails.name,
-        aboutMe: profileDetails.aboutMe,
+        name: profileDetails.DisplayName,
+        aboutMe: profileDetails.Love,
         jobTitle: profileDetails.jobTitle,
-        email: profileDetails.email,
-        birthday: profileDetails.birthday,
-        phoneNumber: profileDetails.phoneNumber,
-        description: profileDetails.description,
-        favoriteBook: profileDetails.favoriteBook,
+        email: profileDetails.Email,
+        birthday: profileDetails.Birthday,
+        phoneNumber: profileDetails.PhoneNumber,
+        description: profileDetails.Description,
+        favoriteBook: profileDetails.Favorites,
       });
     }
 
@@ -38,7 +39,7 @@ export class ProfileService {
   }
 
   public getProfileDetails$(employeeId: number): Observable<ProfileModel> {
-    return this.http.get<ProfileModel>('https://symphobook.firebaseio.com/profile.json')
+    return this.http.get<ProfileModel>(environment.apiUrl + ApiEndpointsUrl.user)
     .pipe(
       map(response => {
         return this.mapToProfileDetails(response);

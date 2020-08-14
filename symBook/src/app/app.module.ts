@@ -22,6 +22,7 @@ import { createTranslateLoader } from '@syb/shared/helper/helper';
 import { SharedModule } from '@syb/shared/shared.module';
 import { appReducers, metaReducers } from '@syb/store/app.reducers';
 
+
 @NgModule({
   declarations: [
     AppComponent,
