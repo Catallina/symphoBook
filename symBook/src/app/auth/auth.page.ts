@@ -91,15 +91,15 @@ export class AuthPage implements OnInit {
             //this.router.navigate([environment.defaultUrl]);
           }, errRes => {
             loadingEl.dismiss();
-            // const code = errRes.error.error.message;
-            const message = 'Could not sign you up, please try again.';
-            // if (code === 'EMAIL_EXISTS') {
-            //   message = 'This email address exists already!';
-            // } else if (code === 'EMAIL_NOT_FOUND') {
-            //   message = 'E-Mail address could not be found.';
-            // } else if (code === 'INVALID_PASSWORD') {
-            //   message = 'This password is not correct.';
-            // }
+            const code = errRes.error.error.message;
+            let message = 'Could not sign you up, please try again.';
+            if (code === 'EMAIL_EXISTS') {
+              message = 'This email address exists already!';
+            } else if (code === 'EMAIL_NOT_FOUND') {
+              message = 'E-Mail address could not be found.';
+            } else if (code === 'INVALID_PASSWORD') {
+              message = 'This password is not correct.';
+            }
             this.showAlert(message);
           });
         }
