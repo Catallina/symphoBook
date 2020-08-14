@@ -43,23 +43,24 @@ public class CreateAccount {
 		}
 		
 
+		
 		String errorMessage="Created";
 		if(errors.containsKey("email-already-exists"))
 		{
-			errorMessage=errors.get("email-already-exists");
+			errorMessage="Email already exists";
 	
 		}
 		else
 			if(errors.containsKey("internal-error"))
 			{
-				errorMessage=errors.get("internal-error");
+				errorMessage="Invalid Phone Number";
 			
 			}
 			else
 				if(errors.containsKey("password too short"))
 				{
 					
-					errorMessage=errors.get("password too short");
+					errorMessage="Password is too short";
 					
 				}
 		if(errorMessage=="Created")
