@@ -1,0 +1,35 @@
+/*package com.example.demo;
+
+import java.util.concurrent.TimeUnit;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.SessionCookieOptions;
+
+public class LoginController {
+	
+	@POST
+	@Path("/sessionLogin")
+	@Consumes("application/json")
+	public Response createSessionCookie(LoginRequest request) {
+	  // Get the ID token sent by the client
+	  String idToken = request.getIdToken();
+	  // Set session expiration to 5 days.
+	  long expiresIn = TimeUnit.DAYS.toMillis(5);
+	  SessionCookieOptions options = SessionCookieOptions.builder()
+	      .setExpiresIn(expiresIn)
+	      .build();
+	  try {
+	    // Create the session cookie. This will also verify the ID token in the process.
+	    // The session cookie will have the same claims as the ID token.
+	    String sessionCookie = FirebaseAuth.getInstance().createSessionCookie(idToken, options);
+	    // Set cookie policy parameters as required.
+	    NewCookie cookie = new NewCookie("session", sessionCookie /* ... other parameters */);
+	    return Response.ok().cookie(cookie).build();
+	  } catch (FirebaseAuthException e) {
+	    return Response.status(Status.UNAUTHORIZED).entity("Failed to create a session cookie")
+	        .build();
+	  }
+	}
+
+}
+*/

@@ -34,7 +34,7 @@ public void readData(String email) {
 	
 	  UserRecord userRecord;
 			try {
-				userRecord = FirebaseAuth.getInstance().getUserByEmail(email);
+				userRecord = FirebaseAuth.getInstance().getUserByEmail("miriamdavid1597@gmail.com");
 				   System.out.println("Successfully fetched user data: " + userRecord.getUid());
 				   DatabaseReference refPrintUser = fbs.getDb()
 			                .getReference("users").child(userRecord.getUid());

@@ -26,8 +26,9 @@ public class CreateUserController {
 	}
 	
 	@PostMapping("/users/createaccount") // POST /users/createaccount?Email=a@b.com&Password=abc&PhoneNumber=123&DisplayName=a
-	Boolean createaccount(@RequestParam String Email, @RequestParam String Password, @RequestParam String PhoneNumber, @RequestParam String DisplayName)
+	String createaccount(@RequestParam String Email, @RequestParam String Password, @RequestParam String PhoneNumber, @RequestParam String DisplayName)
 	{
+		PhoneNumber = "+"+PhoneNumber;
 		return newUser.newAccount(Email,Password,PhoneNumber, DisplayName);
 	}
 	//daca useru nou vrea in momentu ala sa isi adauge detalii

@@ -41,6 +41,7 @@ public class CreateAccountActivity {
 	
 
 	userRecord = FirebaseAuth.getInstance().createUser(request);
+	
 	uidUsers.add(userRecord.getUid().toString());
 		
 	  
