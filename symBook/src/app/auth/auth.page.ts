@@ -82,14 +82,16 @@ export class AuthPage implements OnInit {
 
           this.authService.createAccount$(credentials).subscribe(success => {
 
+            console.error(success, 'ceapa');
+
             this.isLoading = false;
             loadingEl.dismiss();
             console.warn('Aiiiici');
-            
             this.router.navigateByUrl('/books');
 
             //this.router.navigate([environment.defaultUrl]);
-          }, errRes => {
+          }, errRes =>{
+          console.log("n-o mers :(", errRes)
             loadingEl.dismiss();
             const code = errRes.error.error.message;
             let message = 'Could not sign you up, please try again.';

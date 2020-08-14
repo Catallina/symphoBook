@@ -27,7 +27,7 @@ export class AuthService {
   ) {}
 
   public login$(email: string, password: string) {
-    return this.http.post(`https://identitytoolkit.googleapis.com/v1/accounts:signInWithCustomToken?key=${environment.firebase.apiKey}`, {
+    return this.http.post(`https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=${environment.firebase.apiKey}`, {
       email: email, password: password
     });
   }
@@ -55,6 +55,7 @@ export class AuthService {
           //this.authStore.token = token;
 
          // return token;
+          console.warn(response, "ceapapa")
           return response;
         })
       );
