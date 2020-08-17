@@ -1,9 +1,8 @@
-import { Component, OnInit, OnDestroy, ViewChild, SimpleChanges } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, SimpleChanges, Output, EventEmitter } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { takeWhile } from 'rxjs/operators';
 import { filter, map, distinctUntilChanged } from 'rxjs/operators';
-import {trigger, state, style, animate, transition } from '@angular/animations';
 
 import { BookDetailsFacade } from '@syb/books/store/book-details/book-details.facade';
 
@@ -14,33 +13,17 @@ import { BookGroupModel } from '@syb/books/models/book-group.model';
 
 import { BooksService } from '@syb/books/books.service';
 import { NavController, LoadingController, IonRange } from '@ionic/angular';
-import { AudioService } from '@syb/books/audio/audio.service';
+import { AudioService } from '@syb/books/audio/audio.service'; 
 
 @Component({
   selector: 'syb-discover',
   templateUrl: './discover.page.html',
   styleUrls: ['./discover.page.scss'],
-  animations: [
-    trigger('showHide', [
-      state(
-        'active',
-        style({
-          opacity: 1
-        })
-      ),
-      state(
-        'inactive',
-        style({
-          opacity: 0
-        })
-      ),
-      transition('inactive => active', animate('250ms ease-in')),
-      transition('active => inactive', animate('250ms ease-out'))
-    ])
-  ]
 })
 export class DiscoverPage implements OnInit, OnDestroy {
   @ViewChild('range', {static: false}) range: IonRange;
+
+  @Output() public fileSelected = new EventEmitter<any>();
 
   public isAlive: boolean = false;
 
@@ -48,7 +31,7 @@ export class DiscoverPage implements OnInit, OnDestroy {
 
   public bookDetails: BookGroupModel[];
 
-  public files: any = [];
+  // public files: any = [];
   public currentFile: any = {};
   public onSeekState: boolean;
   public displayFooter: string = 'inactive';
@@ -68,15 +51,12 @@ export class DiscoverPage implements OnInit, OnDestroy {
     public audioService: AudioService,
     public loadingCtrl: LoadingController,
   ) {
-    this.getDocuments();
   }
 
   ngOnInit() {
     this.isAlive = true;
 
-    this.bookFacade.getStoreBookGroup$().pipe(takeWhile(() => this.isAlive)).subscribe((book: BookGroupModel[]) => {
-      this.bookDetails = book;
-    });
+    this.getDocuments();
   }
 
   ngOnDestroy() {
@@ -110,8 +90,10 @@ export class DiscoverPage implements OnInit, OnDestroy {
       message: 'Loading Content. Please Wait...'
     }).then(loadingEl => {
       loadingEl.present();
-      this.booksService.getFiles().subscribe(files => {
-        this.files = files;
+
+      this.bookFacade.getStoreBookGroup$().pipe(takeWhile(() => this.isAlive)).subscribe((book: BookGroupModel[]) => {
+        this.bookDetails = book;
+
         loadingEl.dismiss();
       });
     });
@@ -120,6 +102,8 @@ export class DiscoverPage implements OnInit, OnDestroy {
   openFile(file, index) {
     this.currentFile = { index, file };
     this.playStream(file.url);
+    this.fileSelected.emit(this.currentFile);
+    this.bookFacade.setCurrentFile(this.currentFile);
     this.displayFooter = 'active';
   }
 
@@ -197,13 +181,13 @@ export class DiscoverPage implements OnInit, OnDestroy {
 
   next() {
     const index = this.currentFile.index + 1;
-    const file = this.files[index];
+    const file = this.bookDetails[0].bookList[index];
     this.openFile(file, index);
   }
 
   previous() {
     const index = this.currentFile.index - 1;
-    const file = this.files[index];
+    const file = this.bookDetails[0].bookList[index];
     this.openFile(file, index);
   }
 
@@ -212,7 +196,7 @@ export class DiscoverPage implements OnInit, OnDestroy {
   }
 
   isLastPlaying() {
-    return this.currentFile.index === this.files.length - 1;
+    return this.currentFile.index === this.bookDetails[0].bookList.length - 1;
   }
 
   onSeekStart() {

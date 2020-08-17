@@ -6,11 +6,11 @@ import { IonRange } from '@ionic/angular';
 import { BookGroupModel } from '@syb/books/models/book-group.model';
 
 @Component({
-  selector: 'syb-footer',
-  templateUrl: './footer.component.html',
-  styleUrls: ['./footer.component.scss'],
+  selector: 'syb-footer-player',
+  templateUrl: './footer-player.page.html',
+  styleUrls: ['./footer-player.page.scss'],
 })
-export class FooterComponent implements OnInit {
+export class FooterPlayerPage implements OnInit {
   @ViewChild('range', {static: false}) range: IonRange;
 
   @Input() public currentFile: any;
@@ -19,6 +19,8 @@ export class FooterComponent implements OnInit {
 
   public seekbar = 0;
 
+  public files: any = [];
+  //public currentFile: any = {};
   public displayFooter: string = 'inactive';
   public onSeekState: boolean;
 
@@ -36,8 +38,6 @@ export class FooterComponent implements OnInit {
 
   ngOnInit() {
     this.isAlive = true;
-
-    console.warn(this.currentFile);
 
     this.bookFacade.getStoreBookGroup$().pipe(takeWhile(() => this.isAlive)).subscribe((book: BookGroupModel[]) => {
       this.bookDetails = book;

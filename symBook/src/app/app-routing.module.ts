@@ -27,7 +27,12 @@ const routes: Routes = [
   {
     path: '**',
     loadChildren: () => import('@syb/not-found/not-found.module').then(m => m.NotFoundModule),
+  },  {
+    path: 'footer-player',
+    loadChildren: () => import('./shared/footer-player/footer-player.module').then( m => m.FooterPlayerPageModule)
   },
+
+
 ];
 
 @NgModule({

@@ -16,7 +16,9 @@ import { BookGroupDetails } from '@syb/books/interfaces/book-group-details.inter
 })
 export class BooksService {
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+  ) {}
 
   public mapToBookList(bookList: any): BookListModel[] {
     const mappedList: BookListModel[] = [];
@@ -34,6 +36,7 @@ export class BooksService {
               author: bookList[element].author,
               date: bookList[element].date,
               url: bookList[element].url,
+              urls: this.mapUrls(bookList[element].urls),
             })
           );
         }
@@ -41,6 +44,21 @@ export class BooksService {
     }
 
     return mappedList;
+  }
+
+  public mapUrls(urls: any): string[] {
+    const mappedUrl = [];
+
+    if (urls) {
+      for ( const element in urls) {
+          if (urls.hasOwnProperty(element)) {
+            mappedUrl.push(
+              { element, url: urls[element]}
+            );
+        }
+      }
+    }
+    return mappedUrl;
   }
 
   public mapToBookGroup(data: any): BookGroupModel[] {
@@ -110,24 +128,4 @@ export class BooksService {
       map(response => response)
     );
   }
-
-  files: any = [
-    { 
-      url: 'https://ia802602.us.archive.org/9/items/pride_and_prejudice_librivox/prideandprejudice_01-03_austen.mp3', 
-      name: 'Pride and Prejudice by Jane Austen'
-    },
-    {
-      url: 'https://ia600305.us.archive.org/17/items/adventures_holmes/adventureholmes_01_doyle_64kb.mp3',
-      name: 'The Adventures of Sherlock Holmes by Doyle, Sir Arthur Conan'
-    },
-    { 
-      url: 'https://ia800301.us.archive.org/14/items/art_of_war_librivox/art_of_war_01-02_sun_tzu.mp3',
-      name: 'Art of war by Sun Tzu'
-    }
-  ];
-
-  getFiles() {
-    return of(this.files);
-  }
-
 }

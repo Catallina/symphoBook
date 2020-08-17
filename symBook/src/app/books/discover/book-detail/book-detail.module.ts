@@ -31,7 +31,7 @@ const routes: Routes = [
     NO_ERRORS_SCHEMA,
   ],
   entryComponents: [
-    CreateWishlistComponent
+    CreateWishlistComponent,
   ]
 })
 export class BookDetailPageModule {}

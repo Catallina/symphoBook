@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, Renderer2 } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { Platform, MenuController } from '@ionic/angular';
@@ -20,8 +20,8 @@ export class AppComponent implements OnInit {
     private authService: AuthService,
     private router: Router,
     private menu: MenuController,
-    private elementRef: ElementRef,
-  ) {
+    private render: Renderer2,
+    ) {
     this.initializeApp();
   }
 
@@ -44,4 +44,15 @@ export class AppComponent implements OnInit {
     this.authService.logout();
     this.router.navigateByUrl('/auth');
   }
+
+  public toggleDarkTheme(event) {
+    if (event.detail.checked) {
+      //document.body.setAttribute('color-theme', 'dark');
+      this.render.setAttribute(document.body, 'color-theme', 'dark');
+    } else {
+      //document.body.setAttribute('color-theme', 'light');
+      this.render.setAttribute(document.body, 'color-theme', 'light');
+    }
+  }
+
 }

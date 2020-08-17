@@ -1,3 +1,4 @@
+import { currentFileState } from './book-details.selectors';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
@@ -43,6 +44,10 @@ export class BookDetailsFacade {
         this.bookStore.dispatch(new BookDetailsActions.SelectedBookAction({bookDetails: bookDetails}));
     }
 
+    public setCurrentFile(currentFile: any): void {
+        this.bookStore.dispatch(new BookDetailsActions.CurrentFileAction({currentFile: currentFile}));
+    }
+
     //GETTERS
     public getStoreBusy$(): Observable<boolean> {
         return this.bookStore.select(busyState);
@@ -54,6 +59,10 @@ export class BookDetailsFacade {
 
     public getStoreBook$(): Observable<BookListModel> {
         return this.bookStore.select(selectedBookIdState);
+    }
+
+    public getStoreCurrentFile$(): Observable<BookListModel> {
+        return this.bookStore.select(currentFileState);
     }
 
 

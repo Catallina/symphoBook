@@ -32,6 +32,7 @@
             <ion-label>Wishlist</ion-label>
           </ion-item>
         </ion-menu-toggle>
+  
         <ion-menu-toggle>
           <ion-item lines="none" (click)="onLogout()" button>
             <ion-icon name="exit" slot="start"></ion-icon>
@@ -40,17 +41,24 @@
         </ion-menu-toggle>
       </ion-list>
     </ion-content>
+
     <ion-footer >
       <ion-toolbar>
         <ion-list>
           <ion-item lines="none">
             <ion-icon slot="start" name="moon"></ion-icon>
             <ion-label>Dark Theme</ion-label>
-            <ion-toggle id="themeToggle" slot="end"></ion-toggle>
+            <ion-toggle (ionChange)="toggleDarkTheme($event)" id="themeToggle" slot="end"></ion-toggle>
           </ion-item>
         </ion-list>
       </ion-toolbar>
     </ion-footer>
   </ion-menu>
   <ion-router-outlet id="main"></ion-router-outlet>
+  <!-- <ion-footer>
+    <ng-container>
+      <syb-footer></syb-footer>
+    </ng-container>
+  </ion-footer> -->
+
 </ion-app>

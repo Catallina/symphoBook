@@ -1,5 +1,7 @@
 export const ApiEndpointsUrl = {
   // user-role
-  login: 'auth/login',
+  login: 'users/createaccount',
   refresh: 'auth/refresh',
+
+  user: 'users/profile',
 };
