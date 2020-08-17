@@ -12,12 +12,12 @@ import java.util.Map;
 public class RetriveDataFromDbUserProfile  implements Runnable {
 	FireBaseService fbs=ConnectToBd.Connection();
 	public Map<String, String> UserProfile = new HashMap<String, String>();
-	String email;
+	String uid;
 	String Description;
 	public  RetriveDataFromDbUserProfile() {}
-public  RetriveDataFromDbUserProfile(String email)
+public  RetriveDataFromDbUserProfile(String uid)
 	{
-		this.email=email;
+		this.uid=uid;
 		
 	}
 public Map<String, String> getUserProfile()
@@ -29,12 +29,13 @@ public Map<String, String> getUserProfile()
 public String getDescription()
 {
 	return Description;}
-public void readData(String email) {
+public void readData(String uid) {
 
 	
 	  UserRecord userRecord;
 			try {
-				userRecord = FirebaseAuth.getInstance().getUserByEmail("miriamdavid1597@gmail.com");
+			userRecord = FirebaseAuth.getInstance().getUser(uid);
+				//userRecord = FirebaseAuth.getInstance().
 				   System.out.println("Successfully fetched user data: " + userRecord.getUid());
 				   DatabaseReference refPrintUser = fbs.getDb()
 			                .getReference("users").child(userRecord.getUid());
@@ -76,7 +77,7 @@ public void readData(String email) {
 }
 public void run()
 {
-		readData(email);
+		readData(uid);
 }
 	
 

@@ -15,12 +15,12 @@ public class UserProfile  {
 	
 	
 	 
-	public String getJsonUserProfile() throws InterruptedException
+	public String getJsonUserProfile(String uid) throws InterruptedException
 	{
 			Gson gson = new Gson();
 			Map<String, String> UserProfile;
 			
-			RetriveDataFromDbUserProfile profile = new RetriveDataFromDbUserProfile("miriamdavid1597@gmail.com");
+			RetriveDataFromDbUserProfile profile = new RetriveDataFromDbUserProfile(uid);
 			Thread t=new Thread(profile);
 	
 	    t.start();
