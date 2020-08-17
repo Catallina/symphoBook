@@ -35,7 +35,7 @@ public class CreateAccount {
 			
 			errors.put(e1.getErrorCode(), e1.getLocalizedMessage());
 		}
-	catch (IllegalArgumentException e2)
+		catch (IllegalArgumentException e2)
 		
 		{
 	
@@ -43,7 +43,6 @@ public class CreateAccount {
 		}
 		
 
-		
 		String errorMessage="Created";
 		if(errors.containsKey("email-already-exists"))
 		{
@@ -55,14 +54,17 @@ public class CreateAccount {
 			{
 				errorMessage="Invalid Phone Number";
 			
+				
+				
 			}
+		
 			else
 				if(errors.containsKey("password too short"))
 				{
-					
 					errorMessage="Password is too short";
 					
 				}
+			
 		if(errorMessage=="Created")
 		{
 		DatabaseReference refAddUser = fbs.getDb().getReference("users");

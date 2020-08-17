@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.google.firebase.auth.FirebaseAuthException;
+import com.google.gson.Gson;
 
 @RestController
 public class CreateUserController {
@@ -30,6 +31,7 @@ public class CreateUserController {
 	@PostMapping("/users/createaccount") // POST /users/createaccount?Email=a@b.com&Password=abc&PhoneNumber=123&DisplayName=a
 	ResponseEntity<String> createaccount(@RequestParam String Email, @RequestParam String Password, @RequestParam String PhoneNumber, @RequestParam String DisplayName)
 			{
+		PhoneNumber = "+"+PhoneNumber;
 						String eroareamea = newUser.newAccount(Email,Password,PhoneNumber, DisplayName);
 						switch(eroareamea) {
 						case"Created": return new ResponseEntity<>(eroareamea,HttpStatus.OK);
