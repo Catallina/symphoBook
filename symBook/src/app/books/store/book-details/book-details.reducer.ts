@@ -33,6 +33,12 @@ export function bookDetailsReducer(
       });
     }
 
+    case BookDetailsActionType.CURRENT_FILE: {
+      return newState(state, {
+        currentFile: action.payload.currentFile,
+      });
+    }
+
     case BookDetailsActionType.AUDIO: {
       return newState(state, {
         loading: false

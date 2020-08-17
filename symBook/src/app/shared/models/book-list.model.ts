@@ -6,6 +6,7 @@ export class BookListModel {
   author: string;
   date: Date;
   url: string;
+  urls: string[];
 
   constructor(values: Object = {}) {
     Object.assign(this, values);

@@ -2,7 +2,7 @@ import { Observable } from 'rxjs';
 import { Credentials } from './interface/credentials.interface';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { NgForm } from '@angular/forms';
+import { NgForm, FormControl, Validators, FormGroup } from '@angular/forms';
 
 import { LoadingController, AlertController } from '@ionic/angular';
 
@@ -10,7 +10,8 @@ import { AuthService } from '@syb/auth/auth.service';
 import { TypeLogin } from '@syb/shared/enums/login.enums';
 import { environment } from '@env/environment';
 
-import * as firebase from 'firebase';
+import { Facebook, FacebookLoginResponse } from '@ionic-native/facebook/ngx';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-auth',
@@ -28,6 +29,8 @@ export class AuthPage implements OnInit {
     private router: Router,
     private loadingCtrl: LoadingController,
     private alertCtrl: AlertController,
+    private fb: Facebook,
+    public http: HttpClient,
   ) {}
 
   ngOnInit() {
@@ -41,11 +44,6 @@ export class AuthPage implements OnInit {
         this.router.navigateByUrl('/auth');
       }, 500);
     });
-
-    // if (!firebase.apps.length) {
-    //   firebase.initializeApp(environment.firebase);
-    // }
-
   }
 
   authenticate(credentials: Credentials) {
@@ -54,17 +52,17 @@ export class AuthPage implements OnInit {
       .create({ keyboardClose: true, message: 'Logging in...' })
       .then(loadingEl => {
         loadingEl.present();
-        let authObs: Observable<any>;
 
         if (this.isLogin) {
-          console.warn('Login', this.isLogin);
+          const email = credentials.Email;
+          const password = credentials.Password;
 
-          this.authService.login$(credentials.Email, credentials.Password).subscribe(success => {
+          this.authService.login$(email, password).subscribe(success => {
             this.isLoading = false;
             loadingEl.dismiss();
-            this.router.navigateByUrl('/books');
-            //this.router.navigate([environment.defaultUrl]);
+            this.router.navigate([environment.defaultUrl]);
           }, errRes => {
+            console.warn(errRes);
             loadingEl.dismiss();
             const code = errRes.error.error.message;
             let message = 'Could not sign you up, please try again.';
@@ -78,28 +76,24 @@ export class AuthPage implements OnInit {
             this.showAlert(message);
           });
         } else {
-          console.warn('SignUp', this.isLogin);
-
           this.authService.createAccount$(credentials).subscribe(success => {
-
-            console.error(success, 'ceapa');
-
             this.isLoading = false;
             loadingEl.dismiss();
-            console.warn('Aiiiici');
-            this.router.navigateByUrl('/books');
-
-            //this.router.navigate([environment.defaultUrl]);
-          }, errRes =>{
-          console.log("n-o mers :(", errRes)
+            this.alertCtrl.create({
+              header: 'Authentication success',
+              message: 'Go to Login',
+              buttons: ['Okay']})
+              .then((alertEl) => alertEl.present());
+          }, (errRes) => {
             loadingEl.dismiss();
-            const code = errRes.error.error.message;
+            const code = errRes.error;
+            console.warn(errRes);
             let message = 'Could not sign you up, please try again.';
-            if (code === 'EMAIL_EXISTS') {
+            if (code === 'Email already exists') {
               message = 'This email address exists already!';
-            } else if (code === 'EMAIL_NOT_FOUND') {
-              message = 'E-Mail address could not be found.';
-            } else if (code === 'INVALID_PASSWORD') {
+            } else if (code === 'Invalid Phone Number') {
+              message = 'This phone number is not correct.';
+            } else if (code === 'Password is too short') {
               message = 'This password is not correct.';
             }
             this.showAlert(message);
@@ -116,8 +110,6 @@ export class AuthPage implements OnInit {
     if (!form.valid) {
       return;
     }
-    const email = form.value.email;
-    const password = form.value.password;
 
     const credentials: Credentials = {
       Email: form.value.email,
@@ -126,8 +118,18 @@ export class AuthPage implements OnInit {
       DisplayName: form.value.name,
     };
 
-
     this.authenticate(credentials);
+
+    //form.resetForm();
+  }
+
+
+  onLogWithFacebook() {
+    this.fb.login(['public_profile', 'user_friends', 'email'])
+      .then((res: FacebookLoginResponse) => console.log('Logged into Facebook!', res))
+      .catch(e => console.log('Error logging into Facebook', e));
+
+    this.fb.logEvent(this.fb.EVENTS.EVENT_NAME_ADDED_TO_CART);
   }
 
   private showAlert(message: string) {

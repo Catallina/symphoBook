@@ -1,5 +1,5 @@
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { NgModule } from '@angular/core';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
@@ -21,7 +21,6 @@ import { AppRoutingModule } from '@syb/app-routing.module';
 import { createTranslateLoader } from '@syb/shared/helper/helper';
 import { SharedModule } from '@syb/shared/shared.module';
 import { appReducers, metaReducers } from '@syb/store/app.reducers';
-
 
 @NgModule({
   declarations: [
@@ -51,12 +50,15 @@ import { appReducers, metaReducers } from '@syb/store/app.reducers';
 
     StoreModule.forRoot(appReducers, { metaReducers }),
 
-    SharedModule,
+
   ],
   providers: [
     StatusBar,
     SplashScreen,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
+  ],
+  schemas: [
+    CUSTOM_ELEMENTS_SCHEMA
   ],
   bootstrap: [AppComponent]
 })

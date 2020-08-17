@@ -38,17 +38,18 @@ export class ProfileService {
     return mappedList;
   }
 
-  public getProfileDetails$(employeeId: number): Observable<ProfileModel> {
-    return this.http.get<ProfileModel>(environment.apiUrl + ApiEndpointsUrl.user)
+  public getProfileDetails$(userId: string): Observable<ProfileModel> {
+    return this.http.get<ProfileModel>(environment.apiUrl + ApiEndpointsUrl.user + userId)
     .pipe(
       map(response => {
+        console.warn(response);
         return this.mapToProfileDetails(response);
       })
     );
   }
 
-  public fetchProfileDetails(employeeId: number): void {
-    this.getProfileDetails$(employeeId)
+  public fetchProfileDetails(userId: string): void {
+    this.getProfileDetails$(userId)
     .subscribe((profile: ProfileModel) => {
       if (profile) {
         this.profileStore.profileDetails = profile;

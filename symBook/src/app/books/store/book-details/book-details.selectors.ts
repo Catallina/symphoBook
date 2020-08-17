@@ -20,6 +20,11 @@ export const selectedBookIdState = createSelector(
     (state: BookState) => state.bookDetails.selectedBook
 );
 
+export const currentFileState = createSelector(
+    bookStore,
+    (state: BookState) => state.bookDetails.currentFile
+);
+
 export const canplayState = createSelector(
     bookStore,
     (state: BookState) => state.audio.canplay

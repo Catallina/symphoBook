@@ -6,6 +6,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 
 import { AuthPage } from '@syb/auth/auth.page';
+import { Facebook } from '@ionic-native/facebook/ngx';
 
 const routes: Routes = [
   {
@@ -21,6 +22,9 @@ const routes: Routes = [
     IonicModule,
     RouterModule.forChild(routes)
   ],
-  declarations: [AuthPage]
+  declarations: [AuthPage],
+  providers: [
+    Facebook,
+  ]
 })
 export class AuthPageModule {}

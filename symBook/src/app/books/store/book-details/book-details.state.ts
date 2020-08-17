@@ -5,6 +5,7 @@ export interface BookDetailsState {
     busy: boolean;
     bookGroup: BookGroupModel[];
     selectedBook: BookListModel;
+    currentFile: any;
 
     canplay: boolean;
     loadedmetadata: any;
@@ -22,6 +23,7 @@ export const initialBookDetailsState: BookDetailsState = {
     busy: false,
     bookGroup: null,
     selectedBook: null,
+    currentFile: null,
 
     canplay: false,
     loadedmetadata: null,

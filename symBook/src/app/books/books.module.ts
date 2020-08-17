@@ -1,3 +1,5 @@
+import { SharedModule } from '@syb/shared/shared.module';
+import { FooterComponent } from '@syb/shared/footer/footer.component';
 import { NgModule, NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
@@ -11,16 +13,19 @@ import { BookReducers } from '@syb/books/store/book.reducers';
 import { BooksPage } from '@syb/books/books.page';
 import { BooksRoutingModule } from '@syb/books/books-routing.module';
 import { StoreConstants } from '@syb/shared/constants/store.constants';
-import { mediaStateReducer } from '@syb/books/store/audio/audio.reducer';
 
 @NgModule({
   declarations: [
-    BooksPage
+    BooksPage,
   ],
   imports: [
     CommonModule,
     IonicModule,
     BooksRoutingModule,
+
+
+    //SharedModule,
+
 
     StoreModule.forFeature( StoreConstants.booksStore, BookReducers ),
     EffectsModule.forFeature([

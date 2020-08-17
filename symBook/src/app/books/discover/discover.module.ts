@@ -6,7 +6,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 
 import { DiscoverPage } from '@syb/books/discover/discover.page';
-import { FooterComponent } from '@syb/shared/footer/footer.component';
+import { SharedModule } from '@syb/shared/shared.module';
 
 const routes: Routes = [
   {
@@ -21,7 +21,9 @@ const routes: Routes = [
     FormsModule,
     IonicModule,
     ReactiveFormsModule,
-    RouterModule.forChild(routes)
+    RouterModule.forChild(routes),
+
+    SharedModule,
   ],
   schemas: [
     CUSTOM_ELEMENTS_SCHEMA,
@@ -29,7 +31,6 @@ const routes: Routes = [
   ],
   declarations: [
     DiscoverPage,
-    FooterComponent,
   ],
   entryComponents: []
 })

@@ -35,7 +35,18 @@
                 <p><ion-text color="primary">Author: </ion-text>{{ bookDetails.author }}</p>
                 <p><ion-text color="primary">Title: </ion-text>{{ bookDetails.title }}</p>
                 <p><ion-text color="primary">Description: </ion-text>{{ bookDetails.description }}</p>
+                <p>
+                    <ion-text color="primary" *ngFor="let item of bookDetails.urls">
+                        Capitols: 
+                        {{ item['url'] }}
+                    </ion-text>
+                </p>
             </ion-col>
         </ion-row>
     </ion-grid>
 </ion-content>
+<ion-footer>
+    <ng-container>
+        <syb-footer></syb-footer>
+    </ng-container>
+</ion-footer>

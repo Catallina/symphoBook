@@ -9,6 +9,7 @@ export enum BookDetailsActionType {
   GET_BOOK_GROUP_ERROR = '[BOOK][BookDetails] get book group error',
 
   SELECTED_BOOK = '[BOOK][BookDetails] selected book',
+  CURRENT_FILE = '[BOOK][BookDetails] current file',
 
   AUDIO = '[BOOK][Audio] Audio',
   CANPLAY = '[BOOK][Audio] Canplay',
@@ -43,6 +44,13 @@ export class SelectedBookAction implements Action {
 
   constructor(public payload: { bookDetails: BookListModel }) {}
 }
+
+export class CurrentFileAction implements Action {
+  readonly type = BookDetailsActionType.CURRENT_FILE;
+
+  constructor(public payload: { currentFile: any }) {}
+}
+
 
 export class AudioAction implements Action {
   readonly type = BookDetailsActionType.AUDIO;
@@ -90,6 +98,7 @@ export type BookDetailsActions =
   | GetBookGroupErrorAction
 
   | SelectedBookAction
+  | CurrentFileAction
 
   | AudioAction
   | CanplayAction
