@@ -42,10 +42,8 @@ public static void main(String[] args) {
 		
 		Gson gson = new Gson();
 		String jsonBooksFrontPage="";
-
 	
 	
-
 				//repository.insert(b);
 	List<BookHomepage> bookHomepageList = new ArrayList<BookHomepage>();
 	for (Books book: repository.findAll())

@@ -30,7 +30,15 @@ public class Books {
 	public List<String>mp3;
 	@Field
 	public String totalTime;
+	@Field
+	public List<String> tags;
 	
+	public List<String> getTags() {
+		return tags;
+	}
+	public void setTags(List<String> tags) {
+		this.tags = tags;
+	}
 	public String getId() {
 		return id;
 	}
@@ -82,6 +90,9 @@ public class Books {
 	public List<String> getMp3() {
 		return mp3;
 	}
+	public String getFirstMp3() {
+		return mp3.get(0);
+	}
 	public void setMp3(List<String> mp3) {
 		this.mp3 = mp3;
 	}
@@ -95,7 +106,7 @@ public class Books {
 	//public <String> mp3=new ArrayList<String>();
 
 	public Books () {}
-	public Books(String photo, String title, String description, int chapters, String language, String year, String author, List<String> mp3, String totalTime)
+	public Books(String photo, String title, String description, int chapters, String language, String year, String author, List<String> mp3, String totalTime,List<String> tags)
 	{
 		this.photo=photo;
 		this.title=title;
@@ -106,6 +117,7 @@ public class Books {
 		this.author=author;
 		this.mp3=mp3;
 		this.totalTime=totalTime;
+		this.tags=tags;
 	}
 	public Books(String title)
 	{

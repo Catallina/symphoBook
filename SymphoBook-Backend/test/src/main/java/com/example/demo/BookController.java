@@ -3,7 +3,10 @@ package com.example.demo;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.google.gson.Gson;
 @RestController
 public class BookController {
 
@@ -21,8 +24,20 @@ public class BookController {
 	{
 		
 	//	return new ResponseEntity<>(book.getJsonAllBooksFrontPage(),HttpStatus.OK);
-		System.out.println(book.getJsonAllBooksFrontPage());
+		//System.out.println(book.getJsonAllBooksFrontPage());
 		return ResponseEntity.status(HttpStatus.OK).body(book.getJsonAllBooksFrontPage());
 		
+	}
+	@GetMapping("homepage/book")   //http://localhost:8080/homepage/book?id=
+	ResponseEntity<String> getBookFromId(@RequestParam String id)
+	{	Gson g = new Gson();
+		String jsonBooksId=book.getJsonFromBookId(id);
+	
+		if(jsonBooksId=="Book not found")
+		{
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(g.toJson(jsonBooksId));
+			
+		}
+		return ResponseEntity.status(HttpStatus.OK).body(jsonBooksId);
 	}
 }
