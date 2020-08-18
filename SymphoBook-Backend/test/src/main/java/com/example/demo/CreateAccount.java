@@ -76,7 +76,7 @@ public class CreateAccount {
 		  return errorMessage;
 	}
 	
-    public Boolean addDetailsforAccount(String Description,String Love, String Birthday,  String Favorites)
+   /* public Boolean addDetailsforAccount(String Description,String Love, String Birthday,  String Favorites)
     {
     	
   	  UsersDescription userDescription=new UsersDescription(Description,Love,Birthday,Favorites);
@@ -84,16 +84,16 @@ public class CreateAccount {
                .getReference("users");
   	  refAddUserDescription.child(createAccountActivityInstance.getUserRecord().getUid()).updateChildrenAsync(userDescription.getUserMapDescription());
   	  return (createAccountActivityInstance.getUserRecord()!=null);
-    }
+    }*/
     
     
     
 	//p
-    public Boolean addDetailsforAccountAfter(String Description,String Love, String Birthday,  String Favorites, String email) throws FirebaseAuthException
+    public Boolean addDetailsforAccountAfter(String Description,String Love, String Birthday,  String Favorites, String uid) throws FirebaseAuthException
     {
     	  UsersDescription userDescription=new UsersDescription(Description,Love,Birthday,Favorites);
     	  UserRecord userRecord;
-				userRecord = FirebaseAuth.getInstance().getUserByEmail(email);
+				userRecord = FirebaseAuth.getInstance().getUser(uid);
 				   System.out.println("Successfully fetched user data: " + userRecord.getUid());
     	  DatabaseReference refAddUserDescription = fbs.getDb()
                   .getReference("users");

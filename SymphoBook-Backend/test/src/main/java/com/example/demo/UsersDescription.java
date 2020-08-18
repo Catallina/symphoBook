@@ -22,9 +22,13 @@ public class UsersDescription {
 		this.description=description;
 		this.love=love;
 		this.birthday=birthday;
+		//this.favorites=favorites;
+	}
+	public UsersDescription (String favorites)
+	{
+	
 		this.favorites=favorites;
 	}
-
 	public void  setDescription(String description)
 	{
 		this.description=description;
@@ -63,7 +67,7 @@ public class UsersDescription {
 		UserMapDescription.put("Description", description);
 		UserMapDescription.put("Love", love);
 	UserMapDescription.put("Birthday", birthday);
-	UserMapDescription.put("Favorites", favorites);
+//	UserMapDescription.put("Favorites", favorites);
 		return (HashMap<String, Object>) UserMapDescription;
 	}
 

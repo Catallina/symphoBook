@@ -3,9 +3,11 @@ package com.example.demo;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.google.firebase.auth.FirebaseAuthException;
 import com.google.gson.Gson;
 @RestController
 public class BookController {
@@ -39,5 +41,10 @@ public class BookController {
 			
 		}
 		return ResponseEntity.status(HttpStatus.OK).body(jsonBooksId);
+	}
+	@PostMapping("book/addfavorite")
+	ResponseEntity<Boolean> addToFavorite(@RequestParam String id, @RequestParam String uid) throws FirebaseAuthException, InterruptedException
+	{
+		return ResponseEntity.status(HttpStatus.OK).body(book.getFavoriteTitle(id, uid));
 	}
 }

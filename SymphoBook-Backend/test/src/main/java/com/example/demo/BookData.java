@@ -13,6 +13,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.stereotype.Component;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthException;
+import com.google.firebase.auth.UserRecord;
+import com.google.firebase.database.DatabaseReference;
 import com.google.gson.Gson;
 
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -55,25 +59,35 @@ public class BookData implements CommandLineRunner {
 		jsonBooksId=gson.toJson(bookFromId);
 		else
 			jsonBooksId="Book not found";
-		
-		/*Optional<Books> bookFromId = repository.findById(id);
-		if (bookFromId.isPresent())
-		{
-			Books book=bookFromId.get();
-			jsonBooksId=gson.toJson(book);
 			
-		}
-		else
-		{
-			error="Book not found";
-			jsonBooksId=gson.toJson(error);
-		}
-	*/
-		
-		
 		return jsonBooksId;
 	}
+	public Boolean getFavoriteTitle(String id,String uid) throws FirebaseAuthException, InterruptedException
+	{	
+		List<String> ListFavorites;
+		Map<String, Object> favorite = new HashMap<String,Object>();
+		RetriveDataFromDbUserProfile profile = new RetriveDataFromDbUserProfile(uid);
+		Thread t=new Thread(profile);
+		   t.start();
+		    Thread.sleep(10000);
+		    t.join();
+		ListFavorites=profile.getListFavorites();
+		FireBaseService fbs = ConnectToBd.Connection();
+		String favoriteBook=repository.findById(id).orElse(null).getTitle();
+		UsersDescription userDescription = new UsersDescription(favoriteBook);
+		ListFavorites.add(favoriteBook);
+		favorite.put("Favorites",ListFavorites);
+		UserRecord userRecord;
+		userRecord = FirebaseAuth.getInstance().getUser(uid);
+		   System.out.println("Successfully fetched user data: " + userRecord.getUid());
+  DatabaseReference refAddUserDescription = fbs.getDb()
+          .getReference("users");
+  refAddUserDescription.child(userRecord.getUid()).updateChildrenAsync(favorite);
+  return (userRecord.getUid()!=null);
+		
+		
 	
+	}
 	@Override
 	public void run(String... args) throws Exception {
 		// TODO Auto-generated method stub
