@@ -35,7 +35,7 @@ public class CreateAccount {
 			
 			errors.put(e1.getErrorCode(), e1.getLocalizedMessage());
 		}
-	catch (IllegalArgumentException e2)
+		catch (IllegalArgumentException e2)
 		
 		{
 	
@@ -43,7 +43,6 @@ public class CreateAccount {
 		}
 		
 
-		
 		String errorMessage="Created";
 		if(errors.containsKey("email-already-exists"))
 		{
@@ -55,14 +54,17 @@ public class CreateAccount {
 			{
 				errorMessage="Invalid Phone Number";
 			
+				
+				
 			}
+		
 			else
 				if(errors.containsKey("password too short"))
 				{
-					
 					errorMessage="Password is too short";
 					
 				}
+			
 		if(errorMessage=="Created")
 		{
 		DatabaseReference refAddUser = fbs.getDb().getReference("users");
@@ -74,7 +76,7 @@ public class CreateAccount {
 		  return errorMessage;
 	}
 	
-    public Boolean addDetailsforAccount(String Description,String Love, String Birthday,  String Favorites)
+   /* public Boolean addDetailsforAccount(String Description,String Love, String Birthday,  String Favorites)
     {
     	
   	  UsersDescription userDescription=new UsersDescription(Description,Love,Birthday,Favorites);
@@ -82,16 +84,16 @@ public class CreateAccount {
                .getReference("users");
   	  refAddUserDescription.child(createAccountActivityInstance.getUserRecord().getUid()).updateChildrenAsync(userDescription.getUserMapDescription());
   	  return (createAccountActivityInstance.getUserRecord()!=null);
-    }
+    }*/
     
     
     
 	//p
-    public Boolean addDetailsforAccountAfter(String Description,String Love, String Birthday,  String Favorites, String email) throws FirebaseAuthException
+    public Boolean addDetailsforAccountAfter(String Description,String Love, String DisplayName, String uid) throws FirebaseAuthException
     {
-    	  UsersDescription userDescription=new UsersDescription(Description,Love,Birthday,Favorites);
+    	  UsersDescription userDescription=new UsersDescription(Description,Love,DisplayName);
     	  UserRecord userRecord;
-				userRecord = FirebaseAuth.getInstance().getUserByEmail(email);
+				userRecord = FirebaseAuth.getInstance().getUser(uid);
 				   System.out.println("Successfully fetched user data: " + userRecord.getUid());
     	  DatabaseReference refAddUserDescription = fbs.getDb()
                   .getReference("users");

@@ -18,7 +18,7 @@ public class UserProfile  {
 	public String getJsonUserProfile(String uid) throws InterruptedException
 	{
 			Gson gson = new Gson();
-			Map<String, String> UserProfile;
+			Map<String, Object> UserProfile;
 			
 			RetriveDataFromDbUserProfile profile = new RetriveDataFromDbUserProfile(uid);
 			Thread t=new Thread(profile);
