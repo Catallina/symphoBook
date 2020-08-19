@@ -18,7 +18,7 @@
             matInput
             [(ngModel)]="profileDetailsEdit.name"
             (ngModelChange)="onInputsChange()"
-            [value]="profileDetailsEdit.love"
+            [value]="profileDetailsEdit.name"
             placeholder="Name"
           ></ion-input>
         </ion-item>
@@ -36,18 +36,10 @@
             matInput
             [(ngModel)]="profileDetailsEdit.love"
             (ngModelChange)="onInputsChange()"
-            [value]="profileDetailsEdit.description"
+            [value]="profileDetailsEdit.love"
             placeholder="Love"
           ></ion-input>
         </ion-item>
-        <!-- <ion-item
-          *ngIf="!aboutMeCtrl.valid && aboutMeCtrl.touched"
-          lines="none"
-        >
-          <ion-label>
-            <ion-text color="danger"><h6>Should be a valid em address.</h6></ion-text>
-          </ion-label>
-        </ion-item> -->
       </ion-list>
       <ion-button 
         (click)="updateProfile()" 

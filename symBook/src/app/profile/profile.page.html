@@ -16,7 +16,7 @@
 
 <ion-content has-header="true">
   <div class="profile-bg"></div>
-  <div class="content" *ngIf="profileDetails">
+  <div class="content" *ngIf="profileDetails" (newItemEvent)="profileDetails">
     <div class="profile-info">
       <img class="profile-image" src="assets/image/profil.jpg">
       <h3 class="profile-name">{{ profileDetails.name }}</h3>

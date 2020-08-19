@@ -139,7 +139,7 @@ export class BooksService {
 
   public getBook$(): Observable<BookGroupModel[]> {
 
-    return of(this.mapToBookList(this.responseData))
+    //return of(this.mapToBookList(this.responseData))
     return this.http.get<any>(environment.apiUrl + ApiEndpointsUrl.book)
       .pipe(
         map(response => {
@@ -159,7 +159,18 @@ export class BooksService {
   public storeWishBook$(bookList: BookListModel, userId): Observable<any> {
     //const bookDetailsPayload = this.mapToBookDetailsPayload(bookList, userId);
 
-    return this.http.post<BookListItem>(environment.apiUrl + ApiEndpointsUrl.wishList + '?uid=' + userId + '?bookId' + bookList.id, bookList)
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+      }),
+    };
+
+    const req = {
+      bookId: bookList.id, 
+      userId: userId
+    }
+
+    return this.http.post<BookListItem>(environment.apiUrl + ApiEndpointsUrl.wishList + '?uid=' + userId + '&IdBook=' + bookList.id, req)
     .pipe(
       map(response => response)
     );
@@ -167,7 +178,19 @@ export class BooksService {
 
   public storeFavoriteBook$(bookList: BookListModel, userId): Observable<any> {
 
-    return this.http.post<BookListItem>(environment.apiUrl + ApiEndpointsUrl.wishList + + '?bookId' + bookList.id + '?uid=' + userId, bookList)
+    const req = {
+      bookId: bookList.id, 
+      userId: userId
+    }
+
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+      }),
+    };
+
+
+    return this.http.post<BookListItem>(environment.apiUrl + ApiEndpointsUrl.addFavorites + '?id=' + bookList.id + '&uid=' + userId, req, httpOptions)
     .pipe(
       map(response => response)
     );
@@ -175,7 +198,7 @@ export class BooksService {
 
   public getBookById$(bookId: string): Observable<BookListModel> {
 
-    return of(this.mapToBookDetails(this.responseBookDetails));
+    //return of(this.mapToBookDetails(this.responseBookDetails));
     return this.http.get<any>(environment.apiUrl + ApiEndpointsUrl.bookDetails + '?id=' + bookId)
       .pipe(
         map(response => {

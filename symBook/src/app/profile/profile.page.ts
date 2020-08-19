@@ -52,6 +52,12 @@ export class ProfilePage implements OnInit, OnDestroy {
       .subscribe((profile: ProfileModel) => {
         if (profile) {
           this.profileDetails = profile;
+
+          if (profile && profile.favoriteBook) {
+            profile.favoriteBook = profile.favoriteBook.filter(function (el) {
+              return el != null;
+            });
+          }
         }
     });
 
@@ -71,8 +77,16 @@ export class ProfilePage implements OnInit, OnDestroy {
     this.modalCtrl.create({
         component: EditProfileComponent, 
         componentProps: { profileDetails: this.profileDetails, userId: this.userId }
-      }).then((modalEl) =>{
-      modalEl.present();
-    });
+      })
+      .then(modalEl => {
+        modalEl.present();
+        return modalEl.onDidDismiss();
+      })
+      .then(resultData => {
+        console.log(resultData.data, resultData.role);
+        if (resultData.role === 'confirm') {
+          console.log('Saved!');
+        }
+      });
   }
 }

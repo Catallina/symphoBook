@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 import { ProfileModel } from '@syb/profile/profile.model';
@@ -55,11 +55,22 @@ export class ProfileService {
   }
 
   public updateProfile$(userId: string, updatedProfile: ProfileModel): void {
-   // http://localhost:8080/users/adddetails?Description=lalallalla&Love=cats&DisplayName=Miri&uid=IWUrYdw5kfO5u9NEbUKme5usFk53
-    const sendData = `?Description=${updatedProfile.description}&Love=${updatedProfile.love}&DisplayName${updatedProfile.name}&uid=${userId}`
+    const sendData = `?Description=${updatedProfile.description}&Love=${updatedProfile.love}&DisplayName=${updatedProfile.name}&uid=${userId}`
+    
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+      }),
+    };
+
+    const data = {
+      description: updatedProfile.description,
+      love: updatedProfile.love,
+      name: updatedProfile.name,
+      userId: userId,
+    }
     this.http.put(
-      environment.apiUrl + ApiEndpointsUrl.userProfile + sendData,
-      updatedProfile)
+      environment.apiUrl + ApiEndpointsUrl.userProfile + sendData, data, httpOptions)
       .pipe(catchError(error => [error]))
       .subscribe((response: ProfileModel) => this.profileStore.profileDetails = response);
   }
