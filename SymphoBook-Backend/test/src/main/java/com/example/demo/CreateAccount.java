@@ -6,17 +6,20 @@ import com.google.firebase.auth.UserRecord;
 import com.google.firebase.database.*;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Component
 public class CreateAccount {
-
+	@Autowired
+	private BookWishlistRepository wishlistRepository;
 	CreateAccountActivity createAccountActivityInstance;
 	/*1*/FireBaseService fbs = ConnectToBd.Connection();
 	Map<String, String> errors = new HashMap<String,String>();
@@ -25,13 +28,16 @@ public class CreateAccount {
 	{
 		
 		
-		
+
 		createAccountActivityInstance=new CreateAccountActivity();
 		
 		
 		try {
 			createAccountActivityInstance.CreateNewAccount(Email, Password, PhoneNumber, DisplayName);
+			BookWishlist wishlist = new BookWishlist(createAccountActivityInstance.getUserRecord().getUid(),new ArrayList<String>());
+			wishlistRepository.save(wishlist);
 		}  catch (FirebaseAuthException e1) {
+			
 			
 			errors.put(e1.getErrorCode(), e1.getLocalizedMessage());
 		}
