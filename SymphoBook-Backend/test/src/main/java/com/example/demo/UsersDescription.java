@@ -10,19 +10,28 @@ public class UsersDescription {
 	String love;
 	String birthday;
 	String favorites;
+	String DisplayName;
 	users us;
 	Map<String, Object> UserMapDescription ;
 	
 	
 	public UsersDescription ()
 	{}
-	public UsersDescription (String description, String love, String birthday, String favorites)
+	public UsersDescription (String description, String love,String DisplayName)
 	{
 		
 		this.description=description;
 		this.love=love;
-		this.birthday=birthday;
+		this.DisplayName=DisplayName;
+		//this.birthday=birthday;
 		//this.favorites=favorites;
+	}
+	
+	public String getDisplayName() {
+		return DisplayName;
+	}
+	public void setDisplayName(String displayName) {
+		DisplayName = displayName;
 	}
 	public UsersDescription (String favorites)
 	{
@@ -66,7 +75,7 @@ public class UsersDescription {
 		UserMapDescription = new HashMap<String, Object>();
 		UserMapDescription.put("Description", description);
 		UserMapDescription.put("Love", love);
-	UserMapDescription.put("Birthday", birthday);
+			UserMapDescription.put("DisplayName", DisplayName);
 //	UserMapDescription.put("Favorites", favorites);
 		return (HashMap<String, Object>) UserMapDescription;
 	}

@@ -105,8 +105,12 @@ public class BookData implements CommandLineRunner {
 		
 		
 	}
-	public String getJsonWishlistBook()
+	public String getJsonWishlistBook(String uid, String IdBook)
 	{
+		BookWishlist OldWishlist = new BookWishlist();
+		OldWishlist=wishlistRepository.findById(uid).orElse(null);
+		
+		
 		return "";
 	}
 	@Override

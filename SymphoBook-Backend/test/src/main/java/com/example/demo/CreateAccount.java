@@ -89,9 +89,9 @@ public class CreateAccount {
     
     
 	//p
-    public Boolean addDetailsforAccountAfter(String Description,String Love, String Birthday,  String Favorites, String uid) throws FirebaseAuthException
+    public Boolean addDetailsforAccountAfter(String Description,String Love, String DisplayName, String uid) throws FirebaseAuthException
     {
-    	  UsersDescription userDescription=new UsersDescription(Description,Love,Birthday,Favorites);
+    	  UsersDescription userDescription=new UsersDescription(Description,Love,DisplayName);
     	  UserRecord userRecord;
 				userRecord = FirebaseAuth.getInstance().getUser(uid);
 				   System.out.println("Successfully fetched user data: " + userRecord.getUid());
