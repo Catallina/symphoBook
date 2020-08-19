@@ -102,6 +102,24 @@ export class BookDetailPage implements OnInit, OnDestroy {
     );
   }
 
+  public onAddFavorite(event: Event) {
+    event.stopPropagation();
+
+    this.modalCtrl.dismiss(
+      this.loadingCtrl
+      .create({ message: 'Book added...' })
+      .then(loadingEl => {
+        loadingEl.present();
+        this.authService.userId.subscribe((userId) => {
+          this.bookService.storeFavoriteBook$(this.bookDetails, userId)
+            .subscribe(() => {
+              loadingEl.dismiss();
+            });
+        })
+      })
+    );
+  }
+
   public onGetTime() {
     this.bookFacade.getStoreTime$().pipe(takeWhile(() => this.isAlive))
     .subscribe((time) => {

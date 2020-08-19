@@ -5,6 +5,8 @@ export const ApiEndpointsUrl = {
 
   user: 'users/profile',
   userProfile: 'users/adddetails',
+  wishList: 'book/wishList',
+  addFavorites: 'book/addfavorite',
 
   book: 'gethomepagebooks',
   bookDetails: 'homepage/book',

@@ -157,15 +157,17 @@ export class BooksService {
   }
 
   public storeWishBook$(bookList: BookListModel, userId): Observable<any> {
-    const bookDetailsPayload = this.mapToBookDetailsPayload(bookList, userId);
+    //const bookDetailsPayload = this.mapToBookDetailsPayload(bookList, userId);
 
-    const httpOptions = {
-      headers: new HttpHeaders({
-        'Content-Type':  'application/vnd.api+json',
-      })
-    };
+    return this.http.post<BookListItem>(environment.apiUrl + ApiEndpointsUrl.wishList + '?uid=' + userId + '?bookId' + bookList.id, bookList)
+    .pipe(
+      map(response => response)
+    );
+  }
 
-    return this.http.post<BookListItem>('https://symphobook.firebaseio.com/book.json', bookDetailsPayload)
+  public storeFavoriteBook$(bookList: BookListModel, userId): Observable<any> {
+
+    return this.http.post<BookListItem>(environment.apiUrl + ApiEndpointsUrl.wishList + + '?bookId' + bookList.id + '?uid=' + userId, bookList)
     .pipe(
       map(response => response)
     );

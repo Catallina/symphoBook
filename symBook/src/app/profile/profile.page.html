@@ -46,7 +46,13 @@
           <ion-label>
             <ion-text color="primary">Favorite books: </ion-text> 
           </ion-label>
-          <ion-note slot="end">{{ profileDetails.favoriteBook }}</ion-note>
+          <ion-note slot="end">
+            <ion-list *ngFor="let book of profileDetails.favoriteBook">
+              <ion-item>
+                <ion-label>{{ book }}</ion-label>
+              </ion-item>
+            </ion-list>
+          </ion-note>
         </ion-item>
       </ion-list>
       <ion-row class="ion-justify-content-end">
