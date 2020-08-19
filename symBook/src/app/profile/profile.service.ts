@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 import { ProfileModel } from '@syb/profile/profile.model';
 import { environment } from '@env/environment';
 import { ProfileStore } from '@syb/profile/store/profile.store';
-import { map } from 'rxjs/operators';
+import { map, catchError } from 'rxjs/operators';
 import { ApiEndpointsUrl } from '@syb/shared/api.constants';
 
 @Injectable({
@@ -23,10 +23,8 @@ export class ProfileService {
 
     if (profileDetails) {
       mappedList = new ProfileModel({
-        id: profileDetails.id,
         name: profileDetails.DisplayName,
-        aboutMe: profileDetails.Love,
-        jobTitle: profileDetails.jobTitle,
+        love: profileDetails.Love,
         email: profileDetails.Email,
         birthday: profileDetails.Birthday,
         phoneNumber: profileDetails.PhoneNumber,
@@ -39,10 +37,9 @@ export class ProfileService {
   }
 
   public getProfileDetails$(userId: string): Observable<ProfileModel> {
-    return this.http.get<ProfileModel>(environment.apiUrl + ApiEndpointsUrl.user + userId)
+    return this.http.get<ProfileModel>(environment.apiUrl + ApiEndpointsUrl.user + '?uid=' + userId)
     .pipe(
       map(response => {
-        console.warn(response);
         return this.mapToProfileDetails(response);
       })
     );
@@ -55,5 +52,15 @@ export class ProfileService {
         this.profileStore.profileDetails = profile;
       }
     });
+  }
+
+  public updateProfile$(userId: string, updatedProfile: ProfileModel): void {
+   // http://localhost:8080/users/adddetails?Description=lalallalla&Love=cats&DisplayName=Miri&uid=IWUrYdw5kfO5u9NEbUKme5usFk53
+    const sendData = `?Description=${updatedProfile.description}&Love=${updatedProfile.love}&DisplayName${updatedProfile.name}&uid=${userId}`
+    this.http.put(
+      environment.apiUrl + ApiEndpointsUrl.userProfile + sendData,
+      updatedProfile)
+      .pipe(catchError(error => [error]))
+      .subscribe((response: ProfileModel) => this.profileStore.profileDetails = response);
   }
 }

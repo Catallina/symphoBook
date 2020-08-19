@@ -1,4 +1,4 @@
-import { BookDetailsFacade } from '@syb/books/store/book-details/book-details.facade';
+import { BookDetailsFacade } from '@syb/store/book-details/book-details.facade';
 import { Component, OnInit, ViewChild, Input } from '@angular/core';
 import { takeWhile, filter, distinctUntilChanged, map } from 'rxjs/operators';
 import { AudioService } from '@syb/books/audio/audio.service';

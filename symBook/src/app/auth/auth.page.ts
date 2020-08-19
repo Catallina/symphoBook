@@ -120,9 +120,8 @@ export class AuthPage implements OnInit {
 
     this.authenticate(credentials);
 
-    //form.resetForm();
+    form.resetForm();
   }
-
 
   onLogWithFacebook() {
     this.fb.login(['public_profile', 'user_friends', 'email'])

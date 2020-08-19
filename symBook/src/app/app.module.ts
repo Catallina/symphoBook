@@ -21,6 +21,8 @@ import { AppRoutingModule } from '@syb/app-routing.module';
 import { createTranslateLoader } from '@syb/shared/helper/helper';
 import { SharedModule } from '@syb/shared/shared.module';
 import { appReducers, metaReducers } from '@syb/store/app.reducers';
+import { BookDetailsEffects } from './store/book-details/book-details.effects';
+import { StoreConstants } from './shared/constants/store.constants';
 
 @NgModule({
   declarations: [
@@ -49,7 +51,10 @@ import { appReducers, metaReducers } from '@syb/store/app.reducers';
     }),
 
     StoreModule.forRoot(appReducers, { metaReducers }),
-
+    StoreModule.forFeature(StoreConstants.booksStore, appReducers ),
+    EffectsModule.forFeature([
+      BookDetailsEffects,
+    ]),
 
   ],
   providers: [

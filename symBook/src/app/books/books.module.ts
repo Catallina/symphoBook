@@ -8,11 +8,12 @@ import { StoreModule } from '@ngrx/store';
 
 import { IonicModule } from '@ionic/angular';
 
-import { BookDetailsEffects } from '@syb/books/store/book-details/book-details.effects';
-import { BookReducers } from '@syb/books/store/book.reducers';
+import { BookDetailsEffects } from '@syb/store/book-details/book-details.effects';
+
 import { BooksPage } from '@syb/books/books.page';
 import { BooksRoutingModule } from '@syb/books/books-routing.module';
 import { StoreConstants } from '@syb/shared/constants/store.constants';
+import { appReducers } from '@syb/store/app.reducers';
 
 @NgModule({
   declarations: [
@@ -23,11 +24,9 @@ import { StoreConstants } from '@syb/shared/constants/store.constants';
     IonicModule,
     BooksRoutingModule,
 
-
     //SharedModule,
 
-
-    StoreModule.forFeature( StoreConstants.booksStore, BookReducers ),
+    StoreModule.forFeature( StoreConstants.booksStore, appReducers ),
     EffectsModule.forFeature([
       BookDetailsEffects,
     ]),

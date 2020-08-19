@@ -38,13 +38,13 @@
                 <ion-card-header>
                     <ion-card-title>The most read book</ion-card-title>
                 </ion-card-header>
-                <ion-img [src]="bookDetails[0].bookList[0].imageUrl"></ion-img>
+                <ion-img [src]="bookDetails[0].photo"></ion-img>
                 <ion-card-content>
-                    <p>{{ bookDetails[0].bookList[0].title }}</p>
+                    <p>{{ bookDetails[0].title }}</p>
                 </ion-card-content>
                 <div>
                     <ion-button
-                    (click)="onSelectedBook(bookDetails[0].bookList[0])"
+                    (click)="onSelectedBook(bookDetails[0])"
                     fill="clear"
                     color="primary"
                     [routerLink]="[
@@ -52,7 +52,7 @@
                         'books',
                         'tabs',
                         'discover',
-                        bookDetails[0].bookList[0].id
+                        bookDetails[0].id
                     ]"
                     >
                     More
@@ -69,33 +69,30 @@
                 >
                 <ion-list
                     class="ion-no-margin"
-                    *virtualItem="let bookGroup">
-                    <ion-list-header>
-                        <h1>{{ bookGroup.title }}</h1>
-                    </ion-list-header>
+                    *virtualItem="let bookGroup; let i = index">
 
                     <ion-item-sliding
-                        *ngFor="let bookList of bookGroup.bookList, let i = index"
+                        #slidingBook
                         detail
                         >
                         <ion-item 
-                            (click)="onSelectedBook(bookList)"
-                            [routerLink]="['/', 'books', 'tabs', 'discover', bookList.id]">
+                            (click)="onSelectedBook(bookGroup.id)"
+                            [routerLink]="['/', 'books', 'tabs', 'discover', bookGroup.id]">
                             <ion-thumbnail slot="start">
-                                <img [src]="bookList.imageUrl">
+                                <img [src]="bookGroup.photo">
                             </ion-thumbnail>
                             
                             <ion-label [color]="currentFile.index === i ? 'success' : 'dark'">
-                                <h2>{{ bookList.title }}</h2>
-                                <h3>{{ bookList.author }}</h3>
-                                <p>{{ bookList.description }}</p>
+                                <h2>{{ bookGroup.title }}</h2>
+                                <h3>{{ bookGroup.author }}</h3>
                             </ion-label>
+                            <ion-icon slot="end" name="arrow-redo-outline"></ion-icon>
                         </ion-item>
                         
                         <ion-item-options side="start">
                             <ion-item-option
                                 color="success"
-                                (click)="openFile(bookList, i)"
+                                (click)="openFile(bookGroup, i, slidingBook)"
                             >
                                 <ion-icon  
                                     name="play" *ngIf="currentFile.index !== i"></ion-icon>
@@ -110,6 +107,6 @@
 </ion-content>
 <ion-footer>
     <ng-container>
-        <syb-footer-player [currentFile]="currentFile" ></syb-footer-player>
+        <syb-footer-player (selectBook)="onGetFile($event)" [currentFile]="currentFile" ></syb-footer-player>
     </ng-container>
 </ion-footer>

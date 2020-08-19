@@ -2,11 +2,13 @@ export class BookListModel {
   id: string;
   title: string;
   description: string;
-  imageUrl: string;
+  photo: string;
   author: string;
-  date: Date;
-  url: string;
   urls: string[];
+  chapters: string;
+  language: string;
+  year: string;
+  totalTime: string;
 
   constructor(values: Object = {}) {
     Object.assign(this, values);

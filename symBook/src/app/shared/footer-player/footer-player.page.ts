@@ -1,8 +1,8 @@
-import { BookDetailsFacade } from '@syb/books/store/book-details/book-details.facade';
-import { Component, OnInit, ViewChild, Input } from '@angular/core';
+import { BookDetailsFacade } from '@syb/store/book-details/book-details.facade';
+import { Component, OnInit, ViewChild, Input, Output, EventEmitter } from '@angular/core';
 import { takeWhile, filter, distinctUntilChanged, map } from 'rxjs/operators';
 import { AudioService } from '@syb/books/audio/audio.service';
-import { IonRange } from '@ionic/angular';
+import { IonRange, LoadingController } from '@ionic/angular';
 import { BookGroupModel } from '@syb/books/models/book-group.model';
 
 @Component({
@@ -13,14 +13,16 @@ import { BookGroupModel } from '@syb/books/models/book-group.model';
 export class FooterPlayerPage implements OnInit {
   @ViewChild('range', {static: false}) range: IonRange;
 
-  @Input() public currentFile: any;
+  //@Input() public currentFile: any;
+
+  @Output() selectBook = new EventEmitter<any>();
 
   public isAlive: boolean = false;
 
   public seekbar = 0;
 
   public files: any = [];
-  //public currentFile: any = {};
+  public currentFile: any = {};
   public displayFooter: string = 'inactive';
   public onSeekState: boolean;
 
@@ -34,15 +36,44 @@ export class FooterPlayerPage implements OnInit {
   constructor(
     private bookFacade: BookDetailsFacade,
     public audioService: AudioService,
+    public loadingCtrl: LoadingController,
   ) { }
 
   ngOnInit() {
     this.isAlive = true;
 
-    this.bookFacade.getStoreBookGroup$().pipe(takeWhile(() => this.isAlive)).subscribe((book: BookGroupModel[]) => {
-      this.bookDetails = book;
+    // this.bookFacade.getStoreBookGroup$().pipe(takeWhile(() => this.isAlive)).subscribe((book: BookGroupModel[]) => {
+    //   this.bookDetails = book;
+    // });
+
+    this.getDocuments();
+
+    this.seekbar = this.getTimeSec();
+
+    this.bookFacade.getStoreCurrentFile$().pipe(takeWhile(() => this.isAlive)).subscribe((book) => {
+      this.currentFile = book;
+    });
+
+  }
+
+  ionViewWillUnload(){
+
+    this.seekbar = this.getTimeSec();
+  }
+
+  getDocuments() {
+    this.loadingCtrl.create({
+      message: 'Loading Content. Please Wait...'
+    }).then(loadingEl => {
+      loadingEl.present();
+
+      this.bookFacade.getStoreBookGroup$().pipe(takeWhile(() => this.isAlive)).subscribe((book: BookGroupModel[]) => {
+        this.bookDetails = book;
+        loadingEl.dismiss();
+      });
     });
   }
+
 
   public onGetTime() {
     this.bookFacade.getStoreTime$().pipe(takeWhile(() => this.isAlive))
@@ -133,7 +164,8 @@ export class FooterPlayerPage implements OnInit {
     });
     this.audioService.play();
     this.bookFacade.setPlaying(true);
-    //this.getTimeSec();
+    this.seekbar = this.getTimeSec();
+
   }
 
   stop() {
@@ -143,16 +175,26 @@ export class FooterPlayerPage implements OnInit {
   next() {
     const index = this.currentFile.index + 1;
     if (this.bookDetails) {
-      const file = this.bookDetails[0].bookList[index];
+      const file = this.bookDetails[index];
       this.openFile(file, index);
+      const details = {
+        file, index
+      }
+      this.selectBook.emit(details);
+      this.range['nativeElement'].value = 0;
     }
   }
 
   previous() {
     const index = this.currentFile.index - 1;
     if (this.bookDetails) {
-      const file = this.bookDetails[0].bookList[index];
+      const file = this.bookDetails[index];
       this.openFile(file, index);
+      const details = {
+        file, index
+      }
+      this.selectBook.emit(details);
+      this.range['nativeElement'].value = 0;
     }
   }
 
@@ -162,7 +204,7 @@ export class FooterPlayerPage implements OnInit {
 
   isLastPlaying() {
     if (this.bookDetails) {
-      return this.currentFile.index === this.bookDetails[0].bookList.length - 1;
+      return this.currentFile.index === this.bookDetails.length - 1;
     }
   }
 
@@ -175,21 +217,22 @@ export class FooterPlayerPage implements OnInit {
     this.onSeekState = this.playing;
 
     if (this.onSeekState) {
-      //this.getTimeSec();
+      this.getTimeSec();
       this.pause();
     }
 
   }
 
   onSeekEnd(event) {
-    const newValue = +this.range.value;
-    event.value = this.getTimeSec();
-    if (event && event.value) {
+    this.seekbar = this.getTimeSec();
+    console.warn(this.seekbar);
+
+    if (event && event.detail.value) {
       if (this.onSeekState) {
-        this.audioService.seekTo(event.value * (newValue / 100));
+        this.audioService.seekTo(event.detail.value);
         this.play();
       } else {
-        this.audioService.seekTo(event.value);
+        this.audioService.seekTo(event.detail.value);
       }
     }
   }
@@ -206,7 +249,7 @@ export class FooterPlayerPage implements OnInit {
       //this.seekbar.setValue(value);
 
       valueTime = value;
-      this.seekbar = value;
+      //this.seekbar = value;
     });
 
     return valueTime;

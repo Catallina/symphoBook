@@ -2,7 +2,10 @@ import { BookListModel } from '@syb/shared/models/book-list.model';
 
 export class BookGroupModel {
   title: string;
-  bookList: BookListModel[];
+  id: string;
+  author: string;
+  photo: string;
+  url: string;
 
   constructor(values: Object = {}) {
     Object.assign(this, values);

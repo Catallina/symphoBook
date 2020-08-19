@@ -1,9 +1,9 @@
-import { currentFileState } from './book-details.selectors';
+import { currentFileState, bookDetailsState } from './book-details.selectors';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
 
-import * as BookDetailsActions from '@syb/books/store/book-details/book-details.actions';
+import * as BookDetailsActions from '@syb/store/book-details/book-details.actions';
 import {
     bookGroupState,
     busyState,
@@ -14,8 +14,8 @@ import {
     durationState,
     durationSecState,
     canplayState,
-} from '@syb/books/store/book-details/book-details.selectors';
-import { BookDetailsState } from '@syb/books/store/book-details/book-details.state';
+} from '@syb/store/book-details/book-details.selectors';
+import { BookDetailsState } from '@syb/store/book-details/book-details.state';
 import { BookListModel } from '@syb/shared/models/book-list.model';
 import { BookGroupModel } from '@syb/books/models/book-group.model';
 
@@ -40,8 +40,16 @@ export class BookDetailsFacade {
         this.bookStore.dispatch(new BookDetailsActions.GetBookGroupErrorAction());
     }
 
-    public selectedBook(bookDetails: BookListModel): void {
-        this.bookStore.dispatch(new BookDetailsActions.SelectedBookAction({bookDetails: bookDetails}));
+    public getBookDetails(bookId: string): void {
+        this.bookStore.dispatch(new BookDetailsActions.GetBookDetailsAction({ bookId: bookId }));
+    }
+    
+    public getBookDetailsError(): void {
+        this.bookStore.dispatch(new BookDetailsActions.GetBookDetailsErrorAction());
+    }
+
+    public selectedBook(bookId: string): void {
+        this.bookStore.dispatch(new BookDetailsActions.SelectedBookAction({bookId: bookId}));
     }
 
     public setCurrentFile(currentFile: any): void {
@@ -57,8 +65,12 @@ export class BookDetailsFacade {
         return this.bookStore.select(bookGroupState);
     }
 
-    public getStoreBook$(): Observable<BookListModel> {
+    public getStoreBook$(): Observable<string> {
         return this.bookStore.select(selectedBookIdState);
+    }
+
+    public getStoreBookDetails$(): Observable<BookListModel> {
+        return this.bookStore.select(bookDetailsState);
     }
 
     public getStoreCurrentFile$(): Observable<BookListModel> {

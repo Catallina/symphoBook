@@ -1,71 +1,77 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
 
-import { BookState } from '@syb/books/store/book.state';
+import { AppState } from '@syb/store/app.state';
 import { StoreConstants } from '@syb/shared/constants/store.constants';
 
-export const bookStore  = createFeatureSelector<BookState>(StoreConstants.booksStore);
+export const bookStore  = createFeatureSelector<AppState>(StoreConstants.booksStore);
 
 export const busyState = createSelector(
     bookStore,
-    (state: BookState) => state.bookDetails.busy
+    (state: AppState) => state.bookDetails.busy
 );
 
 export const bookGroupState = createSelector(
     bookStore,
-    (state: BookState) => state.bookDetails.bookGroup
+    (state: AppState) => state.bookDetails.bookGroup
 );
+
+export const bookDetailsState = createSelector(
+    bookStore,
+    (state: AppState) => state.bookDetails.bookDetails
+);
+
 
 export const selectedBookIdState = createSelector(
     bookStore,
-    (state: BookState) => state.bookDetails.selectedBook
+    (state: AppState) => state.bookDetails.selectedBookId
 );
 
 export const currentFileState = createSelector(
     bookStore,
-    (state: BookState) => state.bookDetails.currentFile
+    (state: AppState) => state.bookDetails.currentFile
 );
 
 export const canplayState = createSelector(
     bookStore,
-    (state: BookState) => state.audio.canplay
+    (state: AppState) => state.bookDetails.canplay
 );
 
 export const loadedmetadataState = createSelector(
     bookStore,
-    (state: BookState) => state.audio.loadedmetadata
+    (state: AppState) => state.bookDetails.loadedmetadata
 );
 
 export const durationState = createSelector(
     bookStore,
-    (state: BookState) => state.audio.duration
+    (state: AppState) => state.bookDetails.duration
 );
 
 export const durationSecState = createSelector(
     bookStore,
-    (state: BookState) => state.audio.durationSec
+    (state: AppState) => state.bookDetails.durationSec
 );
 
 export const mediaTypeState = createSelector(
     bookStore,
-    (state: BookState) => state.audio.mediaType
+    (state: AppState) => state.bookDetails.mediaType
 );
 
 export const playingState = createSelector(
     bookStore,
-    (state: BookState) => state.audio.playing
+    (state: AppState) => state.bookDetails.playing
 );
 
 export const timeState = createSelector(
     bookStore,
-    (state: BookState) => state.audio.time
+    (state: AppState) => state.bookDetails.time
 );
 
 export const timeSecState = createSelector(
     bookStore,
-    (state: BookState) => state.audio.timeSec
+    (state: AppState) => state.bookDetails.timeSec
 );
 
 export const loadstartState = createSelector(
     bookStore,
-    (state: BookState) => state.audio.loadstart
+    (state: AppState) => state.bookDetails.loadstart
 );

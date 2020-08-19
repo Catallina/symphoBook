@@ -4,7 +4,8 @@ import { BookListModel } from '@syb/shared/models/book-list.model';
 export interface BookDetailsState {
     busy: boolean;
     bookGroup: BookGroupModel[];
-    selectedBook: BookListModel;
+    bookDetails: BookListModel;
+    selectedBookId: string;
     currentFile: any;
 
     canplay: boolean;
@@ -22,7 +23,8 @@ export interface BookDetailsState {
 export const initialBookDetailsState: BookDetailsState = {
     busy: false,
     bookGroup: null,
-    selectedBook: null,
+    bookDetails: null,
+    selectedBookId: null,
     currentFile: null,
 
     canplay: false,

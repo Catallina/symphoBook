@@ -18,18 +18,22 @@ const routes: Routes = [
   },
   {
     path: 'profile',
-    loadChildren: () => import('@syb/profile/profile.module').then( m => m.ProfilePageModule)
+    loadChildren: () => import('@syb/profile/profile.module').then( m => m.ProfilePageModule),
+    canLoad: [AuthGuard]
   },
   {
     path: 'books-journal',
-    loadChildren: () => import('@syb/books-journal/books-journal.module').then( m => m.BooksJournalPageModule)
+    loadChildren: () => import('@syb/books-journal/books-journal.module').then( m => m.BooksJournalPageModule),
+    canLoad: [AuthGuard]
   },
   {
     path: '**',
     loadChildren: () => import('@syb/not-found/not-found.module').then(m => m.NotFoundModule),
-  },  {
+  },
+  {
     path: 'footer-player',
-    loadChildren: () => import('./shared/footer-player/footer-player.module').then( m => m.FooterPlayerPageModule)
+    loadChildren: () => import('./shared/footer-player/footer-player.module').then( m => m.FooterPlayerPageModule),
+    canLoad: [AuthGuard]
   },
 
 

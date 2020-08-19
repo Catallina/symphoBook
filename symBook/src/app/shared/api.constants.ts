@@ -4,4 +4,9 @@ export const ApiEndpointsUrl = {
   refresh: 'auth/refresh',
 
   user: 'users/profile',
+  userProfile: 'users/adddetails',
+
+  book: 'gethomepagebooks',
+  bookDetails: 'homepage/book',
+
 };

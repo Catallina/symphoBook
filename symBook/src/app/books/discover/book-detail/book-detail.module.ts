@@ -7,6 +7,7 @@ import { IonicModule } from '@ionic/angular';
 
 import { BookDetailPage } from '@syb/books/discover/book-detail/book-detail.page';
 import { CreateWishlistComponent } from '@syb/wishlist/create-wishlist/create-wishlist.component';
+import { SharedModule } from '@syb/shared/shared.module';
 
 const routes: Routes = [
   {
@@ -20,7 +21,7 @@ const routes: Routes = [
     CommonModule,
     FormsModule,
     IonicModule,
-    RouterModule.forChild(routes)
+    RouterModule.forChild(routes),
   ],
   declarations: [
     BookDetailPage,

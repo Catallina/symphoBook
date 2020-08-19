@@ -8,6 +8,10 @@ export enum BookDetailsActionType {
   GET_BOOK_GROUP_SUCCESS = '[BOOK][BookDetails] get book group success',
   GET_BOOK_GROUP_ERROR = '[BOOK][BookDetails] get book group error',
 
+  GET_BOOK_DETAILS = '[BOOK][BookDetails] Get book details',
+  GET_BOOK_DETAILS_SUCCESS = '[BOOK][BookDetails] Get book details success',
+  GET_BOOK_DETAILS_ERROR = '[BOOK][BookDetails] Get book details error',
+
   SELECTED_BOOK = '[BOOK][BookDetails] selected book',
   CURRENT_FILE = '[BOOK][BookDetails] current file',
 
@@ -39,10 +43,27 @@ export class GetBookGroupErrorAction implements Action {
   constructor() {}
 }
 
+// GET BOOK DETAILS
+export class GetBookDetailsAction implements Action {
+  readonly type = BookDetailsActionType.GET_BOOK_DETAILS;
+
+  constructor(public payload: { bookId: string } ) { }
+}
+export class GetBookDetailsSuccessAction implements Action {
+  readonly type = BookDetailsActionType.GET_BOOK_DETAILS_SUCCESS;
+
+  constructor(public payload: { details: BookListModel }) { }
+}
+export class GetBookDetailsErrorAction implements Action {
+  readonly type = BookDetailsActionType.GET_BOOK_DETAILS_ERROR;
+
+  constructor() { }
+}
+
 export class SelectedBookAction implements Action {
   readonly type = BookDetailsActionType.SELECTED_BOOK;
 
-  constructor(public payload: { bookDetails: BookListModel }) {}
+  constructor(public payload: { bookId: string }) {}
 }
 
 export class CurrentFileAction implements Action {
@@ -96,6 +117,10 @@ export type BookDetailsActions =
   | GetBookGroupAction
   | GetBookGroupSuccessAction
   | GetBookGroupErrorAction
+
+  | GetBookDetailsAction
+  | GetBookDetailsSuccessAction
+  | GetBookDetailsErrorAction
 
   | SelectedBookAction
   | CurrentFileAction

@@ -19,7 +19,11 @@ export interface BookListItem {
     id: string;
     title: string;
     description: string;
-    imageUrl: string;
+    photo: string;
     author: string;
-    date: Date;
+    urls: string[];
+    chapters: string;
+    language: string;
+    year: string;
+    totalTime: string;
 }

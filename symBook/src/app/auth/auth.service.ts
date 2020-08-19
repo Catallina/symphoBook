@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, BehaviorSubject } from 'rxjs';
+import { Observable, BehaviorSubject, from } from 'rxjs';
 import { environment } from '@env/environment';
 import { map, tap } from 'rxjs/operators';
 
@@ -8,6 +8,8 @@ import { ApiEndpointsUrl } from '@syb/shared/api.constants';
 import { Credentials } from '@syb/auth/interface/credentials.interface';
 import { AuthResponseData } from '@syb/auth/interface/authResponseData.interface';
 import { User } from './model/user.model';
+
+import { Plugins } from '@capacitor/core';
 
 @Injectable({
   providedIn: 'root'
@@ -43,10 +45,11 @@ export class AuthService {
     const credentials = {
       email: email,
       password: password,
+      returnSecureToken: true,
     };
 
     return this.http.post<AuthResponseData> (
-      `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=
+      `https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=
       ${environment.firebase.apiKey}`,
       credentials)
       .pipe(tap(this.setUserData.bind(this)));
@@ -54,7 +57,44 @@ export class AuthService {
 
   logout() {
     this._user.next(null);
+    Plugins.Storage.remove({key: 'authData'});
   }
+
+  autoLogin() {
+    return from(Plugins.Storage.get({ key: 'authData' })).pipe(
+      map(storedData => {
+        if (!storedData || !storedData.value) {
+          return null;
+        }
+        const parsedData = JSON.parse(storedData.value) as {
+          token: string;
+          tokenExpirationDate: string;
+          userId: string;
+          email: string;
+        };
+        const expirationTime = new Date(parsedData.tokenExpirationDate);
+        if (expirationTime <= new Date()) {
+          return null;
+        }
+        const user = new User(
+          parsedData.userId,
+          parsedData.email,
+          parsedData.token,
+          expirationTime
+        );
+        return user;
+      }),
+      tap(user => {
+        if (user) {
+          this._user.next(user);
+        }
+      }),
+      map(user => {
+        return !!user;
+      })
+    );
+  }
+
 
   public createAccount$(credentials: Credentials): Observable<any> {
 
@@ -76,17 +116,11 @@ export class AuthService {
     ))
   }
 
-
   public setUserData(userData: AuthResponseData) {
     const expirationTime = new Date(
-      new Date().getTime() +  +userData.expiresIn
+      new Date().getTime() +  +userData.expiresIn * 1000
     );
 
-
-
-    console.warn(new Date().getTime() , '-----', userData.expiresIn)
-
-    console.warn(expirationTime);
     this._user.next(
       new User(
         userData.localId,
@@ -95,6 +129,27 @@ export class AuthService {
         expirationTime
       )
     );
+    this.storeAuthData(
+      userData.localId,
+      userData.idToken,
+      expirationTime.toISOString(),
+      userData.email
+    );
+  }
+
+  private storeAuthData(
+    userId: string,
+    token: string,
+    tokenExpirationDate: string,
+    email: string
+  ) {
+    const data = JSON.stringify({
+      userId: userId,
+      token: token,
+      tokenExpirationDate: tokenExpirationDate,
+      email: email
+    });
+    Plugins.Storage.set({ key: 'authData', value: data });
   }
 
 }

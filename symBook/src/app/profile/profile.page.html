@@ -1,3 +1,10 @@
+<ion-row *ngIf="!profileDetails"  
+  class="ion-justify-content-center spinner-center">
+  <ion-col class="ion-padding" size="2">
+    <ion-spinner color="secondary"></ion-spinner>
+  </ion-col>
+</ion-row>
+
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
@@ -15,38 +22,39 @@
       <h3 class="profile-name">{{ profileDetails.name }}</h3>
       <span class="profile-description">{{ profileDetails.description }}</span>
     </div>
-    <ion-list>
-      <ion-item>
-        <ion-label>
-          <ion-text color="primary">Birthday: </ion-text>
-        </ion-label>
-        <ion-note slot="end">{{ profileDetails.birthday }}</ion-note>
-      </ion-item>
-      <ion-item>
-        <ion-label>
-          <ion-text color="primary">Phone number: </ion-text>
-        </ion-label>
-        <ion-note slot="end">{{ profileDetails.phoneNumber }}</ion-note>
-      </ion-item>
-      <ion-item>
-        <ion-label>
-          <ion-text color="primary">Job title: </ion-text> 
-        </ion-label>
-        <ion-note slot="end">{{ profileDetails.jobTitle }}</ion-note>
-      </ion-item>
-      <ion-item>
-        <ion-label>
-          <ion-text color="primary">Love: </ion-text>
-        </ion-label>
-        <ion-note slot="end">{{ profileDetails.aboutMe }}</ion-note>
-      </ion-item>
-      <ion-item>
-        <ion-label>
-          <ion-text color="primary">Favorite books: </ion-text> 
-        </ion-label>
-        <ion-note slot="end">{{ profileDetails.favoriteBook }}</ion-note>
-      </ion-item>
-    </ion-list>
+    <ion-card>
+      <ion-list>
+        <ion-item>
+          <ion-label>
+            <ion-text color="primary">Birthday: </ion-text>
+          </ion-label>
+          <ion-note slot="end">{{ profileDetails.birthday }}</ion-note>
+        </ion-item>
+        <ion-item>
+          <ion-label>
+            <ion-text color="primary">Phone number: </ion-text>
+          </ion-label>
+          <ion-note slot="end">{{ profileDetails.phoneNumber }}</ion-note>
+        </ion-item>
+        <ion-item>
+          <ion-label>
+            <ion-text color="primary">Love: </ion-text>
+          </ion-label>
+          <ion-note slot="end">{{ profileDetails.love }}</ion-note>
+        </ion-item>
+        <ion-item>
+          <ion-label>
+            <ion-text color="primary">Favorite books: </ion-text> 
+          </ion-label>
+          <ion-note slot="end">{{ profileDetails.favoriteBook }}</ion-note>
+        </ion-item>
+      </ion-list>
+      <ion-row class="ion-justify-content-end">
+        <ion-col class="ion-margin" size="2">
+          <ion-button color="tertiary" (click)="onEditProfile()" ><ion-icon name="create-outline"></ion-icon></ion-button>
+        </ion-col>
+      </ion-row> 
+    </ion-card>
   </div>
 </ion-content>
 <ion-footer>

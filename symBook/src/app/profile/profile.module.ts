@@ -8,7 +8,7 @@ import { IonicModule } from '@ionic/angular';
 
 import { ProfilePageRoutingModule } from '@syb/profile/profile-routing.module';
 import { ProfilePage } from '@syb/profile/profile.page';
-
+import { EditProfileComponent } from '@syb/profile/edit-profile/edit-profile.component';
 
 @NgModule({
   imports: [
@@ -23,9 +23,13 @@ import { ProfilePage } from '@syb/profile/profile.page';
   ],
   declarations: [
     ProfilePage,
+    EditProfileComponent,
   ],
   schemas: [
     CUSTOM_ELEMENTS_SCHEMA,
+  ],
+  entryComponents: [
+    EditProfileComponent,
   ]
 })
 export class ProfilePageModule {}

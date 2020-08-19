@@ -1,14 +1,13 @@
 export class ProfileModel {
-  aboutMe: string;
+  id: string;
+  love: string;
   birthday: string;
   description: string;
   email: string;
-  favoriteBook: string[];
-  id: number;
-  jobTitle: string;
   name: string;
-  passions: string;
   phoneNumber: string;
+
+  favoriteBook: string[];
 
   constructor(values: Object = {}) {
     Object.assign(this, values);

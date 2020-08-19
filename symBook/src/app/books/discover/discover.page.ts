@@ -4,7 +4,7 @@ import { Store } from '@ngrx/store';
 import { takeWhile } from 'rxjs/operators';
 import { filter, map, distinctUntilChanged } from 'rxjs/operators';
 
-import { BookDetailsFacade } from '@syb/books/store/book-details/book-details.facade';
+import { BookDetailsFacade } from '@syb/store/book-details/book-details.facade';
 
 import { AuthService } from '@syb/auth/auth.service';
 import { BookListModel } from '@syb/shared/models/book-list.model';
@@ -12,7 +12,7 @@ import { BookGroupModel } from '@syb/books/models/book-group.model';
 
 
 import { BooksService } from '@syb/books/books.service';
-import { NavController, LoadingController, IonRange } from '@ionic/angular';
+import { NavController, LoadingController, IonRange, IonItemSliding } from '@ionic/angular';
 import { AudioService } from '@syb/books/audio/audio.service'; 
 
 @Component({
@@ -41,6 +41,9 @@ export class DiscoverPage implements OnInit, OnDestroy {
   public playing = true;
   public time: any;
 
+  public bookId: string;
+  public book: BookListModel;
+
   state: any = {};
 
   constructor(
@@ -51,26 +54,46 @@ export class DiscoverPage implements OnInit, OnDestroy {
     public audioService: AudioService,
     public loadingCtrl: LoadingController,
   ) {
+    this.isAlive = true;
   }
 
   ngOnInit() {
-    this.isAlive = true;
 
     this.getDocuments();
+
+    this.bookFacade.getStoreBook$().pipe(takeWhile(() => this.isAlive)).subscribe((bookId: string) => {
+      this.bookId = bookId;
+      if (bookId) {
+        this.bookFacade.getBookDetails(bookId);
+      }
+    });
+
+    this.bookFacade.getStoreBookDetails$().pipe(takeWhile(() => this.isAlive)).subscribe((book: BookListModel) => {
+      this.book = book;
+    });
+    
+
+    this.bookFacade.getStoreCurrentFile$().pipe(takeWhile(() => this.isAlive)).subscribe((book) => {
+      if (book) {
+        this.currentFile = book;
+      }
+    });
   }
 
   ngOnDestroy() {
     this.isAlive = false;
   }
 
-  public onSelectedBook(bookDetails: BookListModel): void {
-    this.bookFacade.selectedBook(bookDetails);
+  public onSelectedBook(bookId: string): void {
+    this.bookFacade.selectedBook(bookId);
   }
 
   public onGetTime() {
     this.bookFacade.getStoreTime$().pipe(takeWhile(() => this.isAlive))
     .subscribe((time) => {
-      this.time = time;
+      if (time) {
+        this.time = time;
+      }
     });
 
     return this.time;
@@ -99,12 +122,15 @@ export class DiscoverPage implements OnInit, OnDestroy {
     });
   }
 
-  openFile(file, index) {
+  openFile(file, index, slidingEl: IonItemSliding) {
     this.currentFile = { index, file };
+
+    console.warn(this.currentFile)
     this.playStream(file.url);
     this.fileSelected.emit(this.currentFile);
     this.bookFacade.setCurrentFile(this.currentFile);
     this.displayFooter = 'active';
+    slidingEl.close();
   }
 
   resetState() {
@@ -114,6 +140,10 @@ export class DiscoverPage implements OnInit, OnDestroy {
     this.bookFacade.setPlaying(false);
     this.bookFacade.setPause(false);
     this.bookFacade.setLoadStart(false);
+  }
+
+  onGetFile(currentFile) {
+    this.bookFacade.setCurrentFile(currentFile);
   }
 
   playStream(url) {
@@ -156,108 +186,5 @@ export class DiscoverPage implements OnInit, OnDestroy {
     });
   }
 
-  pause() {
-    this.bookFacade.getStorePlaying$().pipe(takeWhile(() => this.isAlive))
-      .subscribe((playing) => {
-        this.playing = playing;
-    });
-    this.audioService.pause();
-    this.bookFacade.setPlaying(false);
-  }
 
-  play() {
-    this.bookFacade.getStorePlaying$().pipe(takeWhile(() => this.isAlive))
-      .subscribe((playing) => {
-        this.playing = playing;
-    });
-    this.audioService.play();
-    this.bookFacade.setPlaying(true);
-    //this.getTimeSec();
-  }
-
-  stop() {
-    this.audioService.stop();
-  }
-
-  next() {
-    const index = this.currentFile.index + 1;
-    const file = this.bookDetails[0].bookList[index];
-    this.openFile(file, index);
-  }
-
-  previous() {
-    const index = this.currentFile.index - 1;
-    const file = this.bookDetails[0].bookList[index];
-    this.openFile(file, index);
-  }
-
-  isFirstPlaying() {
-    return this.currentFile.index === 0;
-  }
-
-  isLastPlaying() {
-    return this.currentFile.index === this.bookDetails[0].bookList.length - 1;
-  }
-
-  onSeekStart() {
-    this.bookFacade.getStorePlaying$().pipe(takeWhile(() => this.isAlive))
-    .subscribe((playing) => {
-        this.playing = playing;
-    });
-
-    this.onSeekState = this.playing;
-
-    if (this.onSeekState) {
-      //this.getTimeSec();
-      this.pause();
-    }
-
-  }
-
-  onSeekEnd(event) {
-    const newValue = +this.range.value;
-    event.value = this.getTimeSec();
-    if (event && event.value) {
-      if (this.onSeekState) {
-        this.audioService.seekTo(event.value * (newValue / 100));
-        this.play();
-      } else {
-        this.audioService.seekTo(event.value);
-      }
-    }
-  }
-
-  public getTimeSec() {
-    let valueTime = null;
-    //Updating the Seekbar based on currentTime
-    this.bookFacade.getStoreTimeSec$().pipe(
-      filter(value => value !== undefined),
-      map((value: any) => Number(value)),
-      distinctUntilChanged()
-    )
-    .subscribe((value: any) => {
-      //this.seekbar.setValue(value);
-
-      valueTime = value;
-      this.seekbar = value;
-    });
-
-    return valueTime;
-  }
-
-  public onGetDurationSec() {
-    this.bookFacade.getStoreDurationSec$().pipe(takeWhile(() => this.isAlive))
-    .subscribe((durationSec) => {
-      if (durationSec) {
-        this.durationSec = durationSec;
-      }
-    });
-    return this.durationSec;
-  }
-
-  // reset() {
-  //   this.resetState();
-  //   this.currentFile = {};
-  //   this.displayFooter = 'inactive';
-  // }
 }

@@ -1,39 +1,37 @@
-<p>foooooter</p>
 <ion-footer *ngIf="currentFile && currentFile.file">
-<ion-toolbar color="primary">
-    <ion-range 
-        #range
-        min="0" 
-        color="success" 
-        [max]="onGetDurationSec()" 
-        [(ngModel)]="seekbar" 
-        (touchend)="onSeekEnd($event)"
-        (ionFocus)="onSeekStart()" 
-        (mouseup)="onSeekEnd($event)"
-        name="seekbar">
-        <ion-label slot="start">{{ onGetTime() }}</ion-label>
-        <ion-label slot="end">{{ onGetDuration() }}</ion-label>
-    </ion-range>
+    <ion-toolbar color="success">
+        <ion-range 
+            #range
+            min="0" 
+            color="dark" 
+            [max]="onGetDurationSec()" 
+            [(ngModel)]="seekbar"
+            (ionFocus)="onSeekStart()" 
+            (ionChange)="onSeekEnd($event)"
+            name="seekbar">
+            <ion-label color="dark" slot="start">{{ onGetTime() }}</ion-label>
+            <ion-label color="dark" slot="end">{{ onGetDuration() }}</ion-label>
+        </ion-range>
     </ion-toolbar>
-    <ion-toolbar color="primary" padding>
-    <ion-row>
-        <ion-col size="12" class="ion-text-center name">
-            {{ currentFile.file.name }}
-        </ion-col>
-        <ion-col size="12" class="ion-text-center">
-            <ion-button fill="clear" color="light" [disabled]="isFirstPlaying()" (click)="previous()">
-                <ion-icon slot="icon-only" name="play-skip-back-outline"></ion-icon>
-            </ion-button>
-            <ion-button fill="clear" color="light" *ngIf="!playing" (click)="play()">
-                <ion-icon slot="icon-only" name="play"></ion-icon>
-            </ion-button>
-            <ion-button fill="clear" color="light" *ngIf="playing" (click)="pause()">
-                <ion-icon slot="icon-only" name="pause"></ion-icon>
-            </ion-button>
-            <ion-button fill="clear" color="light" [disabled]="isLastPlaying()" (click)="next()">
-                <ion-icon slot="icon-only" name="play-skip-forward-outline"></ion-icon>
-            </ion-button>
-        </ion-col>
-    </ion-row>
-</ion-toolbar>
+    <ion-toolbar color="success" padding>
+        <ion-row  class="ion-padding-bottom" >
+            <ion-col size="12" class="ion-text-center name">
+                <ion-text color="dark"><h5>{{ currentFile.file.title }}</h5></ion-text>
+            </ion-col>
+            <ion-col size="12" class="ion-text-center">
+                <ion-button fill="clear" color="dark" [disabled]="isFirstPlaying()" (click)="previous()">
+                    <ion-icon slot="icon-only" name="play-skip-back-outline"></ion-icon>
+                </ion-button>
+                <ion-button fill="clear" color="dark" *ngIf="!playing" (click)="play()">
+                    <ion-icon slot="icon-only" name="play-sharp"></ion-icon>
+                </ion-button>
+                <ion-button fill="clear" color="dark" *ngIf="playing" (click)="pause()">
+                    <ion-icon slot="icon-only" name="pause"></ion-icon>
+                </ion-button>
+                <ion-button fill="clear" color="dark" [disabled]="isLastPlaying()" (click)="next()">
+                    <ion-icon slot="icon-only" name="play-skip-forward-outline"></ion-icon>
+                </ion-button>
+            </ion-col>
+        </ion-row>
+    </ion-toolbar>
 </ion-footer>

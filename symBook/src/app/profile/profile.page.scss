@@ -47,6 +47,14 @@
     
 }
 
+.spinner-center {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
 ion-note {
     font-size: 0.75rem;
 }

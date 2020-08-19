@@ -11,24 +11,31 @@
     <ion-grid *ngIf="bookDetails" class="ion-no-padding">
         <ion-row class="ion-align-items-center">
             <ion-col size-sm="8" class="ion-text-center">
-                <img [src]="bookDetails.imageUrl"/>
+                <img [src]="bookDetails.photo"/>
             </ion-col>
         </ion-row>
         <ion-row>
-        <ion-col size-sm="6" offset-sm="3" class="ion-text-right">
-            <ion-button 
-                color="success"  
-                (click)="play()">
-                <ion-icon name="play-outline"></ion-icon>
-            </ion-button>   
+            <ion-col size-sm="6" offset-sm="3" class="ion-text-right">
+                <ion-button 
+                    color="success"  
+                    (click)="play()">
+                    <ion-icon name="play-outline"></ion-icon>
+                </ion-button>   
 
-            <ion-button 
-                color="primary"  
-                class="ion-margin" 
-                (click)="onWishBook($event)">
-                <ion-icon name="heart-outline"></ion-icon>
-            </ion-button>  
-        </ion-col>
+                <ion-button 
+                    color="danger"  
+                    class="ion-margin"
+                    (click)="onWishBook($event)">
+                    <ion-icon name="heart-outline"></ion-icon>
+                </ion-button>
+
+                <ion-button 
+                    color="primary"  
+                    class="ion-margin-end"
+                    (click)="onWishBook($event)">
+                    <ion-icon name="star-outline"></ion-icon>
+            </ion-button>   
+            </ion-col>
         </ion-row>
         <ion-row>
             <ion-col size-sm="6" offset-sm="3" class="ion-text-center" class="ion-padding">
@@ -36,17 +43,58 @@
                 <p><ion-text color="primary">Title: </ion-text>{{ bookDetails.title }}</p>
                 <p><ion-text color="primary">Description: </ion-text>{{ bookDetails.description }}</p>
                 <p>
-                    <ion-text color="primary" *ngFor="let item of bookDetails.urls">
-                        Capitols: 
-                        {{ item['url'] }}
+                    <ion-text color="primary" *ngFor="let item of getArray(bookDetails.urls); let i = index">
+
+                        <ion-item text-wrap (click)="openFile(item, i)">
+                            <ion-icon color="primary" item-start name="musical-note"></ion-icon>
+                            <ion-label [color]="currentFile && currentFile.index === i ? 'success' : 'dark'"> Chapters {{ i + 1 }}</ion-label>
+                            <ion-icon slot="end" color="tertiary" name="play-sharp"></ion-icon>
+                        </ion-item>
                     </ion-text>
                 </p>
             </ion-col>
         </ion-row>
     </ion-grid>
 </ion-content>
-<ion-footer>
-    <ng-container>
-        <syb-footer></syb-footer>
-    </ng-container>
+<ion-footer *ngIf="currentFile && currentFile.file">
+    <ion-toolbar color="success">
+        <ion-range 
+            #range
+            min="0" 
+            color="dark" 
+            [max]="onGetDurationSec()" 
+            [(ngModel)]="seekbar"
+            (ionFocus)="onSeekStart()" 
+            (ionChange)="onSeekEnd($event)"
+            name="seekbar">
+            <ion-label color="dark" slot="start">{{ onGetTime() }}</ion-label>
+            <ion-label color="dark" slot="end">{{ onGetDuration() }}</ion-label>
+        </ion-range>
+    </ion-toolbar>
+    <ion-toolbar color="success" padding>
+        <ion-row  class="ion-padding-bottom" >
+            <ion-col size="12" class="ion-text-center name">
+                <ion-text color="dark"><h5>Chapters {{ currentFile.index + 1 }}</h5></ion-text>
+            </ion-col>
+            <ion-col size="12" class="ion-text-center">
+                <ion-button fill="clear" color="dark" [disabled]="isFirstPlaying()" (click)="previous()">
+                    <ion-icon slot="icon-only" name="play-skip-back-outline"></ion-icon>
+                </ion-button>
+                <ion-button fill="clear" color="dark" *ngIf="!playing" (click)="play()">
+                    <ion-icon slot="icon-only" name="play-sharp"></ion-icon>
+                </ion-button>
+                <ion-button fill="clear" color="dark" *ngIf="playing" (click)="pause()">
+                    <ion-icon slot="icon-only" name="pause"></ion-icon>
+                </ion-button>
+                <ion-button fill="clear" color="dark" [disabled]="isLastPlaying()" (click)="next()">
+                    <ion-icon slot="icon-only" name="play-skip-forward-outline"></ion-icon>
+                </ion-button>
+            </ion-col>
+        </ion-row>
+    </ion-toolbar>
 </ion-footer>
+<!-- <ion-footer>
+    <ng-container>
+        <syb-footer-player (selectBook)="onGetFile($event)" [currentFile]="currentFile" ></syb-footer-player>
+    </ng-container>
+</ion-footer> -->
