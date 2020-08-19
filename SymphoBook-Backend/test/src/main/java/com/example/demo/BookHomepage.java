@@ -21,6 +21,8 @@ public class BookHomepage {
 		this.mp3Url=mp3Url;
 	
 	}
+	
+	
 	public String getMp3Url() {
 		return mp3Url;
 	}

@@ -30,6 +30,7 @@ public class BookController {
 		return ResponseEntity.status(HttpStatus.OK).body(book.getJsonAllBooksFrontPage());
 		
 	}
+	
 	@GetMapping("homepage/book")   //http://localhost:8080/homepage/book?id=
 	ResponseEntity<String> getBookFromId(@RequestParam String id)
 	{	Gson g = new Gson();
@@ -47,4 +48,10 @@ public class BookController {
 	{
 		return ResponseEntity.status(HttpStatus.OK).body(book.getFavoriteTitle(id, uid));
 	}
+	@PostMapping("book/wishlist")
+	ResponseEntity<Boolean> putBookInWishlist(@RequestParam String uid, @RequestParam String IdBook) 
+	{
+		return ResponseEntity.status(HttpStatus.OK).body(book.putBookInWishlist(uid, IdBook));
+	}
+	
 }
