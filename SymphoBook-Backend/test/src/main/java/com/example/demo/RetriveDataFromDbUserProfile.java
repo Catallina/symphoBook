@@ -90,6 +90,7 @@ public void readData(String uid) {
 			                String Birthday=dataSnapshot.child("Birthday").getValue(String.class);
 			                String Email=dataSnapshot.child("Email").getValue(String.class);
 			                String Love=dataSnapshot.child("Love").getValue(String.class);
+			                String PhoneNumber=dataSnapshot.child("PhoneNumber").getValue(String.class);
 			                for(DataSnapshot snapshot:dataSnapshot.getChildren())
 				              {
 				            	  ListFavorites.add(snapshot.child("Favorites").getValue(String.class));
@@ -99,6 +100,7 @@ public void readData(String uid) {
 			                UserProfile.put("Birthday", Birthday);
 			                UserProfile.put("Email", Email);
 			                UserProfile.put("Love",Love );
+			                UserProfile.put("Phone Number",PhoneNumber);
 			                UserProfile.put("Favorites", ListFavorites);
 			           
 			            
