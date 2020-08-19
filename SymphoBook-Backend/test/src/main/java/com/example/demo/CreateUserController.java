@@ -28,7 +28,7 @@ public class CreateUserController {
 		this.newUser=newUser;
 	}
 	
-	@PostMapping("/users/createaccount") // POST /users/createaccount?Email=a@b.com&Password=abc&PhoneNumber=123&DisplayName=a
+	@PostMapping("users/createaccount") // POST /users/createaccount?Email=a@b.com&Password=abc&PhoneNumber=123&DisplayName=a
 	ResponseEntity<String> createaccount(@RequestParam String Email, @RequestParam String Password, @RequestParam String PhoneNumber, @RequestParam String DisplayName)
 			{
 		PhoneNumber = "+"+PhoneNumber;

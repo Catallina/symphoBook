@@ -93,12 +93,18 @@ public class BookData implements CommandLineRunner {
 	public Boolean putBookInWishlist(String uid, String IdBook)
 	{
 		List<String>ListIdBook =new ArrayList<String>();
+		BookWishlist wishlist;
 		BookWishlist OldWishlist = new BookWishlist();
 		OldWishlist=wishlistRepository.findById(uid).orElse(null);
+	
 		ListIdBook.addAll(OldWishlist.getListIdBook());
+		
 		ListIdBook.add(IdBook);
-		BookWishlist wishlist = new BookWishlist(uid, ListIdBook);
+	 wishlist = new BookWishlist(uid, ListIdBook);
 		wishlistRepository.save(wishlist);
+
+	
+		
 		//return (ListIdBook.size()!=0);
 		return (wishlist.getListIdBook().size()!=0);
 		

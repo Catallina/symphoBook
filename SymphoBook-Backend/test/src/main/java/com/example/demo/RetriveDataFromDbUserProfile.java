@@ -100,7 +100,7 @@ public void readData(String uid) {
 			                UserProfile.put("Birthday", Birthday);
 			                UserProfile.put("Email", Email);
 			                UserProfile.put("Love",Love );
-			                UserProfile.put("Phone Number",PhoneNumber);
+			                UserProfile.put("PhoneNumber",PhoneNumber);
 			                UserProfile.put("Favorites", ListFavorites);
 			           
 			            

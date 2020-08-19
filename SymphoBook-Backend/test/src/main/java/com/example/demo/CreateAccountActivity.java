@@ -14,12 +14,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
+
+import org.springframework.beans.factory.annotation.Autowired;
 public class CreateAccountActivity {
 	
 	public static 	UserRecord userRecord;
 	
 	public Map<String,String> UserMap;
-	public static List<String> uidUsers = new ArrayList<String>();
+	public String uidUser;
 	public CreateAccountActivity() {}
 	
 	public void CreateNewAccount(String Email, String Password, String PhoneNumber, String DisplayName) throws FirebaseAuthException {
@@ -42,9 +44,10 @@ public class CreateAccountActivity {
 
 	userRecord = FirebaseAuth.getInstance().createUser(request);
 	
-	uidUsers.add(userRecord.getUid().toString());
-		
-	  
+	uidUser=userRecord.getUid();
+	
+	
+	
 		System.out.println("Successfully created new user: " + userRecord.getUid());
 		
 		
@@ -60,10 +63,7 @@ public class CreateAccountActivity {
 	{
 		return (HashMap<String, String>) UserMap;
 	}
-	public static ArrayList<String> getUidUsers()
-	{
-		return (ArrayList<String>) uidUsers;
-	}
+
 
 	
 }
