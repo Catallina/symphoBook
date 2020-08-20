@@ -21,6 +21,13 @@ public class BookHomepage {
 		this.mp3Url=mp3Url;
 	
 	}
+public BookHomepage(String id, String title, String photo,String author) {
+		
+		this.id = id;
+		this.title = title;
+		this.photo = photo;
+		this.author=author;
+}
 	
 	
 	public String getMp3Url() {

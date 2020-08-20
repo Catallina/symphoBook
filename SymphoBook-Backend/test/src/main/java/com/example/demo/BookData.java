@@ -27,11 +27,14 @@ public class BookData implements CommandLineRunner {
 	private BookRepository repository;
 	@Autowired
 	private BookWishlistRepository wishlistRepository;
+	Gson gson = new Gson();
+	List<String>ListIdBook;
+	BookWishlist OldWishlist;
 	public BookData() {}
 	public String getJsonAllBooksFrontPage()
 	{
 		
-		Gson gson = new Gson();
+	
 		String jsonBooksFrontPage="";
 
 		
@@ -53,7 +56,7 @@ public class BookData implements CommandLineRunner {
 	
 	public String getJsonFromBookId(String id)
 	{
-		Gson gson = new Gson();
+	
 		String jsonBooksId="";
 		String error;
 		Books bookFromId = repository.findById(id).orElse(null);
@@ -92,9 +95,9 @@ public class BookData implements CommandLineRunner {
 	}
 	public Boolean putBookInWishlist(String uid, String IdBook)
 	{
-		List<String>ListIdBook =new ArrayList<String>();
+		ListIdBook =new ArrayList<String>();
 		BookWishlist wishlist;
-		BookWishlist OldWishlist = new BookWishlist();
+		 OldWishlist = new BookWishlist();
 		OldWishlist=wishlistRepository.findById(uid).orElse(null);
 	
 		ListIdBook.addAll(OldWishlist.getListIdBook());
@@ -113,11 +116,21 @@ public class BookData implements CommandLineRunner {
 	}
 	public String getJsonWishlistBook(String uid, String IdBook)
 	{
-		BookWishlist OldWishlist = new BookWishlist();
+		String jsonBooksWishlist="";
+		
+		 OldWishlist = new BookWishlist();
 		OldWishlist=wishlistRepository.findById(uid).orElse(null);
+		ListIdBook =new ArrayList<String>();
+		List<BookHomepage> bookWishlistList = new ArrayList<BookHomepage>();
+		ListIdBook.addAll(OldWishlist.getListIdBook());
+		for(int i=0;i<ListIdBook.size();++i)
+		{
+			Books bookFromId = repository.findById(ListIdBook.get(i)).orElse(null);
+			bookWishlistList.add(new BookHomepage(bookFromId.getId(),bookFromId.getTitle(),bookFromId.getPhoto(),bookFromId.getAuthor()));
+		}
+		jsonBooksWishlist = gson.toJson(bookWishlistList);
 		
-		
-		return "";
+		return jsonBooksWishlist;
 	}
 	@Override
 	public void run(String... args) throws Exception {

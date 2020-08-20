@@ -17,13 +17,13 @@ public class UsersDescription {
 	
 	public UsersDescription ()
 	{}
-	public UsersDescription (String description, String love,String DisplayName)
+	public UsersDescription (String description, String love,String DisplayName,String birthday)
 	{
 		
 		this.description=description;
 		this.love=love;
 		this.DisplayName=DisplayName;
-		//this.birthday=birthday;
+		this.birthday=birthday;
 		//this.favorites=favorites;
 	}
 	
@@ -76,7 +76,7 @@ public class UsersDescription {
 		UserMapDescription.put("Description", description);
 		UserMapDescription.put("Love", love);
 			UserMapDescription.put("DisplayName", DisplayName);
-//	UserMapDescription.put("Favorites", favorites);
+		 UserMapDescription.put("Birthday", birthday);
 		return (HashMap<String, Object>) UserMapDescription;
 	}
 

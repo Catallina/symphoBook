@@ -48,9 +48,9 @@ public class CreateUserController {
 			}
 
 	@PutMapping("users/adddetails") // POST http://localhost:8080/users/adddetails?Description=ab&Love=abc&Birthday=ab&uid=aaaaa
-	ResponseEntity<Boolean> addDetailsAfter(@RequestParam String Description,@RequestParam String Love,@RequestParam String DisplayName, @RequestParam String uid) throws FirebaseAuthException
+	ResponseEntity<Boolean> addDetailsAfter(@RequestParam String Description,@RequestParam String Love,@RequestParam String DisplayName, @RequestParam String Birthday,@RequestParam String uid) throws FirebaseAuthException
 	{
-		return ResponseEntity.status(HttpStatus.OK).body(newUser.addDetailsforAccountAfter(Description, Love, DisplayName, uid));
+		return ResponseEntity.status(HttpStatus.OK).body(newUser.addDetailsforAccountAfter(Description,Love,DisplayName,Birthday,uid));
 		
 	}
 }

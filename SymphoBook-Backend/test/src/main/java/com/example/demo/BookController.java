@@ -53,5 +53,10 @@ public class BookController {
 	{
 		return ResponseEntity.status(HttpStatus.OK).body(book.putBookInWishlist(uid, IdBook));
 	}
-	
+	@GetMapping("book/getwishlist")
+	ResponseEntity<String> getWishlist(@RequestParam String uid, @RequestParam String IdBook)
+	{
+		String jsonBookWishlist=book.getJsonWishlistBook(uid, IdBook);
+		return ResponseEntity.status(HttpStatus.OK).body(jsonBookWishlist);
+	}
 }
