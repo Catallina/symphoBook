@@ -67,8 +67,9 @@ public class BookData implements CommandLineRunner {
 			
 		return jsonBooksId;
 	}
-	public Boolean getFavoriteTitle(String id,String uid) throws FirebaseAuthException, InterruptedException
+	public String putFavoriteTitle(String id,String uid) throws FirebaseAuthException, InterruptedException
 	{	
+		String error="Added";
 		List<String> ListFavorites;
 		Map<String, Object> favorite = new HashMap<String,Object>();
 		RetriveDataFromDbUserProfile profile = new RetriveDataFromDbUserProfile(uid);
@@ -76,9 +77,17 @@ public class BookData implements CommandLineRunner {
 		   t.start();
 		    Thread.sleep(10000);
 		    t.join();
+	    String favoriteBook=repository.findById(id).orElse(null).getTitle();
 		ListFavorites=profile.getListFavorites();
+		if(ListFavorites.contains(favoriteBook))
+		{
+			error="Book already exists in Favorites";
+			return error;
+		}
+		else
+		{
 		FireBaseService fbs = ConnectToBd.Connection();
-		String favoriteBook=repository.findById(id).orElse(null).getTitle();
+		
 		UsersDescription userDescription = new UsersDescription(favoriteBook);
 		ListFavorites.add(favoriteBook);
 		favorite.put("Favorites",ListFavorites);
@@ -88,9 +97,9 @@ public class BookData implements CommandLineRunner {
   DatabaseReference refAddUserDescription = fbs.getDb()
           .getReference("users");
   refAddUserDescription.child(userRecord.getUid()).updateChildrenAsync(favorite);
-  return (userRecord.getUid()!=null);
+		  return error;
 		
-		
+		}
 	
 	}
 	public Boolean putBookInWishlist(String uid, String IdBook)
@@ -114,7 +123,7 @@ public class BookData implements CommandLineRunner {
 		
 		
 	}
-	public String getJsonWishlistBook(String uid, String IdBook)
+	public String getJsonWishlistBook(String uid)
 	{
 		String jsonBooksWishlist="";
 		

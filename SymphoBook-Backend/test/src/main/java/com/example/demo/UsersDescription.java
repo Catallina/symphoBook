@@ -75,8 +75,8 @@ public class UsersDescription {
 		UserMapDescription = new HashMap<String, Object>();
 		UserMapDescription.put("Description", description);
 		UserMapDescription.put("Love", love);
-			UserMapDescription.put("DisplayName", DisplayName);
-		 UserMapDescription.put("Birthday", birthday);
+		UserMapDescription.put("DisplayName", DisplayName);
+		UserMapDescription.put("Birthday", birthday);
 		return (HashMap<String, Object>) UserMapDescription;
 	}
 

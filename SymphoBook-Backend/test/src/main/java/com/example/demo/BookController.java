@@ -44,9 +44,17 @@ public class BookController {
 		return ResponseEntity.status(HttpStatus.OK).body(jsonBooksId);
 	}
 	@PostMapping("book/addfavorite")
-	ResponseEntity<Boolean> addToFavorite(@RequestParam String id, @RequestParam String uid) throws FirebaseAuthException, InterruptedException
+	ResponseEntity<String> addToFavorite(@RequestParam String id, @RequestParam String uid) throws FirebaseAuthException, InterruptedException
 	{
-		return ResponseEntity.status(HttpStatus.OK).body(book.getFavoriteTitle(id, uid));
+		Gson g = new Gson();
+		String jsonFavorites = book.putFavoriteTitle(id, uid);
+		if(jsonFavorites=="Book already exists in Favorites")
+		{
+			return ResponseEntity.status(HttpStatus.CONFLICT).body(g.toJson(jsonFavorites));
+		}
+	
+			return ResponseEntity.status(HttpStatus.OK).body(g.toJson(jsonFavorites));
+
 	}
 	@PostMapping("book/wishlist")
 	ResponseEntity<Boolean> putBookInWishlist(@RequestParam String uid, @RequestParam String IdBook) 
@@ -54,9 +62,9 @@ public class BookController {
 		return ResponseEntity.status(HttpStatus.OK).body(book.putBookInWishlist(uid, IdBook));
 	}
 	@GetMapping("book/getwishlist")
-	ResponseEntity<String> getWishlist(@RequestParam String uid, @RequestParam String IdBook)
+	ResponseEntity<String> getWishlist(@RequestParam String uid)
 	{
-		String jsonBookWishlist=book.getJsonWishlistBook(uid, IdBook);
+		String jsonBookWishlist=book.getJsonWishlistBook(uid);
 		return ResponseEntity.status(HttpStatus.OK).body(jsonBookWishlist);
 	}
 }
