@@ -132,10 +132,6 @@ public class BookData implements CommandLineRunner {
 
 		}
 		
-		
-		
-		
-		
 	}
 	public String getJsonWishlistBook(String uid)
 	{
@@ -156,7 +152,40 @@ public class BookData implements CommandLineRunner {
 		return jsonBooksWishlist;
 	}
 	
+	public String deleteBookFromWishlist(String uid, String IdBook)
+	{
+		
+		String error ="Book is not in the Wishlist";
+		ListIdBook =new ArrayList<String>();
+	//	BookWishlist wishlist;
+		BookWishlist wishlist;
+		OldWishlist = new BookWishlist();
+		OldWishlist=wishlistRepository.findById(uid).orElse(null);
+		System.out.println(ListIdBook.size());
+		ListIdBook.addAll(OldWishlist.getListIdBook());
+		
+		if(ListIdBook.contains(IdBook))
+		{
+			ListIdBook.remove(IdBook);
+			wishlist=new BookWishlist(uid,ListIdBook);
+			wishlistRepository.save(wishlist);
+			error="Deleted";
+			
+		}
+		
+		
+		
+		return error;
+		
+		
+		
+		
 	
+		
+		
+		
+	
+	}
 	public String putBookInJournal(String uid, String IdBook)
 	{
 		String error="Added";
@@ -194,6 +223,32 @@ public class BookData implements CommandLineRunner {
 		jsonBooksJournal = gson.toJson(bookJournalList);
 		
 		return jsonBooksJournal;
+	}
+	
+	
+	public String deleteJournalBook(String uid)
+	{
+		String error="";
+		ListIdBook =new ArrayList<String>();
+		BookJournal journal;
+	    OldJournal = new BookJournal();
+		OldJournal=journalRepository.findById(uid).orElse(null);
+		ListIdBook.addAll(OldJournal.getListIdBook());
+		if(!ListIdBook.isEmpty())
+		{
+			ListIdBook.clear();
+			journal = new BookJournal(uid, ListIdBook);
+			journalRepository.save(journal);
+			error="Journal is deleted!";
+			return error;
+		
+		}
+		else
+		{
+			error="The Journal is already deleted!";
+			return error;
+		}
+		
 	}
 	@Override
 	public void run(String... args) throws Exception {

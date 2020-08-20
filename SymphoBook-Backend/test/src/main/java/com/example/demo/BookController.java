@@ -4,6 +4,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -86,4 +87,28 @@ public class BookController {
 		String jsonBookJournal=book.getJsonJournalBook(uid);
 		return ResponseEntity.status(HttpStatus.OK).body(jsonBookJournal);
 	}
+	@DeleteMapping("book/wishlistdelete")
+	ResponseEntity<String> deleteBook(@RequestParam String uid, @RequestParam String IdBook)
+	{
+		Gson g = new Gson();
+		String jsonDeleteWishlist="";
+		jsonDeleteWishlist=book.deleteBookFromWishlist(uid, IdBook);
+		if(jsonDeleteWishlist=="Book is not in the Wishlist!")
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(g.toJson(jsonDeleteWishlist));
+		
+		return ResponseEntity.status(HttpStatus.OK).body(g.toJson(jsonDeleteWishlist));
+	}
+	
+	@DeleteMapping("book/journaldelete")
+	ResponseEntity<String> deleteJournal(@RequestParam String uid)
+	{
+		Gson g = new Gson();
+		String jsonDeleteJournal="";
+		jsonDeleteJournal=book.deleteJournalBook(uid);
+		if(jsonDeleteJournal=="The Journal is already deleted!")
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(g.toJson(jsonDeleteJournal));
+		
+		return ResponseEntity.status(HttpStatus.OK).body(g.toJson(jsonDeleteJournal));
+	}
+	
 }
