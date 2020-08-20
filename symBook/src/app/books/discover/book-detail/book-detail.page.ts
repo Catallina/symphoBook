@@ -87,7 +87,7 @@ export class BookDetailPage implements OnInit, OnDestroy {
   public onWishBook(event: Event) {
     event.stopPropagation();
 
-    this.modalCtrl.dismiss(
+   // this.modalCtrl.dismiss(
       this.loadingCtrl
       .create({ message: 'Book added...' })
       .then(loadingEl => {
@@ -99,13 +99,13 @@ export class BookDetailPage implements OnInit, OnDestroy {
             });
         })
       })
-    );
+   // );
   }
 
   public onAddFavorite(event: Event) {
     event.stopPropagation();
 
-    this.modalCtrl.dismiss(
+    //this.modalCtrl.dismiss(
       this.loadingCtrl
       .create({ message: 'Book added...' })
       .then(loadingEl => {
@@ -117,7 +117,7 @@ export class BookDetailPage implements OnInit, OnDestroy {
             });
         })
       })
-    );
+    //);
   }
 
   public onGetTime() {
