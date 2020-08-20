@@ -57,9 +57,14 @@ public class BookController {
 
 	}
 	@PostMapping("book/wishlist")
-	ResponseEntity<Boolean> putBookInWishlist(@RequestParam String uid, @RequestParam String IdBook) 
-	{
-		return ResponseEntity.status(HttpStatus.OK).body(book.putBookInWishlist(uid, IdBook));
+	ResponseEntity<String> putBookInWishlist(@RequestParam String uid, @RequestParam String IdBook) 
+	{	Gson g = new Gson();
+		String jsonWishlist = book.putBookInWishlist(uid, IdBook);
+		if(jsonWishlist=="Book already exits in Wishlist!")
+		{
+			return ResponseEntity.status(HttpStatus.CONFLICT).body(g.toJson(jsonWishlist));
+		}
+		return ResponseEntity.status(HttpStatus.OK).body(jsonWishlist);
 	}
 	@GetMapping("book/getwishlist")
 	ResponseEntity<String> getWishlist(@RequestParam String uid)

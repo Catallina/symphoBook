@@ -81,7 +81,7 @@ public class BookData implements CommandLineRunner {
 		ListFavorites=profile.getListFavorites();
 		if(ListFavorites.contains(favoriteBook))
 		{
-			error="Book already exists in Favorites";
+			error="Book already exists in Favorites!";
 			return error;
 		}
 		else
@@ -102,23 +102,31 @@ public class BookData implements CommandLineRunner {
 		}
 	
 	}
-	public Boolean putBookInWishlist(String uid, String IdBook)
+	public String putBookInWishlist(String uid, String IdBook)
 	{
+		String error="Added";
 		ListIdBook =new ArrayList<String>();
 		BookWishlist wishlist;
 		 OldWishlist = new BookWishlist();
 		OldWishlist=wishlistRepository.findById(uid).orElse(null);
 	
 		ListIdBook.addAll(OldWishlist.getListIdBook());
-		
+		if(ListIdBook.contains(IdBook))
+		{
+			error="Book already exists in Wishlist!";
+			return error;
+		}
+			
+		else
+		{
 		ListIdBook.add(IdBook);
-	 wishlist = new BookWishlist(uid, ListIdBook);
+		wishlist = new BookWishlist(uid, ListIdBook);
 		wishlistRepository.save(wishlist);
+		return error;
 
-	
+		}
 		
-		//return (ListIdBook.size()!=0);
-		return (wishlist.getListIdBook().size()!=0);
+		
 		
 		
 		
