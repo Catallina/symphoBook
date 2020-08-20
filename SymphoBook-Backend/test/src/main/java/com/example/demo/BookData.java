@@ -3,6 +3,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -114,6 +115,7 @@ public class BookData implements CommandLineRunner {
 		OldWishlist=wishlistRepository.findById(uid).orElse(null);
 	
 		ListIdBook.addAll(OldWishlist.getListIdBook());
+		Collections.reverse(ListIdBook);
 		if(ListIdBook.contains(IdBook))
 		{
 			error="Book already exists in Wishlist!";
@@ -123,6 +125,7 @@ public class BookData implements CommandLineRunner {
 		else
 		{
 		ListIdBook.add(IdBook);
+		Collections.reverse(ListIdBook);
 		wishlist = new BookWishlist(uid, ListIdBook);
 		wishlistRepository.save(wishlist);
 		return error;
@@ -165,6 +168,7 @@ public class BookData implements CommandLineRunner {
 		ListIdBook.addAll(OldJournal.getListIdBook());
 		
 		ListIdBook.add(IdBook);
+		 Collections.reverse(ListIdBook);
 		journal = new BookJournal(uid, ListIdBook);
 		journalRepository.save(journal);
 		return error;
