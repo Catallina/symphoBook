@@ -34,6 +34,7 @@ public class BookData implements CommandLineRunner {
 	List<String>ListIdBook;
 	BookWishlist OldWishlist;
 	BookJournal OldJournal; 
+	FireBaseService fbs = ConnectToBd.Connection();
 	public BookData() {}
 	public String getJsonAllBooksFrontPage()
 	{
@@ -90,7 +91,7 @@ public class BookData implements CommandLineRunner {
 		}
 		else
 		{
-		FireBaseService fbs = ConnectToBd.Connection();
+	//	FireBaseService fbs = ConnectToBd.Connection();
 		
 		UsersDescription userDescription = new UsersDescription(favoriteBook);
 		ListFavorites.add(favoriteBook);
@@ -106,6 +107,43 @@ public class BookData implements CommandLineRunner {
 		}
 	
 	}
+	
+	public String deleteBookFromFavorite(String uid, String Title) throws FirebaseAuthException, InterruptedException
+	{
+
+		String error="Book is already deleted!";
+		List<String> ListFavorites;
+		Map<String, Object> favorite = new HashMap<String,Object>();
+		RetriveDataFromDbUserProfile profile = new RetriveDataFromDbUserProfile(uid);
+		Thread t=new Thread(profile);
+		   t.start();
+		    Thread.sleep(10000);
+		    t.join();
+	   Books favoriteBook=repository.findByTitle(Title);
+		ListFavorites=profile.getListFavorites();
+		if(ListFavorites.contains(favoriteBook.getTitle()))
+		{
+			ListFavorites.remove(favoriteBook.getTitle());
+			favorite.put("Favorites",ListFavorites);
+			UserRecord userRecord;
+			userRecord = FirebaseAuth.getInstance().getUser(uid);
+			   System.out.println("Successfully fetched user data: " + userRecord.getUid());
+	  DatabaseReference refAddUserDescription = fbs.getDb()
+	          .getReference("users");
+	  refAddUserDescription.child(userRecord.getUid()).updateChildrenAsync(favorite);
+	  		error="Deleted!";
+			  return error;
+		}
+		
+		
+		
+		
+		return error;
+	}
+	
+	
+	
+	
 	public String putBookInWishlist(String uid, String IdBook)
 	{
 		String error="Added";
@@ -155,9 +193,9 @@ public class BookData implements CommandLineRunner {
 	public String deleteBookFromWishlist(String uid, String IdBook)
 	{
 		
-		String error ="Book is not in the Wishlist";
+		String error ="Book is not in the Wishlist!";
 		ListIdBook =new ArrayList<String>();
-	//	BookWishlist wishlist;
+	
 		BookWishlist wishlist;
 		OldWishlist = new BookWishlist();
 		OldWishlist=wishlistRepository.findById(uid).orElse(null);
@@ -169,7 +207,7 @@ public class BookData implements CommandLineRunner {
 			ListIdBook.remove(IdBook);
 			wishlist=new BookWishlist(uid,ListIdBook);
 			wishlistRepository.save(wishlist);
-			error="Deleted";
+			error="Deleted!";
 			
 		}
 		

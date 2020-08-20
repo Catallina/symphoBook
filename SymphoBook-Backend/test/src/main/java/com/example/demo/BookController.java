@@ -111,4 +111,16 @@ public class BookController {
 		return ResponseEntity.status(HttpStatus.OK).body(g.toJson(jsonDeleteJournal));
 	}
 	
+
+	@DeleteMapping("book/favoritedelete")
+	ResponseEntity<String> deleteBookFavorite(@RequestParam String uid,@RequestParam String Title) throws FirebaseAuthException, InterruptedException
+	{
+		Gson g = new Gson();
+		String jsonDeleteFavorite="";
+		jsonDeleteFavorite=book.deleteBookFromFavorite(uid, Title);
+		if(jsonDeleteFavorite=="The Journal is already deleted!")
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(g.toJson(jsonDeleteFavorite));
+		
+		return ResponseEntity.status(HttpStatus.OK).body(g.toJson(jsonDeleteFavorite));
+	}
 }
