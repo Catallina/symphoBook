@@ -166,7 +166,7 @@ public class BookData implements CommandLineRunner {
 		OldJournal=journalRepository.findById(uid).orElse(null);
 	
 		ListIdBook.addAll(OldJournal.getListIdBook());
-		
+		Collections.reverse(ListIdBook);
 		ListIdBook.add(IdBook);
 		 Collections.reverse(ListIdBook);
 		journal = new BookJournal(uid, ListIdBook);
