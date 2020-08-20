@@ -3,8 +3,12 @@ import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { take, tap, delay, map } from 'rxjs/operators';
 
+import { environment } from '@env/environment';
+import { ApiEndpointsUrl } from '@syb/shared/api.constants';
+
 import { AuthService } from '@syb/auth/auth.service';
 import { BookListModel } from '@syb/shared/models/book-list.model';
+import { WishlistStore } from '@syb/wishlist/store/wishlist.store';
 
 @Injectable({ providedIn: 'root' })
 export class WishlistService {
@@ -18,37 +22,67 @@ export class WishlistService {
   constructor(
     private authService: AuthService,
     private http: HttpClient,
+    private wishlistStore: WishlistStore,
   ) {}
 
-  public mapToBookDetailsPayload(list): BookListModel[] {
-    const details: BookListModel[] = [];
-    for ( const element  in list) {
-      if (list.hasOwnProperty(element)) {
-        const bookList = new BookListModel({
-          element,
-          id: element,
-          author: list[element].author,
-          date: list[element].date,
-          description: list[element].description,
-          imageUrl: list[element].imageUrl,
-          title: list[element].title,
-        });
-        details.push(bookList);
-      }
+  // public mapToBookDetailsPayload(list): BookListModel[] {
+  //   const details: BookListModel[] = [];
+  //   for ( const element  in list) {
+  //     if (list.hasOwnProperty(element)) {
+  //       const bookList = new BookListModel({
+  //         element,
+  //         id: element,
+  //         author: list[element].author,
+  //         date: list[element].date,
+  //         description: list[element].description,
+  //         imageUrl: list[element].imageUrl,
+  //         title: list[element].title,
+  //       });
+  //       details.push(bookList);
+  //     }
+  //   }
+  //   return details;
+  // }
+
+  public mapToBookDetailsPayload(bookList: any): BookListModel[] {
+    const mappedList: BookListModel[] = [];
+
+    if (bookList && bookList.length > 0) {
+      bookList.forEach(book => {
+        mappedList.push(
+          new BookListModel({
+            id: book.id,
+            title: book.title,
+            author: book.author,
+            photo: book.photo,
+          })
+        )
+      });
     }
-    return details;
+
+    return mappedList;
   }
 
-  public getWishBook$(): Observable<BookListModel[]> {
+
+  public getWishBook$(userId: string): Observable<BookListModel[]> {
     return this.http
-      .get<{[key: string]: BookListModel }>('https://symphobook.firebaseio.com/book.json')
+      .get<any>(environment.apiUrl + ApiEndpointsUrl.getWishlist + '?uid=' + userId)
       .pipe(
         map(response => {
-          this.book.next(this.mapToBookDetailsPayload(response));
           return this.mapToBookDetailsPayload(response);
         })
       );
   }
+
+  public fetchWishlistDetails(userId: string): void {
+    this.getWishBook$(userId)
+    .subscribe((bookList: BookListModel[]) => {
+      if (bookList) {
+        this.wishlistStore.wishlistDetails = bookList;
+      }
+    });
+  }
+
 
   // addBook(
   //   placeId: string,

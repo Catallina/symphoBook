@@ -61,10 +61,9 @@ export class DiscoverPage implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-
     this.getDocuments();
 
-    this.bookFacade.getStoreBook$().pipe(takeWhile(() => this.isAlive)).subscribe((bookId: string) => {
+    this.bookFacade.getStoreBookId$().pipe(takeWhile(() => this.isAlive)).subscribe((bookId: string) => {
       this.bookId = bookId;
       if (bookId) {
         this.bookFacade.getBookDetails(bookId);
@@ -89,6 +88,9 @@ export class DiscoverPage implements OnInit, OnDestroy {
 
   public onSelectedBook(bookId: string): void {
     this.bookFacade.selectedBook(bookId);
+    this.authService.userId.subscribe((userId) =>{
+      this.booksService.openedBooks$(bookId, userId).subscribe();
+    })
   }
 
   public onGetTime() {

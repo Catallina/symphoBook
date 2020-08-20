@@ -5,19 +5,15 @@ import { takeWhile, filter, map, distinctUntilChanged } from 'rxjs/operators';
 import {
   NavController,
   ModalController,
-  ActionSheetController,
   LoadingController,
-  IonItemSliding,
-  IonRange
+  IonRange,
+  AlertController
 } from '@ionic/angular';
 
 import { BookDetailsFacade } from '@syb/store/book-details/book-details.facade';
 
-import { WishlistService } from '@syb/wishlist/wishlist.service';
 import { BookListModel } from '@syb/shared/models/book-list.model';
 import { BooksService } from '@syb/books/books.service';
-import { BookGroupModel } from '@syb/books/models/book-group.model';
-import { CreateWishlistComponent } from '@syb/wishlist/create-wishlist/create-wishlist.component';
 import { AudioService } from '@syb/books/audio/audio.service';
 import { AuthService } from '@syb/auth/auth.service';
 
@@ -47,7 +43,6 @@ export class BookDetailPage implements OnInit, OnDestroy {
   public playing = true;
   public time: any;
 
-
   constructor(
     private navCtrl: NavController,
     private route: ActivatedRoute,
@@ -57,12 +52,20 @@ export class BookDetailPage implements OnInit, OnDestroy {
     private loadingCtrl: LoadingController,
     private bookFacade: BookDetailsFacade,
     private authService: AuthService,
+    private alertCtrl: AlertController,
   ) {}
 
   ngOnInit() {
     this.isAlive = true;
 
-    this.bookFacade.getStoreBook$().pipe(takeWhile(() => this.isAlive)).subscribe((bookId: string) => {
+    this.bookFacade.getStoreBookId$().pipe(takeWhile(() => this.isAlive)).subscribe((bookId: string) => {
+      this.bookId = bookId;
+      if (bookId) {
+        this.bookFacade.getBookDetails(bookId);
+      }
+    });
+
+    this.bookFacade.getStoreLastBookId$().pipe(takeWhile(() => this.isAlive)).subscribe((bookId: string) => {
       this.bookId = bookId;
       if (bookId) {
         this.bookFacade.getBookDetails(bookId);
@@ -75,8 +78,22 @@ export class BookDetailPage implements OnInit, OnDestroy {
     
     this.bookFacade.getStoreCurrentFile$().pipe(takeWhile(() => this.isAlive)).subscribe((book: BookListModel) => {
       this.currentFile = book;
+    });
 
-      console.warn(book);
+    this.authService.userId.subscribe((userId) => {
+      this.bookFacade.getLastBook(userId);
+    })
+
+    this.bookFacade.getStoreLastBook$().pipe(takeWhile(() => this.isAlive)).subscribe((book: BookListModel) => {
+      //this.bookDetails = book;
+
+      if (book && book.id) {
+        this.bookFacade.getBookDetails(book.id)
+      }
+    });
+
+    this.bookFacade.getStoreBookDetails$().pipe(takeWhile(() => this.isAlive)).subscribe((book: BookListModel) => {
+      this.bookDetails = book;
     });
   }
 
@@ -96,6 +113,10 @@ export class BookDetailPage implements OnInit, OnDestroy {
           this.bookService.storeWishBook$(this.bookDetails, userId)
             .subscribe(() => {
               loadingEl.dismiss();
+            }, (errRes) => {
+              loadingEl.dismiss();
+              const message = errRes.error;
+              this.showAlert(message);
             });
         })
       })
@@ -110,14 +131,26 @@ export class BookDetailPage implements OnInit, OnDestroy {
       .create({ message: 'Book added...' })
       .then(loadingEl => {
         loadingEl.present();
+
         this.authService.userId.subscribe((userId) => {
           this.bookService.storeFavoriteBook$(this.bookDetails, userId)
             .subscribe(() => {
               loadingEl.dismiss();
+            }, (errRes) => {
+              loadingEl.dismiss();
+              const message = errRes.error;
+              this.showAlert(message);
             });
+          })
         })
-      })
     //);
+  }
+
+  private showAlert(message: string) {
+    this.alertCtrl.create({
+      message: message,
+      buttons: ['Okay']})
+      .then((alertEl) => alertEl.present());
   }
 
   public onGetTime() {

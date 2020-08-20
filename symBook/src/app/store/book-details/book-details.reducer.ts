@@ -46,9 +46,32 @@ export function bookDetailsReducer(
       });
     }
 
-    case BookDetailsActionType.SELECTED_BOOK: {
+    case BookDetailsActionType.GET_LAST_BOOK: {
       return newState(state, {
-        selectedBookId: action.payload.bookId,
+          busy: true,
+      });
+    }
+
+    case BookDetailsActionType.GET_LAST_BOOK_SUCCESS: {
+      return newState(state, {
+          busy: false,
+          lastSelectedBook: action.payload.details
+      });
+    }
+
+    case BookDetailsActionType.GET_BOOK_DETAILS_ERROR: {
+      return newState(state, {
+          busy: false,
+      });
+    }
+
+    case BookDetailsActionType.SELECTED_BOOK: {
+      const newSelectBookId = state.selectedBookId !== action.payload.bookId ? action.payload.bookId : null;
+      const lastSelectedBookId = newSelectBookId !== null ? action.payload.bookId : state.lastSelectedBookId;
+      
+      return newState(state, {
+        selectedBookId: newSelectBookId,
+        lastSelectedBookId : lastSelectedBookId,
       });
     }
 

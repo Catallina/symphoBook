@@ -1,3 +1,4 @@
+import { GetLastBookAction, GetLastBookSuccessAction } from './book-details.actions';
 import { BookDetailsState } from '@syb/store/book-details/book-details.state';
 import { selectedBookIdState } from './book-details.selectors';
 import { BookListModel } from '@syb/shared/models/book-list.model';
@@ -21,6 +22,7 @@ import { BookDetailsFacade } from '@syb/store/book-details/book-details.facade';
 import { BooksService } from '@syb/books/books.service';
 import { BookGroupModel } from '@syb/books/models/book-group.model';
 import { Store } from '@ngrx/store';
+import { BooksJournalService } from '@syb/books-journal/books-journal.service';
 
 @Injectable({
   providedIn: 'root'
@@ -31,6 +33,7 @@ export class BookDetailsEffects {
     private actions$: Actions,
     private bookDetailsFacade: BookDetailsFacade,
     private bookService: BooksService,
+    private bookJournalService: BooksJournalService,
     private salesStore: Store<BookDetailsState>,
   ) {}
 
@@ -66,7 +69,7 @@ export class BookDetailsEffects {
   );
 
   @Effect()
-  getSaleDetails$ = this.actions$
+  getBookDetails$ = this.actions$
     .pipe(
       ofType(BookDetailsActionType.GET_BOOK_DETAILS),
       switchMap((action: GetBookDetailsAction) => {
@@ -78,20 +81,34 @@ export class BookDetailsEffects {
                 })
               }
             ),
-            catchError((error) => of(this.bookDetailsFacade.getBookDetailsError()))
+            catchError((error) => of({
+              type: BookDetailsActionType.GET_BOOK_DETAILS_ERROR,
+              error
+            }))
           );
         }
       })
       
     );
 
-  @Effect({ dispatch: false })
-  getSaleDetailsError$ = this.actions$
+  @Effect()
+  getLastVideo$ = this.actions$
     .pipe(
-      ofType(BookDetailsActionType.GET_BOOK_DETAILS_ERROR),
-      map((action: GetBookDetailsErrorAction) => {
-        
-      }
-    )
-  );
+      ofType(BookDetailsActionType.GET_LAST_BOOK),
+      switchMap((action: GetLastBookAction) => {
+        return this.bookJournalService.getBooksJournal$(action.payload.userId).pipe(
+          map((details: BookListModel[]) => {
+              return new GetLastBookSuccessAction({
+                details: details[0],
+              })
+            }
+          ),
+          catchError((error) => of({
+            type: BookDetailsActionType.GET_LAST_BOOK_ERROR,
+            error
+          }))
+        );
+      })
+      
+    );
 }

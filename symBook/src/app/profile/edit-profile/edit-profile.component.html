@@ -15,7 +15,6 @@
       <ion-list>
         <ion-item>
           <ion-input
-            matInput
             [(ngModel)]="profileDetailsEdit.name"
             (ngModelChange)="onInputsChange()"
             [value]="profileDetailsEdit.name"
@@ -23,17 +22,23 @@
           ></ion-input>
         </ion-item>
         <ion-item>
-        <ion-input
-          matInput
-          [(ngModel)]="profileDetailsEdit.description"
-          (ngModelChange)="onInputsChange()"
-          [value]="profileDetailsEdit.description"
-          placeholder="Description"
-        ></ion-input>
+          <ion-input
+            [(ngModel)]="profileDetailsEdit.birthday"
+            (ngModelChange)="onInputsChange()"
+            [value]="profileDetailsEdit.birthday"
+            placeholder="Birthday"
+          ></ion-input>
         </ion-item>
         <ion-item>
           <ion-input
-            matInput
+            [(ngModel)]="profileDetailsEdit.description"
+            (ngModelChange)="onInputsChange()"
+            [value]="profileDetailsEdit.description"
+            placeholder="Description"
+          ></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-input
             [(ngModel)]="profileDetailsEdit.love"
             (ngModelChange)="onInputsChange()"
             [value]="profileDetailsEdit.love"

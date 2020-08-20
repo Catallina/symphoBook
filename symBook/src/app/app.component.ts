@@ -55,7 +55,7 @@ export class AppComponent implements OnInit {
   onLogout() {
     this.authService.logout();
     //this.profileStore.reset();
-    this.bookFacade.reset();
+    //this.bookFacade.reset();
     this.audioService.stop();
 
     this.router.navigateByUrl('/auth');

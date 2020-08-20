@@ -28,7 +28,7 @@ export class BooksPage implements OnInit, OnDestroy {
     this.isAlive = true;
     this.bookFacade.getBookGroup();
 
-    this.bookFacade.getStoreBook$().pipe(takeWhile(() => this.isAlive)).subscribe((bookId: string) => {
+    this.bookFacade.getStoreBookId$().pipe(takeWhile(() => this.isAlive)).subscribe((bookId: string) => {
       this.bookId = bookId;
       if (bookId) {
         this.bookFacade.getBookDetails(bookId);

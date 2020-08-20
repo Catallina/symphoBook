@@ -55,7 +55,7 @@ export class ProfileService {
   }
 
   public updateProfile$(userId: string, updatedProfile: ProfileModel): void {
-    const sendData = `?Description=${updatedProfile.description}&Love=${updatedProfile.love}&DisplayName=${updatedProfile.name}&uid=${userId}`
+    const sendData = `?Description=${updatedProfile.description}&Love=${updatedProfile.love}&DisplayName=${updatedProfile.name}&Birthday=${updatedProfile.birthday}&uid=${userId}`
     
     const httpOptions = {
       headers: new HttpHeaders({
@@ -67,6 +67,7 @@ export class ProfileService {
       description: updatedProfile.description,
       love: updatedProfile.love,
       name: updatedProfile.name,
+      birthday: updatedProfile.birthday,
       userId: userId,
     }
     this.http.put(

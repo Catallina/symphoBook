@@ -38,6 +38,10 @@ export class EditProfileComponent implements OnInit {
     return this.profileDetailsEdit.name === this.profileDetails.name;
   }
 
+  public onChangeBirthday(): boolean {
+    return this.profileDetailsEdit.birthday === this.profileDetails.birthday;
+  }
+
   public onChangeDescription(): boolean {
     return this.profileDetailsEdit.description === this.profileDetails.description;
   }
@@ -47,7 +51,7 @@ export class EditProfileComponent implements OnInit {
   }
 
   public onInputsChange(): void {
-    this.isBtnDisabledByInput = this.onChangeName() && this.onChangeDescription() && this.onChangeLove();
+    this.isBtnDisabledByInput = this.onChangeName() && this.onChangeDescription() && this.onChangeLove() && this.onChangeBirthday();
   }
 
   public updateProfile(): void {

@@ -26,6 +26,16 @@ export const selectedBookIdState = createSelector(
     (state: AppState) => state.bookDetails.selectedBookId
 );
 
+export const lastSelectedBookIdState = createSelector(
+    bookStore,
+    (state: AppState) => state.bookDetails.lastSelectedBookId
+);
+
+export const lastSelectedBookState = createSelector(
+    bookStore,
+    (state: AppState) => state.bookDetails.lastSelectedBook
+);
+
 export const currentFileState = createSelector(
     bookStore,
     (state: AppState) => state.bookDetails.currentFile

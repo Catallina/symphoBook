@@ -44,7 +44,7 @@ const routes: Routes = [
         children: [
           {
             path: '',
-            loadChildren: () => import('./last-book/last-book.module').then( m => m.LastBookPageModule)
+            loadChildren: () => import('@syb/books/discover/book-detail/book-detail.module').then(m => m.BookDetailPageModule)
           }
         ]
       },

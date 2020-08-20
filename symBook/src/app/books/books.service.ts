@@ -79,26 +79,6 @@ export class BooksService {
     }
 
     return mappedList;
-
-    // if (bookList) {
-    //   for ( const element in bookList) {
-    //     if (bookList.hasOwnProperty(element)) {
-    //       mappedList.push(
-    //         new BookListModel({
-    //           element,
-    //           id: bookList[element].id,
-    //           title: bookList[element].title,
-    //           description: bookList[element].description,
-    //           imageUrl: bookList[element].imageUrl,
-    //           author: bookList[element].author,
-    //           date: bookList[element].date,
-    //           url: bookList[element].url,
-    //           urls: this.mapUrls(bookList[element].urls),
-    //         })
-    //       );
-    //     }
-    //   }
-    // }
   }
 
   public mapUrls(urls: any): string[] {
@@ -170,7 +150,7 @@ export class BooksService {
       userId: userId
     }
 
-    return this.http.post<BookListItem>(environment.apiUrl + ApiEndpointsUrl.wishList + '?uid=' + userId + '&IdBook=' + bookList.id, req)
+    return this.http.post<BookListItem>(environment.apiUrl + ApiEndpointsUrl.wishList + '?uid=' + userId + '&IdBook=' + bookList.id, req, httpOptions)
     .pipe(
       map(response => response)
     );
@@ -189,7 +169,6 @@ export class BooksService {
       }),
     };
 
-
     return this.http.post<BookListItem>(environment.apiUrl + ApiEndpointsUrl.addFavorites + '?id=' + bookList.id + '&uid=' + userId, req, httpOptions)
     .pipe(
       map(response => response)
@@ -206,4 +185,23 @@ export class BooksService {
         })
       );
   }
+  
+  public openedBooks$(bookId: string, userId): Observable<any> {
+    const req = {
+      bookId: bookId, 
+      userId: userId
+    }
+
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+      }),
+    };
+
+    return this.http.post<BookListItem>(environment.apiUrl + ApiEndpointsUrl.journal + '?uid=' + userId + '&IdBook=' + bookId, req, httpOptions)
+    .pipe(
+      map(response => response)
+    );
+  }
+
 }

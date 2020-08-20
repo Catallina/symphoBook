@@ -11,6 +11,10 @@ export enum BookDetailsActionType {
   GET_BOOK_DETAILS = '[BOOK][BookDetails] Get book details',
   GET_BOOK_DETAILS_SUCCESS = '[BOOK][BookDetails] Get book details success',
   GET_BOOK_DETAILS_ERROR = '[BOOK][BookDetails] Get book details error',
+  
+  GET_LAST_BOOK = '[BOOK][BookDetails] Get last book',
+  GET_LAST_BOOK_SUCCESS = '[BOOK][BookDetails] Get last book success',
+  GET_LAST_BOOK_ERROR = '[BOOK][BookDetails] Get last book error',
 
   SELECTED_BOOK = '[BOOK][BookDetails] selected book',
   CURRENT_FILE = '[BOOK][BookDetails] current file',
@@ -60,6 +64,22 @@ export class GetBookDetailsErrorAction implements Action {
   constructor() { }
 }
 
+export class GetLastBookAction implements Action {
+  readonly type = BookDetailsActionType.GET_LAST_BOOK;
+
+  constructor(public payload: { userId: string } ) { }
+}
+export class GetLastBookSuccessAction implements Action {
+  readonly type = BookDetailsActionType.GET_LAST_BOOK_SUCCESS;
+
+  constructor(public payload: { details: BookListModel }) { }
+}
+export class GetLastBookErrorAction implements Action {
+  readonly type = BookDetailsActionType.GET_LAST_BOOK_ERROR;
+
+  constructor() { }
+}
+
 export class SelectedBookAction implements Action {
   readonly type = BookDetailsActionType.SELECTED_BOOK;
 
@@ -71,7 +91,6 @@ export class CurrentFileAction implements Action {
 
   constructor(public payload: { currentFile: any }) {}
 }
-
 
 export class AudioAction implements Action {
   readonly type = BookDetailsActionType.AUDIO;
@@ -121,6 +140,10 @@ export type BookDetailsActions =
   | GetBookDetailsAction
   | GetBookDetailsSuccessAction
   | GetBookDetailsErrorAction
+
+  | GetLastBookAction
+  | GetLastBookSuccessAction
+  | GetLastBookErrorAction
 
   | SelectedBookAction
   | CurrentFileAction

@@ -6,6 +6,8 @@ export interface BookDetailsState {
     bookGroup: BookGroupModel[];
     bookDetails: BookListModel;
     selectedBookId: string;
+    lastSelectedBookId: string;
+    lastSelectedBook: BookListModel;
     currentFile: any;
 
     canplay: boolean;
@@ -25,6 +27,8 @@ export const initialBookDetailsState: BookDetailsState = {
     bookGroup: null,
     bookDetails: null,
     selectedBookId: null,
+    lastSelectedBookId: null,
+    lastSelectedBook: null,
     currentFile: null,
 
     canplay: false,

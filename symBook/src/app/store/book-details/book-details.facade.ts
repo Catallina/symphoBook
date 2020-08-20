@@ -1,4 +1,4 @@
-import { currentFileState, bookDetailsState } from './book-details.selectors';
+import { currentFileState, bookDetailsState, lastSelectedBookIdState, lastSelectedBookState } from './book-details.selectors';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
@@ -48,6 +48,10 @@ export class BookDetailsFacade {
         this.bookStore.dispatch(new BookDetailsActions.GetBookDetailsErrorAction());
     }
 
+    public getLastBook(userId: string): void {
+        this.bookStore.dispatch(new BookDetailsActions.GetLastBookAction({ userId: userId }));
+    }
+
     public selectedBook(bookId: string): void {
         this.bookStore.dispatch(new BookDetailsActions.SelectedBookAction({bookId: bookId}));
     }
@@ -65,8 +69,16 @@ export class BookDetailsFacade {
         return this.bookStore.select(bookGroupState);
     }
 
-    public getStoreBook$(): Observable<string> {
+    public getStoreBookId$(): Observable<string> {
         return this.bookStore.select(selectedBookIdState);
+    }
+
+    public getStoreLastBookId$(): Observable<string> {
+        return this.bookStore.select(lastSelectedBookIdState);
+    }
+
+    public getStoreLastBook$(): Observable<BookListModel> {
+        return this.bookStore.select(lastSelectedBookState);
     }
 
     public getStoreBookDetails$(): Observable<BookListModel> {
