@@ -31,6 +31,24 @@ const routes: Routes = [
         ]
       },
       {
+        path: 'notifications',
+        children: [
+          {
+            path: '',
+            loadChildren: () => import('./notifications/notifications.module').then( m => m.NotificationsPageModule)
+          }
+        ]
+      },
+      {
+        path: 'last-book',
+        children: [
+          {
+            path: '',
+            loadChildren: () => import('./last-book/last-book.module').then( m => m.LastBookPageModule)
+          }
+        ]
+      },
+      {
         path: '',
         redirectTo: '/books/tabs/discover',
         pathMatch: 'full'
@@ -42,6 +60,8 @@ const routes: Routes = [
     redirectTo: '/books/tabs/discover',
     pathMatch: 'full'
   },
+ 
+
 ];
 
 @NgModule({

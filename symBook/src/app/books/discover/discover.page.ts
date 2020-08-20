@@ -12,7 +12,7 @@ import { BookGroupModel } from '@syb/books/models/book-group.model';
 
 
 import { BooksService } from '@syb/books/books.service';
-import { NavController, LoadingController, IonRange, IonItemSliding } from '@ionic/angular';
+import { NavController, LoadingController, IonRange, IonItemSliding, IonSearchbar } from '@ionic/angular';
 import { AudioService } from '@syb/books/audio/audio.service'; 
 
 @Component({
@@ -24,6 +24,9 @@ export class DiscoverPage implements OnInit, OnDestroy {
   @ViewChild('range', {static: false}) range: IonRange;
 
   @Output() public fileSelected = new EventEmitter<any>();
+
+  public showSearchBar = false;
+  public myInput: string;
 
   public isAlive: boolean = false;
 
@@ -120,6 +123,10 @@ export class DiscoverPage implements OnInit, OnDestroy {
         loadingEl.dismiss();
       });
     });
+  }
+
+  clickedSearchIcon(event: Event) {
+    this.showSearchBar = !this.showSearchBar;
   }
 
   openFile(file, index, slidingEl: IonItemSliding) {

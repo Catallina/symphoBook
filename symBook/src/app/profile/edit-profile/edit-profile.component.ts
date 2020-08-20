@@ -52,11 +52,10 @@ export class EditProfileComponent implements OnInit {
 
   public updateProfile(): void {
     this.profileService.updateProfile$(this.userId, this.profileDetailsEdit);
-    // this.router.navigateByUrl('/RefreshComponent', { skipLocationChange: true }).then(() => {
-    //     this.router.navigate(['/profile']);
-    // }); 
     window.location.reload()
-    this.modalCtrl.dismiss();
+    setTimeout(() => {
+      this.modalCtrl.dismiss();
+    }, 1000)
     this.isBtnDisabledByInput = true;
   }
 
