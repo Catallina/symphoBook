@@ -48,7 +48,7 @@ public class BookController {
 	{
 		Gson g = new Gson();
 		String jsonFavorites = book.putFavoriteTitle(id, uid);
-		if(jsonFavorites=="Book already exists in Favorites")
+		if(jsonFavorites=="Book already exists in Favorites!")
 		{
 			return ResponseEntity.status(HttpStatus.CONFLICT).body(g.toJson(jsonFavorites));
 		}
@@ -60,7 +60,7 @@ public class BookController {
 	ResponseEntity<String> putBookInWishlist(@RequestParam String uid, @RequestParam String IdBook) 
 	{	Gson g = new Gson();
 		String jsonWishlist = book.putBookInWishlist(uid, IdBook);
-		if(jsonWishlist=="Book already exits in Wishlist!")
+		if(jsonWishlist.equals("Book already exists in Wishlist!"))
 		{
 			return ResponseEntity.status(HttpStatus.CONFLICT).body(g.toJson(jsonWishlist));
 		}
