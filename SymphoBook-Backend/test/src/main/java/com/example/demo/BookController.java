@@ -72,4 +72,18 @@ public class BookController {
 		String jsonBookWishlist=book.getJsonWishlistBook(uid);
 		return ResponseEntity.status(HttpStatus.OK).body(jsonBookWishlist);
 	}
+	@PostMapping("book/journal")
+	ResponseEntity<String> putBookInJournal(@RequestParam String uid, @RequestParam String IdBook) 
+	{	Gson g = new Gson();
+		String jsonJournal = book.putBookInJournal(uid, IdBook);
+	
+		return ResponseEntity.status(HttpStatus.OK).body(g.toJson(jsonJournal));
+	}
+	
+	@GetMapping("book/getjournal")
+	ResponseEntity<String> getJournal(@RequestParam String uid)
+	{
+		String jsonBookJournal=book.getJsonJournalBook(uid);
+		return ResponseEntity.status(HttpStatus.OK).body(jsonBookJournal);
+	}
 }

@@ -20,6 +20,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class CreateAccount {
 	@Autowired
 	private BookWishlistRepository wishlistRepository;
+	@Autowired
+	private BookJournalRepository journalRepository;
 	CreateAccountActivity createAccountActivityInstance;
 	/*1*/FireBaseService fbs = ConnectToBd.Connection();
 	Map<String, String> errors = new HashMap<String,String>();
@@ -36,6 +38,9 @@ public class CreateAccount {
 			createAccountActivityInstance.CreateNewAccount(Email, Password, PhoneNumber, DisplayName);
 			BookWishlist wishlist = new BookWishlist(createAccountActivityInstance.getUserRecord().getUid(),new ArrayList<String>());
 			wishlistRepository.save(wishlist);
+			BookJournal journal = new BookJournal(createAccountActivityInstance.getUserRecord().getUid(),new ArrayList<String>());
+			journalRepository.save(journal);
+			
 		}  catch (FirebaseAuthException e1) {
 			
 			
@@ -97,7 +102,7 @@ public class CreateAccount {
 	//p
     public Boolean addDetailsforAccountAfter(String Description,String Love, String DisplayName, String Birthday,String uid) throws FirebaseAuthException
     {
-    	  UsersDescription userDescription=new UsersDescription(Description,Love,DisplayName,Birthday);
+    	  UsersDescription userDescription=new UsersDescription(Description,Love,Birthday,DisplayName);
     	  UserRecord userRecord;
 				userRecord = FirebaseAuth.getInstance().getUser(uid);
 				   System.out.println("Successfully fetched user data: " + userRecord.getUid());

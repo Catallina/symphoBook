@@ -27,9 +27,12 @@ public class BookData implements CommandLineRunner {
 	private BookRepository repository;
 	@Autowired
 	private BookWishlistRepository wishlistRepository;
+	@Autowired
+	private BookJournalRepository journalRepository;
 	Gson gson = new Gson();
 	List<String>ListIdBook;
 	BookWishlist OldWishlist;
+	BookJournal OldJournal; 
 	public BookData() {}
 	public String getJsonAllBooksFrontPage()
 	{
@@ -148,6 +151,45 @@ public class BookData implements CommandLineRunner {
 		jsonBooksWishlist = gson.toJson(bookWishlistList);
 		
 		return jsonBooksWishlist;
+	}
+	
+	
+	public String putBookInJournal(String uid, String IdBook)
+	{
+		String error="Added";
+		ListIdBook =new ArrayList<String>();
+		BookJournal journal;
+	    OldJournal = new BookJournal();
+		OldJournal=journalRepository.findById(uid).orElse(null);
+	
+		ListIdBook.addAll(OldJournal.getListIdBook());
+		
+		ListIdBook.add(IdBook);
+		journal = new BookJournal(uid, ListIdBook);
+		journalRepository.save(journal);
+		return error;
+
+		
+		
+		
+	}
+	public String getJsonJournalBook(String uid)
+	{
+		String jsonBooksJournal="";
+		OldJournal = new BookJournal();
+		OldJournal=journalRepository.findById(uid).orElse(null);
+	
+		ListIdBook =new ArrayList<String>();
+		List<BookHomepage> bookJournalList = new ArrayList<BookHomepage>();
+		ListIdBook.addAll(OldJournal.getListIdBook());
+		for(int i=0;i<ListIdBook.size();++i)
+		{
+			Books bookFromId = repository.findById(ListIdBook.get(i)).orElse(null);
+			bookJournalList.add(new BookHomepage(bookFromId.getId(),bookFromId.getTitle(),bookFromId.getPhoto(),bookFromId.getAuthor()));
+		}
+		jsonBooksJournal = gson.toJson(bookJournalList);
+		
+		return jsonBooksJournal;
 	}
 	@Override
 	public void run(String... args) throws Exception {
