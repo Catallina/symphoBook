@@ -117,6 +117,8 @@ public class BookController {
 	{
 		Gson g = new Gson();
 		String jsonDeleteFavorite="";
+		
+		Title.replace("%20", " ");
 		jsonDeleteFavorite=book.deleteBookFromFavorite(uid, Title);
 		if(jsonDeleteFavorite=="The Journal is already deleted!")
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(g.toJson(jsonDeleteFavorite));
