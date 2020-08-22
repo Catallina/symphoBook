@@ -23,7 +23,7 @@ public class BookController {
 	}
 	
 	@GetMapping("gethomepagebooks")  //http://localhost:8080/gethomepagebooks
-	ResponseEntity<String> getBooks()
+	ResponseEntity<String> getBooks( )
 	{
 		
 	//	return new ResponseEntity<>(book.getJsonAllBooksFrontPage(),HttpStatus.OK);

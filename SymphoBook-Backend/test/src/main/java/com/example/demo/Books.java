@@ -91,6 +91,10 @@ public class Books {
 		return mp3;
 	}
 	public String getFirstMp3() {
+		if(mp3.size() == 0) {
+			System.out.println("EMPTY MP3 @ id= "+this.id);
+			return "";
+		}
 		return mp3.get(0);
 	}
 	public void setMp3(List<String> mp3) {
