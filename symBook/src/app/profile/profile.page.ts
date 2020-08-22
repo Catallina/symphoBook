@@ -1,8 +1,8 @@
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
-import { IonRange, ModalController } from '@ionic/angular';
+import { IonRange, ModalController, IonItemSliding, LoadingController } from '@ionic/angular';
 import { takeWhile } from 'rxjs/operators';
 
-import { BookDetailsFacade } from '@syb/store/book-details/book-details.facade';
+import { BookDetailsFacade } from '@syb/global/book-details/book-details.facade';
 import { ProfileStore } from '@syb/profile/store/profile.store';
 
 import { AudioService } from '@syb/books/audio/audio.service';
@@ -26,6 +26,7 @@ export class ProfilePage implements OnInit, OnDestroy {
 
   public profileDetails: ProfileModel;
   public userId: string;
+  public favoriteBook: string[];
 
 
   constructor(
@@ -35,12 +36,12 @@ export class ProfilePage implements OnInit, OnDestroy {
     private audioService: AudioService,
     private authService: AuthService,
     private modalCtrl: ModalController,
+    private loadingCtrl: LoadingController
   ) {
     this.isAlive = true;
   }
 
   ngOnInit() {
-    this.bookFacade.getBookGroup();
 
     this.authService.userId.pipe(takeWhile(() => this.isAlive))
       .subscribe((userId) => {
@@ -53,11 +54,21 @@ export class ProfilePage implements OnInit, OnDestroy {
         if (profile) {
           this.profileDetails = profile;
 
-          if (profile && profile.favoriteBook) {
-            profile.favoriteBook = profile.favoriteBook.filter(function (el) {
-              return el != null;
-            });
+          if (profile && profile.birthday) {
+            this.profileDetails.birthday = profile.birthday.substring(0, 10);
           }
+
+        }
+    });
+
+    this.profileStore.favoriteBook$.pipe(takeWhile(() => this.isAlive))
+      .subscribe((book: string[]) => {
+        if (book) {
+          this.favoriteBook = book;
+          
+          this.favoriteBook  = book.filter(function (el) {
+            return el != null;
+          });
         }
     });
 
@@ -73,6 +84,10 @@ export class ProfilePage implements OnInit, OnDestroy {
     this.isAlive = false;
   }
 
+  ionViewCanLeave(){
+    this.isAlive = false;
+  }
+
   onEditProfile() {
     this.modalCtrl.create({
         component: EditProfileComponent, 
@@ -83,10 +98,22 @@ export class ProfilePage implements OnInit, OnDestroy {
         return modalEl.onDidDismiss();
       })
       .then(resultData => {
-        console.log(resultData.data, resultData.role);
         if (resultData.role === 'confirm') {
           console.log('Saved!');
         }
       });
+  }
+
+  onDeleteBook(title: string, slidingEl: IonItemSliding) {
+    slidingEl.close();
+    this.loadingCtrl.create({ message: 'Deleting...' }).then(loadingEl => {
+      loadingEl.present();
+
+      this.profileService.deleteBook$(this.userId, title).subscribe(() => {
+        this.profileStore.favoriteBook = this.favoriteBook.filter(elem => elem !== title);
+    
+        loadingEl.dismiss();
+      });
+    });
   }
 }

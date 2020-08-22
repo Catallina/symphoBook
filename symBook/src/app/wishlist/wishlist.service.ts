@@ -115,13 +115,8 @@ export class WishlistService {
   //   );
   // }
 
-  deleteBook(bookId: string) {
-    return this.book.pipe(
-      take(1),
-      delay(1000),
-      tap(books => {
-        this.book.next(books.filter(book => book.id !== bookId ));
-      })
-    );
+  deleteBook$(userId: string, bookId: string) {
+    const data = `?uid=${userId}&IdBook=${bookId}`;
+    return this.http.delete<BookListModel>(environment.apiUrl + ApiEndpointsUrl.wishlistDelete + data);
   }
 }

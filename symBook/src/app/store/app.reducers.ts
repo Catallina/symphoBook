@@ -1,4 +1,3 @@
-
 import { ActionReducer, MetaReducer, ActionReducerMap } from '@ngrx/store';
 import { storeLogger } from 'ngrx-store-logger';
 
@@ -6,11 +5,9 @@ import { environment } from '@env/environment';
 
 import { AppState } from '@syb/store/app.state';
 import { coreReducers } from '@syb/store/core/core.reducer';
-import { bookDetailsReducer } from '@syb/store/book-details/book-details.reducer';
 
 export const appReducers: ActionReducerMap<AppState> = {
   core: coreReducers,
-  bookDetails: bookDetailsReducer,
 };
 
 export function logger(reducer: ActionReducer<AppState>): any {

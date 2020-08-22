@@ -1,3 +1,5 @@
+import { JournalBookDetailsFacade } from './store/books-journal/books-journal.facade';
+
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
@@ -7,7 +9,7 @@ import { environment } from '@env/environment';
 import { ApiEndpointsUrl } from '@syb/shared/api.constants';
 
 import { BookListModel } from '@syb/shared/models/book-list.model';
-import { BooksJournalStore } from '@syb/books-journal/store/books-journal.store';
+// import { BooksJournalStore } from '@syb/books-journal/store/books-journal.store';
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +18,8 @@ export class BooksJournalService {
 
   constructor(
     private http: HttpClient,
-    private booksJournalStore: BooksJournalStore,
+    private bookJournalFacade: JournalBookDetailsFacade,
+    //private booksJournalStore: BooksJournalStore,
   ) { }
 
   public mapToBookDetailsPayload(bookList: any): BookListModel[] {
@@ -49,12 +52,17 @@ export class BooksJournalService {
       );
   }
 
-  public fetchBookJournalDetails(userId: string): void {
-    this.getBooksJournal$(userId)
-    .subscribe((bookList: BookListModel[]) => {
-      if (bookList) {
-        this.booksJournalStore.booksJournalDetails = bookList;
-      }
-    });
+  // public fetchBookJournalDetails(userId: string): void {
+  //   this.getBooksJournal$(userId)
+  //   .subscribe((bookList: BookListModel[]) => {
+  //     if (bookList) {
+  //       this.bookJournalFacade.getBookDetails(bookList);
+  //       this.booksJournalStore.booksJournalDetails = bookList;
+  //     }
+  //   });
+  // }
+
+  public deleteAllBooks$(userId: string): Observable<[]> {
+    return this.http.delete<[]>(environment.apiUrl + ApiEndpointsUrl.journalDelete + `?uid=${userId}`);
   }
 }

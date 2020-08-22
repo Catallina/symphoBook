@@ -1,5 +1,7 @@
 {
   "name": "symBook",
-  "integrations": {},
+  "integrations": {
+    "cordova": {}
+  },
   "type": "angular"
 }

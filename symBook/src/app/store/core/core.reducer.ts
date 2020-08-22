@@ -10,12 +10,7 @@ export function coreReducers(
     case CoreActionTypes.SET_ACTIVE_LANGUAGE:
       state.activeLanguage = action.payload.language;
 
-      return state;
-
-    case CoreActionTypes.SET_PIPELINE:
-      state.pipelineNumber = action.payload.pipelineNumber;
-
-      return state;
+      return state
 
     default:
       return state;

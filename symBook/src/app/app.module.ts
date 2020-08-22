@@ -21,8 +21,9 @@ import { AppRoutingModule } from '@syb/app-routing.module';
 import { createTranslateLoader } from '@syb/shared/helper/helper';
 import { SharedModule } from '@syb/shared/shared.module';
 import { appReducers, metaReducers } from '@syb/store/app.reducers';
-import { BookDetailsEffects } from './store/book-details/book-details.effects';
+import { GlobalModule } from './global/global.module';
 import { StoreConstants } from './shared/constants/store.constants';
+import { JournalReducers } from './books-journal/store/books-journal.reducers';
 
 @NgModule({
   declarations: [
@@ -44,17 +45,23 @@ import { StoreConstants } from './shared/constants/store.constants';
       }
     }),
 
+
     EffectsModule.forRoot([]),
 
     LoggerModule.forRoot({
       level: environment.logLevel
     }),
 
-    StoreModule.forRoot(appReducers, { metaReducers }),
-    StoreModule.forFeature(StoreConstants.booksStore, appReducers ),
-    EffectsModule.forFeature([
-      BookDetailsEffects,
-    ]),
+    StoreModule.forRoot(appReducers, { metaReducers,
+      runtimeChecks: {
+        strictStateImmutability: false,
+        strictActionImmutability: false,
+        strictStateSerializability: false,
+        strictActionSerializability: false,
+      },
+    }),
+
+    GlobalModule,
 
   ],
   providers: [

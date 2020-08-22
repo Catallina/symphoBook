@@ -1,8 +1,9 @@
-import { BookDetailsFacade } from '@syb/store/book-details/book-details.facade';
 import { Component, OnInit, ViewChild, Input, Output, EventEmitter } from '@angular/core';
 import { takeWhile, filter, distinctUntilChanged, map } from 'rxjs/operators';
-import { AudioService } from '@syb/books/audio/audio.service';
 import { IonRange, LoadingController } from '@ionic/angular';
+
+import { AudioService } from '@syb/books/audio/audio.service';
+import { BookDetailsFacade } from '@syb/global/book-details/book-details.facade';
 import { BookGroupModel } from '@syb/books/models/book-group.model';
 
 @Component({
@@ -41,13 +42,8 @@ export class FooterPlayerPage implements OnInit {
 
   ngOnInit() {
     this.isAlive = true;
-
-    // this.bookFacade.getStoreBookGroup$().pipe(takeWhile(() => this.isAlive)).subscribe((book: BookGroupModel[]) => {
-    //   this.bookDetails = book;
-    // });
-
+    
     this.getDocuments();
-
     this.seekbar = this.getTimeSec();
 
     this.bookFacade.getStoreCurrentFile$().pipe(takeWhile(() => this.isAlive)).subscribe((book) => {

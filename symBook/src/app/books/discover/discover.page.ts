@@ -4,15 +4,16 @@ import { Store } from '@ngrx/store';
 import { takeWhile } from 'rxjs/operators';
 import { filter, map, distinctUntilChanged } from 'rxjs/operators';
 
-import { BookDetailsFacade } from '@syb/store/book-details/book-details.facade';
+import { BookDetailsFacade } from '@syb/global/book-details/book-details.facade';
 
 import { AuthService } from '@syb/auth/auth.service';
 import { BookListModel } from '@syb/shared/models/book-list.model';
 import { BookGroupModel } from '@syb/books/models/book-group.model';
 
 
+import { SearchComponent } from '@syb/books/discover/search/search.component';
 import { BooksService } from '@syb/books/books.service';
-import { NavController, LoadingController, IonRange, IonItemSliding, IonSearchbar } from '@ionic/angular';
+import { NavController, LoadingController, IonRange, IonItemSliding, ModalController } from '@ionic/angular';
 import { AudioService } from '@syb/books/audio/audio.service'; 
 
 @Component({
@@ -26,7 +27,6 @@ export class DiscoverPage implements OnInit, OnDestroy {
   @Output() public fileSelected = new EventEmitter<any>();
 
   public showSearchBar = false;
-  public myInput: string;
 
   public isAlive: boolean = false;
 
@@ -34,7 +34,6 @@ export class DiscoverPage implements OnInit, OnDestroy {
 
   public bookDetails: BookGroupModel[];
 
-  // public files: any = [];
   public currentFile: any = {};
   public onSeekState: boolean;
   public displayFooter: string = 'inactive';
@@ -56,11 +55,13 @@ export class DiscoverPage implements OnInit, OnDestroy {
     public navCtrl: NavController,
     public audioService: AudioService,
     public loadingCtrl: LoadingController,
+    private modalCtrl: ModalController,
   ) {
     this.isAlive = true;
   }
 
   ngOnInit() {
+    this.bookFacade.getBookGroup();
     this.getDocuments();
 
     this.bookFacade.getStoreBookId$().pipe(takeWhile(() => this.isAlive)).subscribe((bookId: string) => {
@@ -128,13 +129,20 @@ export class DiscoverPage implements OnInit, OnDestroy {
   }
 
   clickedSearchIcon(event: Event) {
-    this.showSearchBar = !this.showSearchBar;
-  }
+    //this.showSearchBar = !this.showSearchBar;
+
+    this.modalCtrl.create({
+        component: SearchComponent, 
+        componentProps: { loadedBook: this.bookDetails }
+      })
+      .then(modalEl => {
+        modalEl.present();
+        return modalEl.onDidDismiss();
+      });
+    }
 
   openFile(file, index, slidingEl: IonItemSliding) {
     this.currentFile = { index, file };
-
-    console.warn(this.currentFile)
     this.playStream(file.url);
     this.fileSelected.emit(this.currentFile);
     this.bookFacade.setCurrentFile(this.currentFile);
@@ -194,6 +202,5 @@ export class DiscoverPage implements OnInit, OnDestroy {
       }
     });
   }
-
 
 }

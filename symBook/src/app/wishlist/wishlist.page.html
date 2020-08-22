@@ -28,7 +28,11 @@
             *ngFor="let book of loadedBook"
             #slidingBook
           >
-              <ion-item>
+              <ion-item
+                detail
+                (click)="onSelectedBook(book.id)"
+                [routerLink]="['/', 'wishlist', book.id]"
+              >
                 <ion-thumbnail slot="start">
                   <img [src]="book.photo">
               </ion-thumbnail>

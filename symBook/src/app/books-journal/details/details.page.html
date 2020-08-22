@@ -1,0 +1,50 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-menu-button></ion-menu-button>
+        </ion-buttons>
+        <ion-title>Book journal</ion-title>
+        <ion-buttons slot="end" >
+            <ion-button color="danger" [disabled]="!loadedBook || loadedBook.length <= 0" (click)="onDeleteAll()">
+                <ion-icon name="trash-outline"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content>
+    <ion-grid>
+        <ion-row>
+        <ion-col
+            size-md="6"
+            offset-md="3"
+            *ngIf="!loadedBook || loadedBook.length <= 0"
+            class="ion-text-center"
+        >
+            <p>There are no books!</p>
+        </ion-col>
+        <ion-col
+            size-md="6"
+            offset-md="3"
+            *ngIf="loadedBook && loadedBook.length > 0"
+        >
+            <ion-list>
+                <ion-item
+                    *ngFor="let book of loadedBook" 
+                    (click)="onSelectedBook(book.id)"
+                    [routerLink]="['/', 'books-journal', 'tabs', 'details', book.id]"
+                    detail>
+                <ion-thumbnail slot="start">
+                    <img [src]="book.photo" />
+                </ion-thumbnail>
+
+                <ion-label>
+                    <h5>{{ book.title }}</h5>
+                    <p>{{ book.author }}</p>
+                </ion-label>
+                </ion-item>
+            </ion-list>
+        </ion-col>
+        </ion-row>
+    </ion-grid>
+</ion-content>

@@ -12,6 +12,7 @@ import {
 import { BookGroupDetails } from '@syb/books/interfaces/book-group-details.interface';
 import { environment } from '@env/environment';
 import { ApiEndpointsUrl } from '@syb/shared/api.constants';
+import { NotificationModel } from './notifications/notification.model';
 
 @Injectable({
   providedIn: 'root'
@@ -143,6 +144,7 @@ export class BooksService {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
       }),
+      responseType: 'text' as 'json',
     };
 
     const req = {
@@ -203,5 +205,22 @@ export class BooksService {
       map(response => response)
     );
   }
+
+  public saveNotification(notification: NotificationModel): void {
+    this.http.post<NotificationModel[]>(environment.apiUrl + ApiEndpointsUrl.notification, notification).subscribe();
+  }
+
+  
+  public searchBook$(filterType: string, query: string): Observable<BookGroupModel[]> {
+
+    return of(this.mapToBookList(this.responseData))
+    // return this.http.get<any>(environment.apiUrl + ApiEndpointsUrl.book)
+    //   .pipe(
+    //     map(response => {
+    //       return this.mapToBookList(response);
+    //     })
+    //   );
+  }
+
 
 }

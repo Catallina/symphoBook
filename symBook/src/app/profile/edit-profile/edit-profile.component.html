@@ -22,12 +22,15 @@
           ></ion-input>
         </ion-item>
         <ion-item>
-          <ion-input
+          <ion-datetime
+            class="ion-no-padding"
             [(ngModel)]="profileDetailsEdit.birthday"
             (ngModelChange)="onInputsChange()"
             [value]="profileDetailsEdit.birthday"
             placeholder="Birthday"
-          ></ion-input>
+            displayFormat="DDD. MMM DD, YY"
+            monthShortNames="jan, feb, mar, apr, mai, jun, jul, aug, sep, okt, nov, des"
+            ></ion-datetime>
         </ion-item>
         <ion-item>
           <ion-input

@@ -1,0 +1,60 @@
+<ion-header translucent>
+  <ion-toolbar>
+    <ion-select slot="start" (ionChange)="selectFilterType()" [(ngModel)]="filter">
+      <ion-select-option *ngFor="let item of selectFilter" [value]="item">{{ item }}</ion-select-option>
+    </ion-select>
+    <ion-searchbar 
+      class="text-center"
+      [(ngModel)]="searchInput"
+      animated
+      [debounce]=400
+      search-icon="recording-outline"
+      clear-icon="close-circle-outline"
+      (ionChange)="onSearchInput($event)"
+      (ionCancel)="onSearchCancel($event)"
+      (ionClear)="onSearchClear($event)">
+    </ion-searchbar>
+
+    <ion-buttons slot="end">
+      <ion-button (click)="onCancel()"><ion-icon name="chevron-down-outline"></ion-icon></ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid>
+    <ion-row>
+      <ion-col
+        size-md="6"
+        offset-md="3"
+        *ngIf="!loadedBook || loadedBook.length <= 0"
+        class="ion-text-center"
+      >
+        <p>Search a book!</p>
+      </ion-col>
+      <ion-col
+        size-md="6"
+        offset-md="3"
+        *ngIf="loadedBook && loadedBook.length > 0"
+      >
+        <ion-list>
+          <ion-item
+            *ngFor="let book of loadedBook"
+              detail
+              (click)="onSelectedBook(book.id)"
+              [routerLink]="['/', 'books', 'tabs', 'discover', book.id]"
+            >
+              <ion-thumbnail slot="start">
+                <img [src]="book.photo">
+            </ion-thumbnail>
+          
+            <ion-label>
+              <h5>{{ book.title }}</h5>
+              <p>{{ book.author }}</p>
+            </ion-label>
+          </ion-item>
+        </ion-list>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

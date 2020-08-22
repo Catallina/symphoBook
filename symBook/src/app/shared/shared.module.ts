@@ -1,5 +1,4 @@
 import { FooterPlayerPage } from './footer-player/footer-player.page';
-import { FooterComponent } from '@syb/shared/footer/footer.component';
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
@@ -16,7 +15,6 @@ import { CommonModule } from '@angular/common';
 
 @NgModule({
   declarations: [
-    //FooterComponent,
     FooterPlayerPage,
   ],
   entryComponents: [],
@@ -24,7 +22,6 @@ import { CommonModule } from '@angular/common';
     CommonModule,
   ],
   exports: [
-    //FooterComponent,
     FooterPlayerPage,
   ],
   schemas: [

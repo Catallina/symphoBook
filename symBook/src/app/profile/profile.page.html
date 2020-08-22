@@ -16,11 +16,11 @@
 
 <ion-content has-header="true">
   <div class="profile-bg"></div>
-  <div class="content" *ngIf="profileDetails" (newItemEvent)="profileDetails">
+  <div color="primary" class="content" *ngIf="profileDetails" (newItemEvent)="profileDetails">
     <div class="profile-info">
       <img class="profile-image" src="assets/image/profil.jpg">
-      <h3 class="profile-name">{{ profileDetails.name }}</h3>
-      <span class="profile-description">{{ profileDetails.description }}</span>
+      <ion-text><h3>{{ profileDetails.name }}</h3></ion-text>
+      <ion-text><h5>{{ profileDetails.description }}</h5></ion-text>
     </div>
     <ion-card>
       <ion-list>
@@ -28,7 +28,7 @@
           <ion-label>
             <ion-text color="primary">Birthday: </ion-text>
           </ion-label>
-          <ion-note slot="end">{{ profileDetails.birthday }}</ion-note>
+          <ion-note slot="end">{{ profileDetails.birthday | date }}</ion-note>
         </ion-item>
         <ion-item>
           <ion-label>
@@ -49,7 +49,9 @@
   
           <ion-item-sliding 
             class="ion-padding-start ion-padding-end" 
-            *ngFor="let book of profileDetails.favoriteBook">
+            *ngFor="let book of favoriteBook"
+            #slidingBook
+            >
 
             <ion-item class="ion-text-center" slot="end">
               <ion-label><ion-text><h6>{{ book }}</h6></ion-text></ion-label>
@@ -58,6 +60,7 @@
             <ion-item-options>
               <ion-item-option 
                 color="danger"
+                (click)="onDeleteBook(book, slidingBook)"
                 ><ion-icon name="trash" slot="icon-only"></ion-icon>
               </ion-item-option>
             </ion-item-options>

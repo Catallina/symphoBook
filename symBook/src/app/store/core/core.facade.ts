@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 import * as CoreActions from '@syb/store/core/core.actions';
 import { AppState } from '@syb/store/app.state';
 
-import { activeLanguageState, pipelineNumberState } from '@syb/store/core/core.selectors';
+import { activeLanguageState } from '@syb/store/core/core.selectors';
 
 @Injectable({
   providedIn: 'root'
@@ -21,15 +21,5 @@ export class CoreFacade {
   }
   public getActiveLanguage$(): Observable<string> {
     return this.store.select(activeLanguageState);
-  }
-
-  /* PIPELINE */
-  public setPipeline(pipelineNumber: string): void {
-    return this.store.dispatch(
-      new CoreActions.SetPipeline({ pipelineNumber: pipelineNumber })
-    );
-  }
-  public getPipeline$(): Observable<string> {
-    return this.store.select(pipelineNumberState);
   }
 }

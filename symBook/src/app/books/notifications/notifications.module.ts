@@ -8,13 +8,20 @@ import { NotificationsPageRoutingModule } from './notifications-routing.module';
 
 import { NotificationsPage } from './notifications.page';
 
+import { LocalNotifications } from '@ionic-native/local-notifications/ngx';
+
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    NotificationsPageRoutingModule
+    NotificationsPageRoutingModule,
+
+    //LocalNotifications,
   ],
-  declarations: [NotificationsPage]
+  declarations: [NotificationsPage],
+  providers: [
+    LocalNotifications,
+  ]
 })
 export class NotificationsPageModule {}

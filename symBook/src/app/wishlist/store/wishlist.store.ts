@@ -21,7 +21,7 @@ export class WishlistStore {
 
   public set wishlistDetails(item: BookListModel[]) {
     this.wishlistStore.bookDetails = item;
-    this.logger.debug('MyProfile - Set Profile item', { item: item, store: this.wishlistStore });
+    this.logger.debug('WISHLIST - Display wish book', { item: item, store: this.wishlistStore });
     this.bookDetailsSubject.next(Object.assign({}, this.wishlistStore).bookDetails);
   }
 
@@ -32,7 +32,7 @@ export class WishlistStore {
   public reset(): void {
     this.wishlistStore = Object.assign({}, initialWishlistState);
 
-    this.logger.debug('MyProfile -  Reset store', { store: this.wishlistStore});
+    this.logger.debug('WISHLIST -  Reset store', { store: this.wishlistStore});
 
     this.bookDetailsSubject.next(Object.assign({}, initialWishlistState).bookDetails);
   }

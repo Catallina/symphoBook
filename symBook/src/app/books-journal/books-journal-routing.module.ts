@@ -5,9 +5,26 @@ import { BooksJournalPage } from './books-journal.page';
 
 const routes: Routes = [
   {
-    path: '',
-    component: BooksJournalPage
-  }
+    path: 'tabs',
+    component: BooksJournalPage,
+    children: [
+      {
+        path: 'details',
+        children: [
+          {
+            path: '',
+            loadChildren: () => import('./details/details.module').then( m => m.DetailsPageModule)
+          },
+          {
+            path: ':bookId',
+            loadChildren: () => import('@syb/books/discover/book-detail/book-detail.module').then(m => m.BookDetailPageModule)
+          }
+        ]
+      }
+    ]
+  },
+
+
 ];
 
 @NgModule({

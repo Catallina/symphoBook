@@ -1,9 +1,11 @@
+import { ProfileStore } from './../store/profile.store';
 import { ModalController } from '@ionic/angular';
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 import { ProfileModel } from '@syb/profile/profile.model';
 import { ProfileService } from '../profile.service';
 import { Router } from '@angular/router';
+import { takeWhile } from 'rxjs/operators';
 
 @Component({
   selector: 'syb-edit-profile',
@@ -14,20 +16,28 @@ export class EditProfileComponent implements OnInit {
   @Input() profileDetails: ProfileModel;
   @Input() userId: string;
 
+  @Output() public idUpdate = new EventEmitter<any>();
+
+  public isAlive = false;
+
   public isBtnDisabledByInput: boolean = true;
 
   public profileDetailsEdit: ProfileModel;
 
-  public 
-
   constructor(
     private modalCtrl: ModalController,
-    private router: Router,
     private profileService: ProfileService,
-  ) { }
+    private profileStore: ProfileStore,
+  ) { 
+    this.isAlive = true;
+  }
 
   ngOnInit() {
     this.profileDetailsEdit = JSON.parse(JSON.stringify(this.profileDetails));
+  }
+
+  ngOnDestroy(): void {
+    this.isAlive = false;
   }
 
   onCancel() {
@@ -55,12 +65,15 @@ export class EditProfileComponent implements OnInit {
   }
 
   public updateProfile(): void {
-    this.profileService.updateProfile$(this.userId, this.profileDetailsEdit);
-    window.location.reload()
-    setTimeout(() => {
+    this.profileService.updateProfile$(this.userId, this.profileDetailsEdit).subscribe((isUpdate) => {
+      this.profileStore.profileDetails = this.profileDetailsEdit;
       this.modalCtrl.dismiss();
-    }, 1000)
+    });
     this.isBtnDisabledByInput = true;
+  }
+
+  public openCalendar() {
+    
   }
 
 }

@@ -1,9 +1,5 @@
-import { BookListModel } from '@syb/shared/models/book-list.model';
+import { BooksJournalState } from './books-journal/books-journal.state';
 
-export interface BooksJournalState {
-  bookDetails: BookListModel[];
+export interface JournalState {
+  journalDetails: BooksJournalState,
 }
-
-export const initialBooksJournalState: BooksJournalState = {
-  bookDetails: null,
-};

@@ -9,8 +9,14 @@ export const ApiEndpointsUrl = {
   wishList: 'book/wishlist',
   addFavorites: 'book/addfavorite',
   getWishlist: 'book/getwishlist',
+  wishlistDelete: 'book/wishlistdelete',
+  deleteFavorites: 'book/favoritedelete',
+
+  notification: '',
+  
   journalBook: 'book/getjournal',
   journal: 'book/journal',
+  journalDelete: 'book/journaldelete',
 
   book: 'gethomepagebooks',
   bookDetails: 'homepage/book',

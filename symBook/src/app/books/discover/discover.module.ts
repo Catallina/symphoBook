@@ -7,6 +7,7 @@ import { IonicModule } from '@ionic/angular';
 
 import { DiscoverPage } from '@syb/books/discover/discover.page';
 import { SharedModule } from '@syb/shared/shared.module';
+import { SearchComponent } from '@syb/books/discover/search/search.component';
 
 const routes: Routes = [
   {
@@ -31,7 +32,10 @@ const routes: Routes = [
   ],
   declarations: [
     DiscoverPage,
+    SearchComponent,
   ],
-  entryComponents: []
+  entryComponents: [
+    SearchComponent,
+  ]
 })
 export class DiscoverPageModule {}

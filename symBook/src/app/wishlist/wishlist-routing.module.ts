@@ -6,7 +6,11 @@ import { WishlistPage } from './wishlist.page';
 const routes: Routes = [
   {
     path: '',
-    component: WishlistPage
+    component: WishlistPage,
+  },
+  {
+    path: ':bookId',
+    loadChildren: () => import('@syb/books/discover/book-detail/book-detail.module').then(m => m.BookDetailPageModule)
   }
 ];
 

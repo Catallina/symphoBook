@@ -7,10 +7,11 @@ import {
   ModalController,
   LoadingController,
   IonRange,
-  AlertController
+  AlertController,
+  ToastController
 } from '@ionic/angular';
 
-import { BookDetailsFacade } from '@syb/store/book-details/book-details.facade';
+import { BookDetailsFacade } from '@syb/global/book-details/book-details.facade';
 
 import { BookListModel } from '@syb/shared/models/book-list.model';
 import { BooksService } from '@syb/books/books.service';
@@ -53,6 +54,7 @@ export class BookDetailPage implements OnInit, OnDestroy {
     private bookFacade: BookDetailsFacade,
     private authService: AuthService,
     private alertCtrl: AlertController,
+    private toastController: ToastController,
   ) {}
 
   ngOnInit() {
@@ -65,19 +67,16 @@ export class BookDetailPage implements OnInit, OnDestroy {
       }
     });
 
-    this.bookFacade.getStoreLastBookId$().pipe(takeWhile(() => this.isAlive)).subscribe((bookId: string) => {
-      this.bookId = bookId;
-      if (bookId) {
-        this.bookFacade.getBookDetails(bookId);
-      }
-    });
-
     this.bookFacade.getStoreBookDetails$().pipe(takeWhile(() => this.isAlive)).subscribe((book: BookListModel) => {
-      this.bookDetails = book;
+      if (book) {
+        this.bookDetails = book;
+      }
     });
     
     this.bookFacade.getStoreCurrentFile$().pipe(takeWhile(() => this.isAlive)).subscribe((book: BookListModel) => {
-      this.currentFile = book;
+      if (book) {
+        this.currentFile = book;
+      }
     });
 
     this.authService.userId.subscribe((userId) => {
@@ -91,10 +90,6 @@ export class BookDetailPage implements OnInit, OnDestroy {
         this.bookFacade.getBookDetails(book.id)
       }
     });
-
-    this.bookFacade.getStoreBookDetails$().pipe(takeWhile(() => this.isAlive)).subscribe((book: BookListModel) => {
-      this.bookDetails = book;
-    });
   }
 
   ngOnDestroy() {
@@ -104,46 +99,41 @@ export class BookDetailPage implements OnInit, OnDestroy {
   public onWishBook(event: Event) {
     event.stopPropagation();
 
-   // this.modalCtrl.dismiss(
-      this.loadingCtrl
-      .create({ message: 'Book added...' })
-      .then(loadingEl => {
-        loadingEl.present();
-        this.authService.userId.subscribe((userId) => {
-          this.bookService.storeWishBook$(this.bookDetails, userId)
-            .subscribe(() => {
-              loadingEl.dismiss();
-            }, (errRes) => {
-              loadingEl.dismiss();
-              const message = errRes.error;
-              this.showAlert(message);
-            });
-        })
-      })
-   // );
+    this.authService.userId.subscribe((userId) => {
+      this.bookService.storeWishBook$(this.bookDetails, userId)
+        .subscribe(() => {
+            this.toastController
+              .create({ 
+                message: `Added book to wishlist ${this.bookDetails.title}`,
+                duration: 2000,
+                position: 'top'
+            }).then((toast) => toast.present())
+        }, (errRes) => {
+          
+          const message = errRes.error;
+          this.showAlert(message);
+        });
+    });
   }
 
   public onAddFavorite(event: Event) {
     event.stopPropagation();
 
-    //this.modalCtrl.dismiss(
-      this.loadingCtrl
-      .create({ message: 'Book added...' })
-      .then(loadingEl => {
-        loadingEl.present();
-
-        this.authService.userId.subscribe((userId) => {
-          this.bookService.storeFavoriteBook$(this.bookDetails, userId)
-            .subscribe(() => {
-              loadingEl.dismiss();
-            }, (errRes) => {
-              loadingEl.dismiss();
-              const message = errRes.error;
-              this.showAlert(message);
-            });
-          })
-        })
-    //);
+    this.authService.userId.subscribe((userId) => {
+      this.bookService.storeFavoriteBook$(this.bookDetails, userId)
+        .subscribe(() => {
+          this.toastController
+          .create({ 
+            message: `Added book to favorite ${this.bookDetails.title}`,
+            duration: 2000,
+            position: 'top'
+          }).then((toast) => toast.present())
+          
+        }, (errRes) => {
+          const message = errRes.error;
+          this.showAlert(message);
+        });
+      })
   }
 
   private showAlert(message: string) {

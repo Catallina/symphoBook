@@ -10,6 +10,7 @@ import { ProfilePageRoutingModule } from '@syb/profile/profile-routing.module';
 import { ProfilePage } from '@syb/profile/profile.page';
 import { EditProfileComponent } from '@syb/profile/edit-profile/edit-profile.component';
 
+
 @NgModule({
   imports: [
     HttpClientModule,
@@ -30,6 +31,6 @@ import { EditProfileComponent } from '@syb/profile/edit-profile/edit-profile.com
   ],
   entryComponents: [
     EditProfileComponent,
-  ]
+  ],
 })
 export class ProfilePageModule {}

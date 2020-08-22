@@ -7,6 +7,7 @@ import { environment } from '@env/environment';
 import { ProfileStore } from '@syb/profile/store/profile.store';
 import { map, catchError } from 'rxjs/operators';
 import { ApiEndpointsUrl } from '@syb/shared/api.constants';
+import { BookListModel } from '@syb/shared/models/book-list.model';
 
 @Injectable({
   providedIn: 'root'
@@ -50,11 +51,12 @@ export class ProfileService {
     .subscribe((profile: ProfileModel) => {
       if (profile) {
         this.profileStore.profileDetails = profile;
+        this.profileStore.favoriteBook = profile.favoriteBook;
       }
     });
   }
 
-  public updateProfile$(userId: string, updatedProfile: ProfileModel): void {
+  public updateProfile$(userId: string, updatedProfile: ProfileModel): Observable<any> {
     const sendData = `?Description=${updatedProfile.description}&Love=${updatedProfile.love}&DisplayName=${updatedProfile.name}&Birthday=${updatedProfile.birthday}&uid=${userId}`
     
     const httpOptions = {
@@ -70,9 +72,13 @@ export class ProfileService {
       birthday: updatedProfile.birthday,
       userId: userId,
     }
-    this.http.put(
+    return this.http.put(
       environment.apiUrl + ApiEndpointsUrl.userProfile + sendData, data, httpOptions)
-      .pipe(catchError(error => [error]))
-      .subscribe((response: ProfileModel) => this.profileStore.profileDetails = response);
+      .pipe(catchError(error => [error]));
+  }
+
+  deleteBook$(userId: string, titleBook: string) {
+    const data = `?uid=${userId}&Title=${titleBook}`;
+    return this.http.delete<BookListModel>(environment.apiUrl + ApiEndpointsUrl.deleteFavorites + data);
   }
 }

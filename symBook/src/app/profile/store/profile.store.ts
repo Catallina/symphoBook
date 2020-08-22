@@ -11,19 +11,20 @@ import { ProfileModel } from '@syb/profile/profile.model';
 })
 
 export class ProfileStore {
-  private myProfileStore: ProfileState = Object.assign({}, initialProfileState);
+  private profileStore: ProfileState = Object.assign({}, initialProfileState);
 
   private profileDetailsSubject = new BehaviorSubject<ProfileModel>(initialProfileState.profileDetails);
   private profileImageSubject$ = new BehaviorSubject<string | ArrayBuffer>(initialProfileState.profileImage);
+  private favoriteBookSubject$ = new BehaviorSubject<string[]>(initialProfileState.favoriteBook);
 
   constructor (
     private logger: NGXLogger,
   ) {}
 
   public set profileDetails(item: ProfileModel) {
-    this.myProfileStore.profileDetails = item;
-    this.logger.debug('MyProfile - Set Profile item', { item: item, store: this.myProfileStore });
-    this.profileDetailsSubject.next(Object.assign({}, this.myProfileStore).profileDetails);
+    this.profileStore.profileDetails = item;
+    this.logger.debug('PROFILE - Set Profile item', { item: item, store: this.profileStore });
+    this.profileDetailsSubject.next(Object.assign({}, this.profileStore).profileDetails);
   }
 
   public get profileDetails$(): Observable<ProfileModel> {
@@ -33,22 +34,35 @@ export class ProfileStore {
   // profile image
 
   public set profileImage(image: string | ArrayBuffer) {
-    this.myProfileStore.profileImage = image;
+    this.profileStore.profileImage = image;
 
-    this.logger.debug('PROFILE STORE - updated profile image', { payload: image, store: this.myProfileStore });
+    this.logger.debug('PROFILE - updated profile image', { payload: image, store: this.profileStore });
 
-    this.profileImageSubject$.next(Object.assign({}, this.myProfileStore).profileImage);
+    this.profileImageSubject$.next(Object.assign({}, this.profileStore).profileImage);
   }
 
   public get profileImage$(): Observable<string | ArrayBuffer> {
     return this.profileImageSubject$.asObservable();
   }
 
-  public reset(): void {
-    this.myProfileStore = Object.assign({}, initialProfileState);
+  // favorite book
 
-    this.logger.debug('MyProfile -  Reset store', { store: this.myProfileStore});
+  public set favoriteBook(item: string[]) {
+    this.profileStore.favoriteBook = item;
+    this.logger.debug('PROFILE - Set Profile item', { item: item, store: this.profileStore });
+    this.favoriteBookSubject$.next(Object.assign({}, this.profileStore).favoriteBook);
+  }
+
+  public get favoriteBook$(): Observable<string[]> {
+    return this.favoriteBookSubject$.asObservable();
+  }
+
+  public reset(): void {
+    this.profileStore = Object.assign({}, initialProfileState);
+
+    this.logger.debug('PROFILE -  Reset store', { store: this.profileStore});
 
     this.profileImageSubject$.next(Object.assign({}, initialProfileState).profileImage);
+    this.favoriteBookSubject$.next(Object.assign({}, initialProfileState).favoriteBook);
   }
 }

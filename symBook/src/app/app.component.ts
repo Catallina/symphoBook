@@ -7,7 +7,7 @@ import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 
 import { AuthService } from '@syb/auth/auth.service';
-import { BookDetailsFacade } from '@syb/store/book-details/book-details.facade';
+import { BookDetailsFacade } from '@syb/global/book-details/book-details.facade';
 import { takeWhile } from 'rxjs/operators';
 import { AudioService } from './books/audio/audio.service';
 
