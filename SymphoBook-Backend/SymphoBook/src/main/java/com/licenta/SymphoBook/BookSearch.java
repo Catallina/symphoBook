@@ -332,8 +332,17 @@ public HashMap<String, Integer> procesare( String description)
     	String word="";
     	
     	 Set<String> idsFromBooleanSearch = booleanSearch(query);
-    	 List<String> ListidsFromBooleanSearch = new ArrayList<String>();
-    	 ListidsFromBooleanSearch=idsFromBooleanSearch.stream().collect(Collectors.toList());
+    	/* List<String> ListidsFromBooleanSearch = new ArrayList<String>();
+    	 ListidsFromBooleanSearch=idsFromBooleanSearch.stream().collect(Collectors.toList());*/
+  //  System.out.println("size="+idsFromBooleanSearch.size());
+    	 if (idsFromBooleanSearch==null)
+    	 {
+    		 jsonBooksId="Book not found!";
+    	 }
+    	 else
+    	 {
+    		 List<String> ListidsFromBooleanSearch = new ArrayList<String>();
+        	 ListidsFromBooleanSearch=idsFromBooleanSearch.stream().collect(Collectors.toList());
     	 List<BookHomepage> booksFromBooleanSearch = new ArrayList<BookHomepage>();
     	for(int i=0; i<idsFromBooleanSearch.size();++i)
     	{
@@ -345,7 +354,7 @@ public HashMap<String, Integer> procesare( String description)
     	}
     
     	jsonBooksId=gson.toJson(booksFromBooleanSearch);
-    	
+    	 }
     	
     	return jsonBooksId;
     
