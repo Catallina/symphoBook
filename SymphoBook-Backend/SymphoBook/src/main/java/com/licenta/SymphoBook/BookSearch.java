@@ -163,6 +163,7 @@ public HashMap<String, Integer> procesare( String description)
 			 
 	        Document document = new Document();
 	        document.putAll(bookSearchList);
+	        collection.deleteOne(document);
 	        collection.insertOne(document);
 		return bookSearchList;
 	}
@@ -218,6 +219,7 @@ public HashMap<String, Integer> procesare( String description)
 			 
 	        Document document = new Document();
 	        document.putAll(indirectIndex);
+	        collection.deleteOne(document);
 	        collection.insertOne(document);
 	        
 	        
@@ -324,18 +326,26 @@ public HashMap<String, Integer> procesare( String description)
     public String getBooksFromBooleanSearch(String query)
    
     {
+    	//String error="";
     	Gson gson = new Gson ();
     	String jsonBooksId="";
+    	String word="";
+    	
     	 Set<String> idsFromBooleanSearch = booleanSearch(query);
     	 List<String> ListidsFromBooleanSearch = new ArrayList<String>();
     	 ListidsFromBooleanSearch=idsFromBooleanSearch.stream().collect(Collectors.toList());
     	 List<BookHomepage> booksFromBooleanSearch = new ArrayList<BookHomepage>();
     	for(int i=0; i<idsFromBooleanSearch.size();++i)
     	{
+    		
+    		
     		Books bookFromId = repository.findById(ListidsFromBooleanSearch.get(i)).orElse(null);
     		booksFromBooleanSearch.add(new BookHomepage(bookFromId.getId(),bookFromId.getTitle(),bookFromId.getPhoto(),bookFromId.getAuthor()));
+    		
     	}
+    
     	jsonBooksId=gson.toJson(booksFromBooleanSearch);
+    	
     	
     	return jsonBooksId;
     

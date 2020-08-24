@@ -45,9 +45,11 @@ private final BookSearch book;
 	ResponseEntity<String> getBooleanSearch(@RequestParam String query)
 	{	query.replace("%20"," ");
 		query.replace(" "," and ");
-		if(book.getBooksFromBooleanSearch(query)!=null)
-			return ResponseEntity.status(HttpStatus.OK).body(book.getBooksFromBooleanSearch(query));
-		return ResponseEntity.status(HttpStatus.NOT_FOUND).body("not found");
+		if(book.getBooksFromBooleanSearch(query)=="Book not found!")
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Book not found!");
+		
+	return ResponseEntity.status(HttpStatus.OK).body(book.getBooksFromBooleanSearch(query));
+		
 	}
 	
 	/*@GetMapping("gethomepagebooks")
