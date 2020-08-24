@@ -351,7 +351,6 @@ public class StopWordList {
             "obtain",
             "obtained",
             "obviously",
-            "of",
             "off",
             "often",
             "oh",
