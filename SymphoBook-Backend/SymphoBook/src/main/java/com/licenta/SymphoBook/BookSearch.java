@@ -39,6 +39,8 @@ public class BookSearch {
 	@Autowired
 	private BookWishlistRepository wishlistRepository;
 	
+	 MongoClient mongoClient = MongoClients.create("mongodb://localhost:27017");
+	 MongoDatabase db = mongoClient.getDatabase("SymphoBook");
 
 	
 	
@@ -152,6 +154,16 @@ public HashMap<String, Integer> procesare( String description)
 			bookSearchList.put(book.getId(),currentIdWords );
 		}
 		
+		   if(db.getCollection("DirectIndex")==null)
+		        db.createCollection("DirectIndex");
+	     
+			 MongoCollection<org.bson.Document> collection = db.getCollection("DirectIndex");
+			 
+			 
+			 
+	        Document document = new Document();
+	        document.putAll(bookSearchList);
+	        collection.insertOne(document);
 		return bookSearchList;
 	}
 	
@@ -196,15 +208,18 @@ public HashMap<String, Integer> procesare( String description)
 	                    //}
 	                   
 	                }
-	        MongoClient mongoClient = MongoClients.create("mongodb://localhost:27017");
-			 MongoDatabase db = mongoClient.getDatabase("SymphoBook");
-		//	 db.createCollection("IndirectIndex");
+	      
+	        if(db.getCollection("IndirectIndex")==null)
+		        db.createCollection("IndirectIndex");
+	     
 			 MongoCollection<org.bson.Document> collection = db.getCollection("IndirectIndex");
-
+			 
+			 
+			 
 	        Document document = new Document();
 	        document.putAll(indirectIndex);
 	        collection.insertOne(document);
-	       
+	        
 	        
 	        
 	        
@@ -306,7 +321,7 @@ public HashMap<String, Integer> procesare( String description)
         return resultSet; //returneaza id-urile cartilor
     }
     
-    public String getBooksFromBooleanSearch(String query, String filter)
+    public String getBooksFromBooleanSearch(String query)
    
     {
     	Gson gson = new Gson ();
