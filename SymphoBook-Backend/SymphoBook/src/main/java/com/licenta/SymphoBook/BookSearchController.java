@@ -49,26 +49,24 @@ private final BookSearch book;
 		
 		switch(filter) {
 		
-		case "General": if(book.getBooksFromBooleanSearch(query, filter)!="Not Found")
+		case "General": if(book.getBooksFromBooleanSearch(query, filter).equals("[]"))
+								return ResponseEntity.status(HttpStatus.NOT_FOUND).body(book.getBooksFromBooleanSearch(query,filter));
+							
+						else
 							return ResponseEntity.status(HttpStatus.OK).body(book.getBooksFromBooleanSearch(query,filter));
-						
-						return ResponseEntity.status(HttpStatus.NOT_FOUND).body(book.getBooksFromBooleanSearch(query,filter));
 		
-		case "Title":    if(book.SearchByTitle(query, filter)!="Not Found")
-								return ResponseEntity.status(HttpStatus.OK).body(book.SearchByTitle(query,filter));
-		
-						return ResponseEntity.status(HttpStatus.NOT_FOUND).body(book.SearchByTitle(query,filter));
+		case "Title":    if(book.SearchByTitle(query, filter).equals("[]"))
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(book.SearchByTitle(query,filter));
+						else
+							return ResponseEntity.status(HttpStatus.OK).body(book.SearchByTitle(query,filter));
+							
 		
 		default : return ResponseEntity.status(HttpStatus.NOT_FOUND).body(" ");
 		}
 	}
-	
-	/*@GetMapping("gethomepagebooks")
-	ResponseEntity<String> getHomepage(@RequestParam String uid) throws InterruptedException
-	{
-		String jsonHomepage=book.getJsonRecommendedBooks(uid);
-		return ResponseEntity.status(HttpStatus.OK).body(jsonHomepage);
-	}*/
+		
+		
+		
 }
 
 
