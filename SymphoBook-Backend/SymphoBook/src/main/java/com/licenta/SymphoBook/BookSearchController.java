@@ -52,12 +52,12 @@ private final BookSearch book;
 		
 	}
 	
-	@GetMapping("gethomepagebooks")
+	/*@GetMapping("gethomepagebooks")
 	ResponseEntity<String> getHomepage(@RequestParam String uid) throws InterruptedException
 	{
 		String jsonHomepage=book.getJsonRecommendedBooks(uid);
 		return ResponseEntity.status(HttpStatus.OK).body(jsonHomepage);
-	}
+	}*/
 }
 
 
