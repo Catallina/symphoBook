@@ -42,22 +42,29 @@ private final BookSearch book;
 		return ResponseEntity.status(HttpStatus.OK).body(book.indirectIndex());
 	}*/
 	@GetMapping("book/search")
-	ResponseEntity<String> getBooleanSearch(@RequestParam String query)
+	ResponseEntity<String> getBooleanSearch(@RequestParam String query,@RequestParam String filter)
 	{	query.replace("%20"," ");
 		query.replace(" "," and ");
-		if(book.getBooksFromBooleanSearch(query)=="")
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("");
+		query=query.toLowerCase();
 		
-	return ResponseEntity.status(HttpStatus.OK).body(book.getBooksFromBooleanSearch(query));
+		switch(filter) {
 		
+		case "General": if(book.getBooksFromBooleanSearch(query, filter)!="Not Found")
+							return ResponseEntity.status(HttpStatus.OK).body(book.getBooksFromBooleanSearch(query,filter));
+						
+						return ResponseEntity.status(HttpStatus.NOT_FOUND).body(book.getBooksFromBooleanSearch(query,filter));
+		
+		case "Title":    if(book.SearchByTitle(query, filter)!="Not Found")
+								return ResponseEntity.status(HttpStatus.OK).body(book.SearchByTitle(query,filter));
+		
+						return ResponseEntity.status(HttpStatus.NOT_FOUND).body(book.SearchByTitle(query,filter));
+		
+		default : return ResponseEntity.status(HttpStatus.NOT_FOUND).body(" ");
+		}
 	}
-	
-	@GetMapping("gethomepagebooks")
-	ResponseEntity<String> getHomepage(@RequestParam String uid) throws InterruptedException
-	{
-		String jsonHomepage=book.getJsonRecommendedBooks(uid);
-		return ResponseEntity.status(HttpStatus.OK).body(jsonHomepage);
-	}
+		
+		
+		
 }
 
 

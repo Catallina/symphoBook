@@ -65,12 +65,22 @@ public class BookSearch {
  
  public String SearchByTitle(String query, String filter)
  {
-	 
-	 
-	 
-	 
-	 return "";
-	 
+
+	 Gson gson=new Gson();
+	 String jsonBookFound="Not Found";
+	 List<BookHomepage> bookfound = new ArrayList<BookHomepage>();
+	for(Books book: repository.findAllByTitle(query))
+	{
+		bookfound.add(new BookHomepage(book.getId(),book.getTitle(),book.getPhoto(),book.getAuthor()));
+		
+		
+	}
+	if(!bookfound.isEmpty())
+		jsonBookFound=gson.toJson(bookfound);
+	
+	 return jsonBookFound;
+
+
  } 
  
  public String SearchByAuthor(String query,String filter)
@@ -323,19 +333,19 @@ public HashMap<String, Integer> procesare( String description)
         return resultSet; //returneaza id-urile cartilor
     }
     
-    public String getBooksFromBooleanSearch(String query)
+    public String getBooksFromBooleanSearch(String query, String filter)
    
     {
     	//String error="";
     	Gson gson = new Gson ();
     	String jsonBooksId="";
    
-    	
+    
     	 Set<String> idsFromBooleanSearch = booleanSearch(query);
     	
     	 if (idsFromBooleanSearch==null)
     	 {
-    		 jsonBooksId="";
+    		 jsonBooksId="Not Found";
     	 }
     	 else
     	 {
