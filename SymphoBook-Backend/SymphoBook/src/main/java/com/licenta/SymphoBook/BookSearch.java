@@ -68,6 +68,7 @@ public class BookSearch {
 
 	 Gson gson=new Gson();
 	 String jsonBookFound="Not Found";
+	 jsonBookFound=gson.toJson(jsonBookFound);
 	 List<BookHomepage> bookfound = new ArrayList<BookHomepage>();
 	for(Books book: repository.findAllByTitle(query))
 	{
