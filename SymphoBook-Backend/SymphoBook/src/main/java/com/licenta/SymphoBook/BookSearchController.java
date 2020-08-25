@@ -62,9 +62,13 @@ private final BookSearch book;
 		default : return ResponseEntity.status(HttpStatus.NOT_FOUND).body(" ");
 		}
 	}
-		
-		
-		
+	
+	/*@GetMapping("gethomepagebooks")
+	ResponseEntity<String> getHomepage(@RequestParam String uid) throws InterruptedException
+	{
+		String jsonHomepage=book.getJsonRecommendedBooks(uid);
+		return ResponseEntity.status(HttpStatus.OK).body(jsonHomepage);
+	}*/
 }
 
 
