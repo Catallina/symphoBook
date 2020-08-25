@@ -56,10 +56,12 @@ public void readDataFavorites(String uid)
 				  refPrintUser.addValueEventListener(new ValueEventListener() {
 
 			            public void onDataChange(DataSnapshot dataSnapshot) {
-			    
+			            	ListFavorites.clear();
 			              for(DataSnapshot snapshot:dataSnapshot.getChildren())
 			              {
-			            	  ListFavorites.add(snapshot.getValue(String.class));
+			            	  String favorite=snapshot.getValue(String.class);
+			            	  if(!ListFavorites.contains(favorite))
+			            		  ListFavorites.add(snapshot.getValue(String.class));
 			              }
 			        
 			           
@@ -94,7 +96,7 @@ public void readData(String uid) {
 				  refPrintUser.addValueEventListener(new ValueEventListener() {
 
 			            public void onDataChange(DataSnapshot dataSnapshot) {
-			    
+			            	ListFavorites.clear();
 			            	String DisplayName=dataSnapshot.child("DisplayName").getValue(String.class);
 			                String Description = dataSnapshot.child("Description").getValue(String.class);
 			                String Birthday=dataSnapshot.child("Birthday").getValue(String.class);
@@ -103,6 +105,7 @@ public void readData(String uid) {
 			                String PhoneNumber=dataSnapshot.child("PhoneNumber").getValue(String.class);
 			                for(DataSnapshot snapshot:dataSnapshot.child("Favorites").getChildren())
 				              {
+			                	
 				            	  ListFavorites.add(snapshot.getValue(String.class));
 				              }
 			                UserProfile.put("DisplayName", DisplayName);

@@ -21,8 +21,8 @@ private final BookSearch book;
 		this.book=book;
 		this.book.getIdsDescriptionsandTagsfromBooks();
 		this.book.indirectIndex();
-		this.book.C=this.book.bookSearchList.size();
-		this.book.D=this.book.indirectIndex.size();
+		this.book.C=this.book.indirectIndex.size();
+		this.book.D=this.book.bookSearchList.size();
 	}
 	
 	/*@GetMapping("getdescriptionbooks")
@@ -41,6 +41,14 @@ private final BookSearch book;
 		
 		return ResponseEntity.status(HttpStatus.OK).body(book.indirectIndex());
 	}*/
+	@GetMapping("gethomepagebooks")  //http://localhost:8080/gethomepagebooks
+	ResponseEntity<String> getBooks( String uid) throws InterruptedException
+	{
+		
+	//	return new ResponseEntity<>(book.getJsonAllBooksFrontPage(),HttpStatus.OK);
+		//System.out.println(book.getJsonAllBooksFrontPage());
+		return ResponseEntity.status(HttpStatus.OK).body(book.getJsonRecommendedBooks( uid));
+	}
 	@GetMapping("book/search")
 	ResponseEntity<String> getBooleanSearch(@RequestParam String query,@RequestParam String filter)
 	{	query.replace("%20"," ");

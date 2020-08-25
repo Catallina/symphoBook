@@ -1,6 +1,6 @@
 package com.licenta.SymphoBook;
 
-public class Element implements Comparable<Element>{
+public class Element {
  
 	public int id;
 	public double score;
@@ -31,14 +31,13 @@ public class Element implements Comparable<Element>{
 		this.score = score;
 	}
 
-
-	public int compareTo(Element e)
+	/*public int compareTo(Element e)
 	{
 		return (int)(this.score-e.score);
 		/*  0-daca sunt egale
 		 *  >0 primu el>el2
 		 *  <0 el1<el2
 		 */
-	}
+	
 	
 }

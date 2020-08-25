@@ -22,7 +22,7 @@ public class BookController {
 		
 	}
 	
-	@GetMapping("gethomepagebooks")  //http://localhost:8080/gethomepagebooks
+	/*@GetMapping("gethomepagebooks")  //http://localhost:8080/gethomepagebooks
 	ResponseEntity<String> getBooks( )
 	{
 		
@@ -30,7 +30,7 @@ public class BookController {
 		//System.out.println(book.getJsonAllBooksFrontPage());
 		return ResponseEntity.status(HttpStatus.OK).body(book.getJsonAllBooksFrontPage());
 		
-	}
+	}*/
 	@GetMapping("homepage/book")   //http://localhost:8080/homepage/book?id=
 	ResponseEntity<String> getBookFromId(@RequestParam String id)
 	{	Gson g = new Gson();

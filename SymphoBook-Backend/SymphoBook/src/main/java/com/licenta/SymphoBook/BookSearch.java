@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -92,12 +93,7 @@ public class BookSearch {
 
  } 
  
- public String SearchByAuthor(String query,String filter)
- {
-	 
-	 
-	 return "";
- }
+ 
 public HashMap<String, Integer> procesare( String description) 
 	    {
 	    	List<String> stopwords = StopWordList.getStopwords();
@@ -183,7 +179,7 @@ public HashMap<String, Integer> procesare( String description)
 	        Document document = new Document();
 	        document.putAll(bookSearchList);
 	        collection.deleteOne(document);
-	        collection.insertOne(document);
+	        collection.insertOne(document); 
 		return bookSearchList;
 	}
 	
@@ -413,6 +409,8 @@ public HashMap<String, Integer> procesare( String description)
     		for(j=0;j<C;j++)
     		{
     			Tfidf[i][j]=(TF(j,i)*Math.log10((D/DF(j))));
+    			if(Double.isNaN(Tfidf[i][j]))
+    				System.out.println("i="+i+" j="+j);
     		}
     	}
     	
@@ -457,13 +455,18 @@ public HashMap<String, Integer> procesare( String description)
     	
     	S=new double[D][D];
     	for(i=0;i<D;i++)
+    	
+    		
     		for(j=0;j<D;j++)
+    		{
+    			S[i][j]=0;
     			for(int k =0;k<C;k++)
     				{S[i][j]+=Tfidf[j][k]*Tfidf_transpose[k][j];
     				
-    				if(Double.isNaN(S[i][j]))
-    					System.out.println("S["+i+"]"+" "+"["+j+"]"+"tfidf nan?:"+Double.isNaN(Tfidf[j][k]));
+    				//if(Double.isNaN(S[i][j]))
+    				//	System.out.println("S["+i+"]"+" "+"["+j+"]"+"tfidf nan?:"+Double.isNaN(S[i][j]));
     				}
+    		}
     	
     	
 
@@ -477,6 +480,7 @@ public HashMap<String, Integer> procesare( String description)
     	{
     		homepage.add(i, new Element(i,0));
     	}
+    	System.out.println("Size homepage="+homepage.size());
     	BookWishlist OldWishlist = new BookWishlist();
    		OldWishlist=wishlistRepository.findById(uid).orElse(null);
    		
@@ -497,10 +501,10 @@ public HashMap<String, Integer> procesare( String description)
 		    List<String> ListFavorites = profile.getListFavorites();
 		    if (ListFavorites.size() != 0)
 		    {
-		    	System.out.println("ListFavories size = "+ListFavorites.size());
+		    //	System.out.println("ListFavories size = "+ListFavorites.size());
 		    for(i=0;i<ListFavorites.size();++i)
 		    {
-		    	System.out.println("ListFavories"+"["+i+"]="+  	ListFavorites.get(i));
+		    //	System.out.println("ListFavories"+"["+i+"]="+  	ListFavorites.get(i));
 		    	bookFromTitle = repository.findByTitle(ListFavorites.get(i));
 		    	//remove duplicates
 		    	if (!Favorites.contains(Integer.parseInt(bookFromTitle.getId())))
@@ -514,7 +518,12 @@ public HashMap<String, Integer> procesare( String description)
 		    	return null; // it's empty here
 		    }
 		    
-		    calculate_similarities();
+		    for(int f=0;f<Favorites.size();++f)
+		    {
+		    	System.out.println("Favories"+"["+f+"]="+  	Favorites.get(f));
+		    }
+
+		    	calculate_similarities();
 		    Element e = new Element(0,0);
 		    
 		    for(i=0;i<Favorites.size();++i)
@@ -527,11 +536,24 @@ public HashMap<String, Integer> procesare( String description)
 		    		e.score+=S[Favorites.get(i)][j];
 		    		homepage.set(j,e);
 		    		
+		    		
 		    	}
 		    	}
+		    System.out.println("size homepage="+homepage.size()+" last el="+homepage.get(homepage.size()-1).id+" "+homepage.get(homepage.size()-1).score);
 		    
-	   Collections.sort(homepage,Collections.reverseOrder());
-	   
+	   //Collections.sort(homepage);
+		    Collections.sort(homepage, new Comparator<Element>() {
+		    	@Override
+		    	public int compare(Element e1, Element e2) {
+		    	return Double.compare(e1.score, e2.score);}
+		    	});
+	   Collections.reverse(homepage);
+	   for (Element book: homepage)
+		{
+		
+		
+		System.out.println("book="+book.getId()+ " score="+book.getScore() );
+		}
 	   return homepage;
     	
     	
@@ -553,20 +575,20 @@ public HashMap<String, Integer> procesare( String description)
     		b =	repository.findById(String.valueOf(book.getId())).orElse(null);
     		//System.out.println(bookHomepageList.size());
     		//System.out.println("book="+b.getId()+" "+b.getTitle()+" "+b.getPhoto()+" "+b.getAuthor()+" "+b.getFirstMp3());
-    		//System.out.println("book="+book.getId());
+    		//System.out.println("book="+book.getId()+ " score="+book.getScore() );
     	try {	
     		
     	   bookHomepageList.add(new BookHomepage(b.getId(),b.getTitle(),b.getPhoto(),b.getAuthor(),b.getFirstMp3()));
     	}
     	catch(NullPointerException e)
     	{
-    		System.out.println("eroare="+e.getMessage());
+    		//System.out.println("eroare="+e.getMessage());
     	}
-    	   System.out.println(bookHomepageList.size());
+    	   //System.out.println(bookHomepageList.size());
     		//bookHomepageList.add(new BookHomepage(b.getId(),b.getTitle(),b.getPhoto(),b.getAuthor(),b.getFirstMp3()));
     		}
     	}
-    	else { //nu avem favorites, fara recomandari
+    	else  { //nu avem favorites, fara recomandari
     		for (Books book: repository.findAll())
     		{		
     			System.out.println("book="+book.getId()+" "+book.getTitle()+" "+book.getPhoto()+" "+book.getAuthor()+" "+book.getFirstMp3());
