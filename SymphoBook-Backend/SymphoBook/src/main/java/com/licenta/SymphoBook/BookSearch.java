@@ -329,15 +329,13 @@ public HashMap<String, Integer> procesare( String description)
     	//String error="";
     	Gson gson = new Gson ();
     	String jsonBooksId="";
-    	String word="";
+   
     	
     	 Set<String> idsFromBooleanSearch = booleanSearch(query);
-    	/* List<String> ListidsFromBooleanSearch = new ArrayList<String>();
-    	 ListidsFromBooleanSearch=idsFromBooleanSearch.stream().collect(Collectors.toList());*/
-  //  System.out.println("size="+idsFromBooleanSearch.size());
+    	
     	 if (idsFromBooleanSearch==null)
     	 {
-    		 jsonBooksId="Book not found!";
+    		 jsonBooksId="";
     	 }
     	 else
     	 {
@@ -372,7 +370,7 @@ public HashMap<String, Integer> procesare( String description)
 
     }
     
-    public int TF(int x, int y)
+    public int TF(int x, int y) //de cate ori apare cuvantu x in y
     {
 
     	HashMap<String,Integer> map = indirectIndex.get(words.get(x));
@@ -381,7 +379,7 @@ public HashMap<String, Integer> procesare( String description)
     	else return 0;
     }
     
-    public int DF(int x)
+    public int DF(int x) //in cate doc apare cuvantu per total
     {
     	return indirectIndex.get(words.get(x)).size();
     }
@@ -442,9 +440,14 @@ public HashMap<String, Integer> procesare( String description)
     	for(i=0;i<D;i++)
     		for(j=0;j<D;j++)
     			for(int k =0;k<C;k++)
-    				S[i][j]+=Tfidf[j][k]*Tfidf_transpose[k][j];
+    				{S[i][j]+=Tfidf[j][k]*Tfidf_transpose[k][j];
+    				
+    				if(Double.isNaN(S[i][j]))
+    					System.out.println("S["+i+"]"+" "+"["+j+"]"+"tfidf nan?:"+Double.isNaN(Tfidf[j][k]));
+    				}
     	
     	
+
     }
     
     public List<Element> getRecommendedBooks(String uid) throws InterruptedException
@@ -493,12 +496,15 @@ public HashMap<String, Integer> procesare( String description)
 		    }
 		    
 		    calculate_similarities();
-		    Element e;
+		    Element e = new Element(0,0);
 		    
 		    for(i=0;i<Favorites.size();++i)
 		    	{for(j=0;j<D;++j)
 		    	{
+		    		
 		    		e=homepage.get(j);
+		    		if(i==0)
+		    			e.id=j;
 		    		e.score+=S[Favorites.get(i)][j];
 		    		homepage.set(j,e);
 		    		
@@ -516,6 +522,8 @@ public HashMap<String, Integer> procesare( String description)
     	Gson gson = new Gson();
     	Books b;
     	List<Element> homepage=getRecommendedBooks(uid);
+    	System.out.println("sizehomepage="+homepage.size());
+    	System.out.println("first element homepage="+homepage.get(0));
     	String jsonBooksFrontPage="";
 
        List<BookHomepage> bookHomepageList = new ArrayList<BookHomepage>();
@@ -524,9 +532,17 @@ public HashMap<String, Integer> procesare( String description)
     		{
     		
     		b =	repository.findById(String.valueOf(book.getId())).orElse(null);
-    		System.out.println(bookHomepageList.size());
+    		//System.out.println(bookHomepageList.size());
     		//System.out.println("book="+b.getId()+" "+b.getTitle()+" "+b.getPhoto()+" "+b.getAuthor()+" "+b.getFirstMp3());
+    		//System.out.println("book="+book.getId());
+    	try {	
+    		
     	   bookHomepageList.add(new BookHomepage(b.getId(),b.getTitle(),b.getPhoto(),b.getAuthor(),b.getFirstMp3()));
+    	}
+    	catch(NullPointerException e)
+    	{
+    		System.out.println("eroare="+e.getMessage());
+    	}
     	   System.out.println(bookHomepageList.size());
     		//bookHomepageList.add(new BookHomepage(b.getId(),b.getTitle(),b.getPhoto(),b.getAuthor(),b.getFirstMp3()));
     		}

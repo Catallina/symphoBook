@@ -45,19 +45,19 @@ private final BookSearch book;
 	ResponseEntity<String> getBooleanSearch(@RequestParam String query)
 	{	query.replace("%20"," ");
 		query.replace(" "," and ");
-		if(book.getBooksFromBooleanSearch(query)=="Book not found!")
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Book not found!");
+		if(book.getBooksFromBooleanSearch(query)=="")
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("");
 		
 	return ResponseEntity.status(HttpStatus.OK).body(book.getBooksFromBooleanSearch(query));
 		
 	}
 	
-	/*@GetMapping("gethomepagebooks")
+	@GetMapping("gethomepagebooks")
 	ResponseEntity<String> getHomepage(@RequestParam String uid) throws InterruptedException
 	{
 		String jsonHomepage=book.getJsonRecommendedBooks(uid);
 		return ResponseEntity.status(HttpStatus.OK).body(jsonHomepage);
-	}*/
+	}
 }
 
 
