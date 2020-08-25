@@ -1,13 +1,11 @@
-<ion-header translucent>
-  <ion-toolbar>
-    <ion-select slot="start" (ionChange)="selectFilterType()" [(ngModel)]="filter">
-      <ion-select-option *ngFor="let item of selectFilter" [value]="item">{{ item }}</ion-select-option>
-    </ion-select>
+<ion-header [translucent]="true">
+  <ion-toolbar class="align-header" >
     <ion-searchbar 
-      class="text-center"
       [(ngModel)]="searchInput"
-      animated
-      [debounce]=400
+      [debounce]=1000
+      inputmode="text"
+      type="text"
+      pattern="[a-zA-Z ]*"
       search-icon="recording-outline"
       clear-icon="close-circle-outline"
       (ionChange)="onSearchInput($event)"
@@ -22,6 +20,11 @@
 </ion-header>
 
 <ion-content>
+  <ion-row>
+    <ion-col>
+      <syb-image-picker (getText)="searchAfterImage($event)"></syb-image-picker>
+    </ion-col>
+  </ion-row>
   <ion-grid>
     <ion-row>
       <ion-col
@@ -30,16 +33,19 @@
         *ngIf="!loadedBook || loadedBook.length <= 0"
         class="ion-text-center"
       >
-        <p>Search a book!</p>
+        <p>Nothing found!</p>
       </ion-col>
       <ion-col
         size-md="6"
         offset-md="3"
-        *ngIf="loadedBook && loadedBook.length > 0"
+        *ngIf="loadedBook && loadedBook.length> 0"
       >
-        <ion-list>
+      <ion-virtual-scroll
+        [items]="loadedBook"
+        approxItemHeight="70px">
+        <ion-list
+          *virtualItem="let book ">
           <ion-item
-            *ngFor="let book of loadedBook"
               detail
               (click)="onSelectedBook(book.id)"
               [routerLink]="['/', 'books', 'tabs', 'discover', book.id]"
@@ -54,6 +60,7 @@
             </ion-label>
           </ion-item>
         </ion-list>
+        </ion-virtual-scroll>
       </ion-col>
     </ion-row>
   </ion-grid>

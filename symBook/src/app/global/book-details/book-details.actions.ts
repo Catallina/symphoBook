@@ -91,7 +91,7 @@ export class GetLastBookErrorAction implements Action {
 export class SearchBookAction implements Action {
   readonly type = BookDetailsActionType.SEARCH_BOOK;
 
-  constructor(public payload: { filterType: string, query: string }) { }
+  constructor(public payload: { query: string }) { }
 }
 export class SearchBookSuccessAction implements Action {
   readonly type = BookDetailsActionType.SEARCH_BOOK_SUCCESS;

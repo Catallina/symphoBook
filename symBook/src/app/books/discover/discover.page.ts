@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy, ViewChild, SimpleChanges, Output, EventEmitter } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { FormControl, FormGroup } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { takeWhile } from 'rxjs/operators';
 import { filter, map, distinctUntilChanged } from 'rxjs/operators';
@@ -127,19 +127,28 @@ export class DiscoverPage implements OnInit, OnDestroy {
       });
     });
   }
+  
+  loadData(event) {
+    setTimeout(() => {
+      this.getDocuments()
+      event.target.complete();
+      if (this.bookDetails.length === 498) {
+        event.target.disabled = true;
+      }
+    }, 1500);
+  }
 
-  clickedSearchIcon(event: Event) {
-    //this.showSearchBar = !this.showSearchBar;
-
+  clickedSearchIcon() {
     this.modalCtrl.create({
         component: SearchComponent, 
         componentProps: { loadedBook: this.bookDetails }
       })
       .then(modalEl => {
+        modalEl.componentProps.modalCtrl = modalEl;
         modalEl.present();
         return modalEl.onDidDismiss();
       });
-    }
+  }
 
   openFile(file, index, slidingEl: IonItemSliding) {
     this.currentFile = { index, file };
@@ -202,5 +211,4 @@ export class DiscoverPage implements OnInit, OnDestroy {
       }
     });
   }
-
 }

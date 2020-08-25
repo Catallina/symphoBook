@@ -42,6 +42,7 @@ export class ProfilePage implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.getProfileDetails();
 
     this.authService.userId.pipe(takeWhile(() => this.isAlive))
       .subscribe((userId) => {
@@ -49,28 +50,16 @@ export class ProfilePage implements OnInit, OnDestroy {
         this.profileService.fetchProfileDetails(userId);
     });
 
-    this.profileStore.profileDetails$.pipe(takeWhile(() => this.isAlive))
-      .subscribe((profile: ProfileModel) => {
-        if (profile) {
-          this.profileDetails = profile;
-
-          if (profile && profile.birthday) {
-            this.profileDetails.birthday = profile.birthday.substring(0, 10);
-          }
-
-        }
-    });
-
     this.profileStore.favoriteBook$.pipe(takeWhile(() => this.isAlive))
-      .subscribe((book: string[]) => {
-        if (book) {
-          this.favoriteBook = book;
-          
-          this.favoriteBook  = book.filter(function (el) {
-            return el != null;
-          });
-        }
-    });
+    .subscribe((book: string[]) => {
+      if (book) {
+        this.favoriteBook = book;
+        
+        this.favoriteBook  = book.filter(function (el) {
+          return el != null;
+        });
+      }
+  });
 
     this.bookFacade.getStoreCurrentFile$().pipe(takeWhile(() => this.isAlive))
       .subscribe((book: any) => {
@@ -84,16 +73,33 @@ export class ProfilePage implements OnInit, OnDestroy {
     this.isAlive = false;
   }
 
-  ionViewCanLeave(){
-    this.isAlive = false;
+  getProfileDetails() {
+    this.loadingCtrl.create({
+      message: 'Loading Content. Please Wait...'
+    }).then(loadingEl => {
+      loadingEl.present();
+
+      this.profileStore.profileDetails$.pipe(takeWhile(() => this.isAlive))
+        .subscribe((profile: ProfileModel) => {
+          if (profile) {
+            this.profileDetails = profile;
+
+            if (profile && profile.birthday) {
+              this.profileDetails.birthday = profile.birthday.substring(0, 10);
+            }
+            loadingEl.dismiss();
+          }
+      });
+    });
   }
 
   onEditProfile() {
-    this.modalCtrl.create({
+    return this.modalCtrl.create({
         component: EditProfileComponent, 
         componentProps: { profileDetails: this.profileDetails, userId: this.userId }
       })
       .then(modalEl => {
+        modalEl.componentProps.modalCtrl = modalEl;
         modalEl.present();
         return modalEl.onDidDismiss();
       })

@@ -171,7 +171,7 @@ export class BooksService {
       }),
     };
 
-    return this.http.post<BookListItem>(environment.apiUrl + ApiEndpointsUrl.addFavorites + '?id=' + bookList.id + '&uid=' + userId, req, httpOptions)
+    return this.http.post<BookListItem>(environment.apiUrl + ApiEndpointsUrl.addFavorites + '?uid=' + userId + '&IdBook=' + bookList.id, req, httpOptions)
     .pipe(
       map(response => response)
     );
@@ -211,16 +211,14 @@ export class BooksService {
   }
 
   
-  public searchBook$(filterType: string, query: string): Observable<BookGroupModel[]> {
+  public searchBook$(query: string): Observable<BookGroupModel[]> {
 
-    return of(this.mapToBookList(this.responseData))
-    // return this.http.get<any>(environment.apiUrl + ApiEndpointsUrl.book)
-    //   .pipe(
-    //     map(response => {
-    //       return this.mapToBookList(response);
-    //     })
-    //   );
+    const data = `?query=${query}`
+    return this.http.get<any>(environment.apiUrl + ApiEndpointsUrl.search + data)
+      .pipe(
+        map(response => {
+          return this.mapToBookList(response);
+        })
+      );
   }
-
-
 }

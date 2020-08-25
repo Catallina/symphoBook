@@ -1,21 +1,14 @@
-import { FooterPlayerPage } from './footer-player/footer-player.page';
+import { OCR } from '@ionic-native/ocr/ngx';
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { RouteReuseStrategy } from '@angular/router';
-import { HttpClientModule } from '@angular/common/http';
 
-import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
-import { SplashScreen } from '@ionic-native/splash-screen/ngx';
-import { StatusBar } from '@ionic-native/status-bar/ngx';
-
-import { TranslateModule } from '@ngx-translate/core';
-
-import { AppRoutingModule } from '@syb/app-routing.module';
+import { ImagePickerComponent } from '@syb/shared/components/image-picker/image-picker.component';
+import { FooterPlayerPage } from '@syb/shared/footer-player/footer-player.page';
 import { CommonModule } from '@angular/common';
 
 @NgModule({
   declarations: [
     FooterPlayerPage,
+    ImagePickerComponent,
   ],
   entryComponents: [],
   imports: [
@@ -23,10 +16,14 @@ import { CommonModule } from '@angular/common';
   ],
   exports: [
     FooterPlayerPage,
+    ImagePickerComponent,
   ],
   schemas: [
     CUSTOM_ELEMENTS_SCHEMA,
     NO_ERRORS_SCHEMA,
+  ],
+  providers: [
+    OCR,
   ]
 })
 export class SharedModule { }

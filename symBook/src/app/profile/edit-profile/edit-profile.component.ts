@@ -15,6 +15,7 @@ import { takeWhile } from 'rxjs/operators';
 export class EditProfileComponent implements OnInit {
   @Input() profileDetails: ProfileModel;
   @Input() userId: string;
+  @Input() modalCtrl: ModalController;
 
   @Output() public idUpdate = new EventEmitter<any>();
 
@@ -25,7 +26,6 @@ export class EditProfileComponent implements OnInit {
   public profileDetailsEdit: ProfileModel;
 
   constructor(
-    private modalCtrl: ModalController,
     private profileService: ProfileService,
     private profileStore: ProfileStore,
   ) { 

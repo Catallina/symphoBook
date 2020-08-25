@@ -1,0 +1,28 @@
+<ion-button class="select-image" *ngIf="!srcImage" (click)="presentActionSheet()" color="light">
+  <ion-icon name="camera"></ion-icon>
+</ion-button>
+
+<ion-card *ngIf="srcImage">
+    
+    <ion-row class="ion-align-items-center">
+      <ion-col size-sm="8" class="ion-text-center">
+        <img id="image" [src]="srcImage"/>
+      </ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-col size-sm="6" offset-sm="3" class="ion-text-center">
+      <ion-card-header>
+        <ion-card-subtitle>
+          <ion-button (click)="analyze()" color="success">
+            <ion-icon name="search"></ion-icon>
+            Read
+          </ion-button>
+          <ion-button (click)="restart()" color="tertiary">
+            <ion-icon name="refresh"></ion-icon>
+            Restart
+          </ion-button>
+        </ion-card-subtitle>
+      </ion-card-header>
+    </ion-col>
+  </ion-row>
+</ion-card>

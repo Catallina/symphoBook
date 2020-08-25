@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { ModalController } from '@ionic/angular';
+import { ModalController, AlertController } from '@ionic/angular';
 import { BookDetailsFacade } from '@syb/global/book-details/book-details.facade';
 import { takeWhile } from 'rxjs/operators';
 import { BookGroupModel } from '@syb/books/models/book-group.model';
@@ -14,6 +14,8 @@ import { BooksService } from '@syb/books/books.service';
 export class SearchComponent implements OnInit {
   @Input() loadedBook: BookGroupModel[];
 
+  @Input() modalCtrl: ModalController;
+
   private isAlive = false;
 
   public searchInput: string;
@@ -23,10 +25,10 @@ export class SearchComponent implements OnInit {
 
 
   constructor(
-    private modalCtrl: ModalController,
     private bookFacade: BookDetailsFacade,
     private authService: AuthService,
     private booksService: BooksService,
+    private alertCtrl: AlertController,
   ) {
     this.isAlive = true;
   }
@@ -34,12 +36,6 @@ export class SearchComponent implements OnInit {
   ngOnInit() {
 
   }
-
-  // ngOnChanges(changes: SimpleChanges): void {
-  //   //Called before any other lifecycle hook. Use it to inject dependencies, but avoid any serious work here.
-  //   //Add '${implements OnChanges}' to the class.
-    
-  // }
   
   onCancel() {
     this.modalCtrl.dismiss(null, 'cancel');
@@ -60,8 +56,41 @@ export class SearchComponent implements OnInit {
   public onSearchInput(event) {
     this.bookFacade.getStoreSearchGroup$().pipe(takeWhile(() => this.isAlive)).subscribe((book: BookGroupModel[]) => {
       this.loadedBook = book;
+    }, error => {
+        const message = error;
+        console.warn(error)
+        this.showAlert(message);
     });
-    this.bookFacade.searchBook(this.filter, this.searchInput)
+
+    if (this.searchInput) {
+      this.bookFacade.searchBook(this.searchInput.toLocaleLowerCase())
+    }
+  }
+
+  public searchAfterImage(event) {
+    this.bookFacade.getStoreSearchGroup$().pipe(takeWhile(() => this.isAlive)).subscribe((book: BookGroupModel[]) => {
+      this.loadedBook = book;
+    }, error => {
+      const message = error;
+      console.warn(error)
+      this.showAlert(message);
+    });
+    console.warn(event)
+
+    if (event) {
+      this.searchInput = event.toLocaleLowerCase().replace('\n', ' ');
+    }
+
+    if (this.searchInput) {
+      this.bookFacade.searchBook(this.searchInput.toLocaleLowerCase())
+    }
+  }
+
+  private showAlert(message: string) {
+    this.alertCtrl.create({
+      message: message,
+      buttons: ['Okay']})
+      .then((alertEl) => alertEl.present());
   }
 
   public onSearchCancel(event) {
@@ -69,7 +98,10 @@ export class SearchComponent implements OnInit {
   }
 
   public onSearchClear(event) {
-    console.warn(event);
+    this.bookFacade.getStoreBookGroup$().pipe(takeWhile(() => this.isAlive)).subscribe((book: BookGroupModel[]) => {
+      this.loadedBook = book;
+    });
+    //this.bookFacade.searchBook(null)
   }
 
 }

@@ -1,10 +1,11 @@
-import { Component, OnInit, ViewChild, Input, Output, EventEmitter } from '@angular/core';
-import { takeWhile, filter, distinctUntilChanged, map } from 'rxjs/operators';
+import { Component, OnInit, ViewChild, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
+import { takeWhile, filter, distinctUntilChanged, map, delay } from 'rxjs/operators';
 import { IonRange, LoadingController } from '@ionic/angular';
 
 import { AudioService } from '@syb/books/audio/audio.service';
 import { BookDetailsFacade } from '@syb/global/book-details/book-details.facade';
 import { BookGroupModel } from '@syb/books/models/book-group.model';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'syb-footer-player',
@@ -14,13 +15,13 @@ import { BookGroupModel } from '@syb/books/models/book-group.model';
 export class FooterPlayerPage implements OnInit {
   @ViewChild('range', {static: false}) range: IonRange;
 
-  //@Input() public currentFile: any;
+  //seekbar: FormControl = new FormControl("seekbar");
 
   @Output() selectBook = new EventEmitter<any>();
 
   public isAlive: boolean = false;
 
-  public seekbar = 0;
+  public seekbar;
 
   public files: any = [];
   public currentFile: any = {};
@@ -34,6 +35,8 @@ export class FooterPlayerPage implements OnInit {
   public playing = true;
   public time: any;
 
+  public interval;
+
   constructor(
     private bookFacade: BookDetailsFacade,
     public audioService: AudioService,
@@ -44,17 +47,26 @@ export class FooterPlayerPage implements OnInit {
     this.isAlive = true;
     
     this.getDocuments();
-    this.seekbar = this.getTimeSec();
+
+    this.bookFacade.getStoreTimeSec$().pipe(
+      filter(value => value !== undefined),
+      map((value: any) => Number(value)),
+      distinctUntilChanged()
+    )
+    .subscribe((value: any) => {
+      this.seekbar = value;
+    });
+
+    this.bookFacade.getStorePlaying$().pipe(takeWhile(() => this.isAlive))
+      .subscribe((playing) => {
+          this.playing = playing;
+    });
+
 
     this.bookFacade.getStoreCurrentFile$().pipe(takeWhile(() => this.isAlive)).subscribe((book) => {
       this.currentFile = book;
     });
 
-  }
-
-  ionViewWillUnload(){
-
-    this.seekbar = this.getTimeSec();
   }
 
   getDocuments() {
@@ -160,8 +172,6 @@ export class FooterPlayerPage implements OnInit {
     });
     this.audioService.play();
     this.bookFacade.setPlaying(true);
-    this.seekbar = this.getTimeSec();
-
   }
 
   stop() {
@@ -205,50 +215,22 @@ export class FooterPlayerPage implements OnInit {
   }
 
   onSeekStart() {
-    this.bookFacade.getStorePlaying$().pipe(takeWhile(() => this.isAlive))
-    .subscribe((playing) => {
-        this.playing = playing;
-    });
-
     this.onSeekState = this.playing;
 
     if (this.onSeekState) {
-      this.getTimeSec();
       this.pause();
     }
-
   }
 
   onSeekEnd(event) {
-    this.seekbar = this.getTimeSec();
-    console.warn(this.seekbar);
-
-    if (event && event.detail.value) {
+    if (event && event.target.value) {
       if (this.onSeekState) {
-        this.audioService.seekTo(event.detail.value);
+        this.audioService.seekTo(event.target.value);
         this.play();
       } else {
-        this.audioService.seekTo(event.detail.value);
+        this.audioService.seekTo(event.target.value);
       }
     }
-  }
-
-  public getTimeSec() {
-    let valueTime = null;
-    //Updating the Seekbar based on currentTime
-    this.bookFacade.getStoreTimeSec$().pipe(
-      filter(value => value !== undefined),
-      map((value: any) => Number(value)),
-      distinctUntilChanged()
-    )
-    .subscribe((value: any) => {
-      //this.seekbar.setValue(value);
-
-      valueTime = value;
-      //this.seekbar = value;
-    });
-
-    return valueTime;
   }
 
   public onGetDurationSec() {
@@ -258,6 +240,7 @@ export class FooterPlayerPage implements OnInit {
         this.durationSec = durationSec;
       }
     });
+
     return this.durationSec;
   }
 

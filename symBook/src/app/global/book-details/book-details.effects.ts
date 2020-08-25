@@ -1,3 +1,4 @@
+import { GetLastBookErrorAction } from './book-details.actions';
 import { selectedBookIdState, bookGroupState } from './book-details.selectors';
 import { BookListModel } from '@syb/shared/models/book-list.model';
 import { Injectable } from '@angular/core';
@@ -14,7 +15,11 @@ import {
   GetBookDetailsAction,
   GetBookDetailsSuccessAction,
   GetBookDetailsErrorAction,
-  GetLastBookAction, GetLastBookSuccessAction, SearchBookSuccessAction, SearchBookAction
+  GetLastBookAction, 
+  GetLastBookSuccessAction, 
+  SearchBookSuccessAction, 
+  SearchBookAction,
+  SearchBookErrorAction
 } from '@syb/global/book-details/book-details.actions';
 import { BookDetailsFacade } from '@syb/global/book-details/book-details.facade';
 
@@ -23,6 +28,7 @@ import { BookGroupModel } from '@syb/books/models/book-group.model';
 import { Store } from '@ngrx/store';
 import { BooksJournalService } from '@syb/books-journal/books-journal.service';
 import { BookDetailsState } from '@syb/global/book-details/book-details.state';
+import { ToastController } from '@ionic/angular';
 
 @Injectable({
   providedIn: 'root'
@@ -35,6 +41,7 @@ export class BookDetailsEffects {
     private bookService: BooksService,
     private bookJournalService: BooksJournalService,
     private salesStore: Store<BookDetailsState>,
+    private toastController: ToastController,
   ) {}
 
   @Effect()
@@ -56,15 +63,12 @@ export class BookDetailsEffects {
   getBookGroupError$ = this.actions$.pipe(
     ofType(BookDetailsActionType.GET_BOOK_GROUP_ERROR),
     map((action: GetBookGroupErrorAction) => {
-      console.log('Error get group');
-      // this.snackbarService.open(
-      //   this.translateService.instant(
-      //     "book-journal.no-details-book",
-      //     action.payload.articleId
-      //   ),
-      //   2500,
-      //   SnackType.Error
-      // );
+      this.toastController
+          .create({ 
+            message: `Server Error`,
+            duration: 2000,
+            position: 'top'
+          }).then((toast) => toast.present())
     })
   );
 
@@ -83,13 +87,25 @@ export class BookDetailsEffects {
             ),
             catchError((error) => of({
               type: BookDetailsActionType.GET_BOOK_DETAILS_ERROR,
-              error
+              error: error
             }))
           );
         }
       })
-      
     );
+
+  @Effect({ dispatch: false })
+  getBookDetailsError$ = this.actions$.pipe(
+    ofType(BookDetailsActionType.GET_BOOK_DETAILS_ERROR),
+    map((action: GetBookDetailsErrorAction) => {
+      this.toastController
+        .create({ 
+          message: `Server Error`,
+          duration: 2000,
+          position: 'top'
+        }).then((toast) => toast.present())
+    })
+  );
 
   @Effect()
   getLastVideo$ = this.actions$
@@ -112,38 +128,50 @@ export class BookDetailsEffects {
       
     );
 
+  @Effect({ dispatch: false })
+  getLastVideoError$ = this.actions$.pipe(
+    ofType(BookDetailsActionType.GET_LAST_BOOK_ERROR),
+    map((action: GetLastBookErrorAction) => {
+      this.toastController
+          .create({ 
+            message: `Server Error`,
+            duration: 2000,
+            position: 'top'
+          }).then((toast) => toast.present())
+    })
+  );
+
   @Effect()
   searchBook$ = this.actions$
     .pipe(
       ofType(BookDetailsActionType.SEARCH_BOOK),
       switchMap((action: SearchBookAction) => {
         const query = action.payload.query;
-        const filterType = action.payload.filterType;
-
-        return this.bookService.searchBook$(filterType, query).pipe(
+  
+        return this.bookService.searchBook$(query).pipe(
           map((response: any) => {
             if (response && response.length > 0) {
               return new SearchBookSuccessAction({ bookList: response });
             }
           },
           catchError((error) => of({
-            type: BookDetailsActionType.SEARCH_BOOK_ERROR
+            type: BookDetailsActionType.SEARCH_BOOK_ERROR,
+            error: error.error
           }))
         ));
       })
     );
 
-    // @Effect({ dispatch: false })
-    // searchBookSuccess$ = this.actions$
-    //   .pipe(
-    //     ofType(BookDetailsActionType.SEARCH_BOOK_SUCCESS),
-    //     withLatestFrom(
-    //       this.salesStore.select(bookGroupState),
-    //     ),
-    //     map((
-    //       [action, bookGroup]: [SearchBookSuccessAction, BookGroupModel[]]
-    //     ) => {
-    //       this.bookDetailsFacade.getBookGroupSuccess(action.payload.bookList)
-    //     })
-    //   );
+    @Effect({ dispatch: false })
+    getSearchError$ = this.actions$.pipe(
+      ofType(BookDetailsActionType.SEARCH_BOOK_ERROR),
+      map((action: SearchBookErrorAction) => {
+        this.toastController
+          .create({ 
+            message: `Server Error`,
+            duration: 2000,
+            position: 'top'
+          }).then((toast) => toast.present())
+      })
+    );
 }

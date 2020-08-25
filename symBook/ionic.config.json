@@ -1,7 +1,8 @@
 {
   "name": "symBook",
   "integrations": {
-    "cordova": {}
+    "cordova": {},
+    "capacitor": {}
   },
   "type": "angular"
 }

@@ -5,10 +5,17 @@
 </ion-header>
 
 <ion-content class="ion-padding ion-margin-top">
-  <ion-row class="ion-justify-content-center ion-padding-bottom">
-    <ion-avatar>
-      <img src="assets/image/notes.jpg">
-    </ion-avatar>
+  <ion-row>
+    <ion-col>
+      <div class="ion-text-center">
+        <ion-text><h3>Welcome to SymphoBook!</h3></ion-text>
+        <ion-row class="ion-justify-content-center ion-padding-top">
+          <ion-avatar>
+            <img src="assets/image/notes.jpg">
+          </ion-avatar>
+        </ion-row>
+      </div>
+    </ion-col>
   </ion-row>
 
   <form #f="ngForm" (ngSubmit)="onSubmit(f)">

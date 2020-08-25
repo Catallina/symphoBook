@@ -53,8 +53,8 @@ export class BookDetailsFacade {
         this.bookStore.dispatch(new BookDetailsActions.GetBookDetailsErrorAction());
     }
 
-    public searchBook(filterType: string, query: string): void {
-        this.bookStore.dispatch(new BookDetailsActions.SearchBookAction({filterType: filterType, query: query}));
+    public searchBook(query: string): void {
+        this.bookStore.dispatch(new BookDetailsActions.SearchBookAction({query: query}));
     }
 
     public searchBookSuccess(bookList: BookGroupModel[]): void {

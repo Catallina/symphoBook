@@ -22,6 +22,8 @@ const routes: Routes = [
     FormsModule,
     IonicModule,
     RouterModule.forChild(routes),
+
+    SharedModule,
   ],
   declarations: [
     BookDetailPage,

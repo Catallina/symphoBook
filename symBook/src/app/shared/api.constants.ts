@@ -12,6 +12,8 @@ export const ApiEndpointsUrl = {
   wishlistDelete: 'book/wishlistdelete',
   deleteFavorites: 'book/favoritedelete',
 
+  search: 'book/search',
+
   notification: '',
   
   journalBook: 'book/getjournal',

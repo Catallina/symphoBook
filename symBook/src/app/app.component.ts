@@ -3,13 +3,12 @@ import { Component, ElementRef, OnInit, Renderer2, OnDestroy } from '@angular/co
 import { Router } from '@angular/router';
 
 import { Platform, MenuController } from '@ionic/angular';
-import { SplashScreen } from '@ionic-native/splash-screen/ngx';
-import { StatusBar } from '@ionic-native/status-bar/ngx';
 
 import { AuthService } from '@syb/auth/auth.service';
 import { BookDetailsFacade } from '@syb/global/book-details/book-details.facade';
-import { takeWhile } from 'rxjs/operators';
 import { AudioService } from './books/audio/audio.service';
+
+import { Plugins, Capacitor } from '@capacitor/core';
 
 @Component({
   selector: 'syb-root',
@@ -24,8 +23,6 @@ export class AppComponent implements OnInit {
 
   constructor(
     private platform: Platform,
-    private splashScreen: SplashScreen,
-    private statusBar: StatusBar,
     private authService: AuthService,
     private router: Router,
     private menu: MenuController,
@@ -47,8 +44,9 @@ export class AppComponent implements OnInit {
 
   initializeApp() {
     this.platform.ready().then(() => {
-      this.statusBar.styleDefault();
-      this.splashScreen.hide();
+      if (Capacitor.isPluginAvailable('SplashScreen')) {
+        Plugins.SplashScreen.hide();
+      }
     });
   }
 

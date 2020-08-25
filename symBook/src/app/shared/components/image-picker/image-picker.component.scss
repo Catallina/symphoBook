@@ -1,0 +1,16 @@
+.select-image {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1rem;
+    border-style: solid;
+    border-radius: 15px;
+    margin: auto;
+    cursor: pointer;
+}
+
+.image-wrapper {
+    width: 90%;
+    display: block;
+    margin: 0 auto;
+}
