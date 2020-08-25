@@ -67,8 +67,8 @@ public class BookSearch {
  {
 
 	 Gson gson=new Gson();
-	 String jsonBookFound="Not Found";
-	 jsonBookFound=gson.toJson(jsonBookFound);
+	 String jsonBookFound;
+	 List<BookHomepage> bookfoundnull = new ArrayList<BookHomepage>();
 	 List<BookHomepage> bookfound = new ArrayList<BookHomepage>();
 	for(Books book: repository.findAllByTitle(query))
 	{
@@ -77,9 +77,17 @@ public class BookSearch {
 		
 	}
 	if(!bookfound.isEmpty())
+		{
 		jsonBookFound=gson.toJson(bookfound);
+		return jsonBookFound;
+		}
 	
-	 return jsonBookFound;
+	
+		return gson.toJson(bookfoundnull);
+	
+	
+	
+
 
 
  } 
@@ -343,10 +351,10 @@ public HashMap<String, Integer> procesare( String description)
    
     
     	 Set<String> idsFromBooleanSearch = booleanSearch(query);
-    	
+    	 List<BookHomepage> booksFromBooleanSearchNull= new ArrayList<BookHomepage>();
     	 if (idsFromBooleanSearch==null)
     	 {
-    		 jsonBooksId="Not Found";
+    		 jsonBooksId=gson.toJson(booksFromBooleanSearchNull);
     	 }
     	 else
     	 {

@@ -5,9 +5,13 @@ import org.springframework.boot.SpringApplication;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -76,12 +80,15 @@ public class BookData implements CommandLineRunner {
 	{	
 		String error="Added";
 		List<String> ListFavorites;
-		Map<String, Object> favorite = new HashMap<String,Object>();
+		
+		
 		RetriveDataFromDbUserProfile profile = new RetriveDataFromDbUserProfile(uid);
+	
 		Thread t=new Thread(profile);
 		   t.start();
 		    Thread.sleep(10000);
 		    t.join();
+		Map<String, Object> oldFavorite = profile.getOldFavorites();
 	    String favoriteBook=repository.findById(IdBook).orElse(null).getTitle();
 		ListFavorites=profile.getListFavorites();
 		if(ListFavorites.contains(favoriteBook))
@@ -91,17 +98,47 @@ public class BookData implements CommandLineRunner {
 		}
 		else
 		{
-	//	FireBaseService fbs = ConnectToBd.Connection();
+		if (oldFavorite.size()==0)
+		{
+		oldFavorite.put(Integer.toString(oldFavorite.size()),favoriteBook);
+		}
+		else
+			if(oldFavorite.size()>0)
+			{
+				oldFavorite.put(Integer.toString(oldFavorite.size()-1),favoriteBook);
+			}
+		final Iterator<Entry<String, Object>> iter = oldFavorite.entrySet().iterator();
+		final HashSet<Object> valueSet = new HashSet<Object>();
+		while (iter.hasNext()) {
+		final Entry<String, Object> next = iter.next();
+		if (!valueSet.add(next.getValue())) {
+		iter.remove();
+		}
+		}
 		
-		UsersDescription userDescription = new UsersDescription(favoriteBook);
-		ListFavorites.add(favoriteBook);
-		favorite.put("Favorites",ListFavorites);
+	/*	Set <String> oldFavoriteSet = oldFavorite.keySet();
+		oldFavorite.clear();
+		for (int i=0;i<oldFavoriteSet.size();++i)
+		{
+			oldFavorite.put(Integer.toString(i),);
+			System.out.println("key="+oldFavorite.get(Integer.toString(i)));
+			
+			
+		}
+	/*	int i=0;
+		for (Iterator<String> it = oldFavoriteSet.iterator(); it.hasNext();i++ ) {
+				String s = it.next();
+				oldFavorite.put(Integer.toString(i),s);
+		}
+	*/
+		//favorite.put("Favorites",ListFavorites);
 		UserRecord userRecord;
 		userRecord = FirebaseAuth.getInstance().getUser(uid);
 		   System.out.println("Successfully fetched user data: " + userRecord.getUid());
   DatabaseReference refAddUserDescription = fbs.getDb()
           .getReference("users");
-  refAddUserDescription.child(userRecord.getUid()).updateChildrenAsync(favorite);
+//  refAddUserDescription.child(userRecord.getUid()).updateChildrenAsync(favorite);
+  refAddUserDescription.child(userRecord.getUid()).child("Favorites").setValueAsync(oldFavorite);
 		  return error;
 		
 		}

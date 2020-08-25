@@ -13,7 +13,7 @@ public class RetriveDataFromDbUserProfile  implements Runnable {
 	FireBaseService fbs=ConnectToBd.Connection();
 	public Map<String, Object> UserProfile = new HashMap<String, Object>();
 	public List<String> ListFavorites = new ArrayList<String>();
-	String uid;
+		String uid;
 	String Description;
 	public  RetriveDataFromDbUserProfile() {}
 public  RetriveDataFromDbUserProfile(String uid)
@@ -31,6 +31,16 @@ public List<String> getListFavorites ()
 {
 	return ListFavorites;
 	}
+public Map<String,Object> getOldFavorites()
+{
+	Map<String,Object> oldFavorites=new HashMap<String,Object>();
+	for(int i=0;i<ListFavorites.size();++i)
+	{
+		oldFavorites.put(Integer.toString(i),ListFavorites.get(i));
+	}
+
+return oldFavorites;
+}
 
 
 public void readDataFavorites(String uid)
@@ -51,7 +61,7 @@ public void readDataFavorites(String uid)
 			              {
 			            	  ListFavorites.add(snapshot.getValue(String.class));
 			              }
-			            	//ListFavorites.add(dataSnapshot.child("Favorites").getValue(String.class) );
+			        
 			           
 			            
 			            }
