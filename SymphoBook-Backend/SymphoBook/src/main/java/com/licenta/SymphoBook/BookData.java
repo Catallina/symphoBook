@@ -42,6 +42,14 @@ public class BookData implements CommandLineRunner {
 	BookJournal OldJournal; 
 	FireBaseService fbs = ConnectToBd.Connection();
 	public BookData() {}
+	public static <K, V> K getKey(Map<K, V> map, V value) {
+		for (Map.Entry<K, V> entry : map.entrySet()) {
+			if (value.equals(entry.getValue())) {
+				return entry.getKey();
+			}
+		}
+		return null;
+	}
 	public String getJsonAllBooksFrontPage()
 	{
 		
@@ -92,10 +100,7 @@ public class BookData implements CommandLineRunner {
 		    t.join();
 		    Map<String, Object> oldFavorite = profile.getOldFavorites();
 		  
-		for(int i=0;i<oldFavorite.size();++i)
-		{
-			System.out.println(oldFavorite.get(Integer.toString(i)));
-		}
+		
 	    String favoriteBook=repository.findById(IdBook).orElse(null).getTitle();
 		ListFavorites=profile.getListFavorites();
 		if(ListFavorites.contains(favoriteBook))
@@ -122,32 +127,14 @@ public class BookData implements CommandLineRunner {
 		}
 		}
 		
-		for(int i=0;i<oldFavorite.size();++i)
-		{
-			System.out.println("noua lista+="+oldFavorite.get(Integer.toString(i)));
-		}
-	/*	Set <String> oldFavoriteSet = oldFavorite.keySet();
-		oldFavorite.clear();
-		for (int i=0;i<oldFavoriteSet.size();++i)
-		{
-			oldFavorite.put(Integer.toString(i),);
-			System.out.println("key="+oldFavorite.get(Integer.toString(i)));
-			
-			
-		}
-	/*	int i=0;
-		for (Iterator<String> it = oldFavoriteSet.iterator(); it.hasNext();i++ ) {
-				String s = it.next();
-				oldFavorite.put(Integer.toString(i),s);
-		}
-	*/
-		//favorite.put("Favorites",ListFavorites);
+	
+	
 		UserRecord userRecord;
 		userRecord = FirebaseAuth.getInstance().getUser(uid);
 		   System.out.println("Successfully fetched user data: " + userRecord.getUid());
   DatabaseReference refAddUserDescription = fbs.getDb()
           .getReference("users");
-//  refAddUserDescription.child(userRecord.getUid()).updateChildrenAsync(favorite);
+
   refAddUserDescription.child(userRecord.getUid()).child("Favorites").updateChildren(oldFavorite,new DatabaseReference.CompletionListener() {
 	
 	@Override
@@ -177,8 +164,18 @@ public class BookData implements CommandLineRunner {
 		    t.join();
 		    
 	   Books favoriteBook=repository.findByTitle(Title);
-		ListFavorites=profile.getListFavorites();////!
-		if(ListFavorites.contains(favoriteBook.getTitle()))
+	   Map<String, Object> oldFavorite = profile.getOldFavorites();
+	   for(int i=0;i<oldFavorite.size();++i)
+		{
+			System.out.println("lista veche+="+oldFavorite.get(Integer.toString(i)));
+		}
+		//ListFavorites=profile.getListFavorites();////!
+		if(oldFavorite.containsValue(favoriteBook.getTitle()))
+			{
+		
+		String key =getKey(oldFavorite, favoriteBook.getTitle());
+		oldFavorite.remove(key);
+	/*	if(ListFavorites.contains(favoriteBook.getTitle()))
 		{
 			ListFavorites.remove(favoriteBook.getTitle());
 			
@@ -186,14 +183,28 @@ public class BookData implements CommandLineRunner {
 			Map<String, Object> mapFavorites = new HashMap<String,Object>();
 			for(String title : ListFavorites){
 				mapFavorites.put(String.valueOf(i),title);
-			}
+			}*/
 			//favorite.put("Favorites",ListFavorites);
+	
+	
+			}
+		for(int i=0;i<oldFavorite.size();++i)
+		{
+			System.out.println("noua lista+="+oldFavorite.get(Integer.toString(i)));
+		}
 			UserRecord userRecord;
 			userRecord = FirebaseAuth.getInstance().getUser(uid);
 			   System.out.println("Successfully fetched user data: " + userRecord.getUid());
 	  DatabaseReference refAddUserDescription = fbs.getDb()
 	          .getReference("users");
-	  refAddUserDescription.child(userRecord.getUid()).child("Favorites").updateChildrenAsync(mapFavorites);
+	  refAddUserDescription.child(userRecord.getUid()).child("Favorites").setValue(oldFavorite, new DatabaseReference.CompletionListener() {
+		
+		@Override
+		public void onComplete(DatabaseError error, DatabaseReference ref) {
+			// TODO Auto-generated method stub
+			
+		}
+	});
 	  		error="Deleted!";
 			  return error;
 		}
@@ -201,8 +212,6 @@ public class BookData implements CommandLineRunner {
 		
 		
 		
-		return error;
-	}
 	
 	
 	
