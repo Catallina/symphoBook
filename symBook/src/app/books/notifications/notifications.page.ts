@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 
 import { LocalNotifications } from '@ionic-native/local-notifications/ngx';
+import { BooksService } from '../books.service';
+import { BookGroupModel } from '../models/book-group.model';
+import { takeWhile } from 'rxjs/operators';
 
 @Component({
   selector: 'syb-notifications',
@@ -8,15 +11,25 @@ import { LocalNotifications } from '@ionic-native/local-notifications/ngx';
   styleUrls: ['./notifications.page.scss'],
 })
 export class NotificationsPage implements OnInit {
+  public isAlive: boolean = false;
   
   public isAndroid = true;
   public key;
 
+  public bookDetails: BookGroupModel[] = [];
+
   constructor(
+    private bookService: BooksService,
     private localNotifications: LocalNotifications,
-  ) { }
+  ) { 
+    this.isAlive = true;
+  }
 
   ngOnInit() {
+
+    this.bookService.getNotification$().pipe(takeWhile(() => this.isAlive)).subscribe((book: BookGroupModel[]) => {
+      this.bookDetails = book;
+    })
 
         // Schedule a single notification
     this.localNotifications.schedule({
@@ -58,6 +71,10 @@ export class NotificationsPage implements OnInit {
       sound: 'file://sound.mp3',
       data: { secret: 'key_data' }
     });
+  }
+
+  ngOnDestroy(): void {
+    this.isAlive = false;
   }
 
 }

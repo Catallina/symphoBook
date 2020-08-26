@@ -38,7 +38,7 @@ export enum BookDetailsActionType {
 export class GetBookGroupAction implements Action {
   readonly type = BookDetailsActionType.GET_BOOK_GROUP;
 
-  constructor() {}
+  constructor(public payload: { userId: string } ) {}
 }
 
 export class GetBookGroupSuccessAction implements Action {
@@ -91,7 +91,7 @@ export class GetLastBookErrorAction implements Action {
 export class SearchBookAction implements Action {
   readonly type = BookDetailsActionType.SEARCH_BOOK;
 
-  constructor(public payload: { query: string }) { }
+  constructor(public payload: { query: string, filterType: string }) { }
 }
 export class SearchBookSuccessAction implements Action {
   readonly type = BookDetailsActionType.SEARCH_BOOK_SUCCESS;

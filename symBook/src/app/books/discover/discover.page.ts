@@ -1,8 +1,5 @@
 import { Component, OnInit, OnDestroy, ViewChild, SimpleChanges, Output, EventEmitter } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
-import { Store } from '@ngrx/store';
 import { takeWhile } from 'rxjs/operators';
-import { filter, map, distinctUntilChanged } from 'rxjs/operators';
 
 import { BookDetailsFacade } from '@syb/global/book-details/book-details.facade';
 
@@ -10,6 +7,8 @@ import { AuthService } from '@syb/auth/auth.service';
 import { BookListModel } from '@syb/shared/models/book-list.model';
 import { BookGroupModel } from '@syb/books/models/book-group.model';
 
+
+// import {DeviceMotion} from '@ionic-native/';
 
 import { SearchComponent } from '@syb/books/discover/search/search.component';
 import { BooksService } from '@syb/books/books.service';
@@ -61,7 +60,10 @@ export class DiscoverPage implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.bookFacade.getBookGroup();
+    this.authService.userId.subscribe((userId) =>{
+      this.bookFacade.getBookGroup(userId);
+    })
+
     this.getDocuments();
 
     this.bookFacade.getStoreBookId$().pipe(takeWhile(() => this.isAlive)).subscribe((bookId: string) => {
@@ -132,7 +134,7 @@ export class DiscoverPage implements OnInit, OnDestroy {
     setTimeout(() => {
       this.getDocuments()
       event.target.complete();
-      if (this.bookDetails.length === 498) {
+      if (this.bookDetails.length === 500) {
         event.target.disabled = true;
       }
     }, 1500);

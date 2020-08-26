@@ -7,17 +7,36 @@
   </ion-toolbar>
 </ion-header>
 <ion-content>
-  <ion-row>
-    <ion-col
-      size-md="6"
-      offset-md="3"
-      class="ion-text-center"
-    >
-    <p>Work in progress!</p>
-    </ion-col>
-
-    <ion-button (click)="single_notification()">
-      Single Notification
-    </ion-button>
-  </ion-row> 
+  <ion-grid *ngIf="bookDetails && bookDetails.length === 0">
+    <ion-row>
+      <ion-col size="12" size-sm="8" offset-sm="2" class="ion-text-center">
+          <p>There are no new notifications right now, please come back later!</p>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <ion-grid *ngIf="bookDetails && bookDetails.length > 0">
+      <ion-row>
+        <ion-col size="12" size-sm="8" offset-sm="2" class="ion-text-center">
+            <ion-text color="tertiary"><h4>New books added to the library's collection</h4></ion-text>
+        </ion-col>
+      </ion-row>
+      <ion-virtual-scroll
+          [items]="bookDetails"
+          approxItemHeight="70px"
+      >
+      <ion-list
+          *virtualItem="let bookGroup; let i = index"
+          class="ion-no-margin">
+          <ion-item>
+            <ion-avatar slot="start">
+                <img [src]="bookGroup.photo">
+            </ion-avatar>
+            <ion-label>
+                <h2>{{ bookGroup.title }}</h2>
+                <h3>{{ bookGroup.author }}</h3>
+            </ion-label>
+          </ion-item>
+      </ion-list>
+    </ion-virtual-scroll>         
+  </ion-grid>
 </ion-content>
