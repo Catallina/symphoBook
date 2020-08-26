@@ -241,10 +241,7 @@ public HashMap<String, Integer> procesare( String description)
 	        
 	        
 
-	     /*   Gson g = new Gson();
-			String json="";
-			json=g.toJson(indirectIndex);
-			searchRepository.save(json);*/
+	   
 	         return indirectIndex;
 	        }
 	
@@ -463,8 +460,7 @@ public HashMap<String, Integer> procesare( String description)
     			for(int k =0;k<C;k++)
     				{S[i][j]+=Tfidf[j][k]*Tfidf_transpose[k][j];
     				
-    				//if(Double.isNaN(S[i][j]))
-    				//	System.out.println("S["+i+"]"+" "+"["+j+"]"+"tfidf nan?:"+Double.isNaN(S[i][j]));
+    				
     				}
     		}
     	
@@ -485,6 +481,7 @@ public HashMap<String, Integer> procesare( String description)
    		OldWishlist=wishlistRepository.findById(uid).orElse(null);
    		
 
+   		if(OldWishlist!=null)
    		for( i=0;i<OldWishlist.ListIdBook.size();++i)
    		{
    			Favorites.add(Integer.parseInt(OldWishlist.ListIdBook.get(i)));
@@ -501,10 +498,10 @@ public HashMap<String, Integer> procesare( String description)
 		    List<String> ListFavorites = profile.getListFavorites();
 		    if (ListFavorites.size() != 0)
 		    {
-		    //	System.out.println("ListFavories size = "+ListFavorites.size());
+		   
 		    for(i=0;i<ListFavorites.size();++i)
 		    {
-		    //	System.out.println("ListFavories"+"["+i+"]="+  	ListFavorites.get(i));
+		   
 		    	bookFromTitle = repository.findByTitle(ListFavorites.get(i));
 		    	//remove duplicates
 		    	if (!Favorites.contains(Integer.parseInt(bookFromTitle.getId())))
@@ -541,7 +538,7 @@ public HashMap<String, Integer> procesare( String description)
 		    	}
 		    System.out.println("size homepage="+homepage.size()+" last el="+homepage.get(homepage.size()-1).id+" "+homepage.get(homepage.size()-1).score);
 		    
-	   //Collections.sort(homepage);
+	   
 		    Collections.sort(homepage, new Comparator<Element>() {
 		    	@Override
 		    	public int compare(Element e1, Element e2) {
@@ -563,8 +560,7 @@ public HashMap<String, Integer> procesare( String description)
     	Gson gson = new Gson();
     	Books b;
     	List<Element> homepage=getRecommendedBooks(uid);
-    	System.out.println("sizehomepage="+homepage.size());
-    	System.out.println("first element homepage="+homepage.get(0));
+  
     	String jsonBooksFrontPage="";
 
        List<BookHomepage> bookHomepageList = new ArrayList<BookHomepage>();
@@ -573,19 +569,16 @@ public HashMap<String, Integer> procesare( String description)
     		{
     		
     		b =	repository.findById(String.valueOf(book.getId())).orElse(null);
-    		//System.out.println(bookHomepageList.size());
-    		//System.out.println("book="+b.getId()+" "+b.getTitle()+" "+b.getPhoto()+" "+b.getAuthor()+" "+b.getFirstMp3());
-    		//System.out.println("book="+book.getId()+ " score="+book.getScore() );
+    		
     	try {	
     		
     	   bookHomepageList.add(new BookHomepage(b.getId(),b.getTitle(),b.getPhoto(),b.getAuthor(),b.getFirstMp3()));
     	}
     	catch(NullPointerException e)
     	{
-    		//System.out.println("eroare="+e.getMessage());
+    	
     	}
-    	   //System.out.println(bookHomepageList.size());
-    		//bookHomepageList.add(new BookHomepage(b.getId(),b.getTitle(),b.getPhoto(),b.getAuthor(),b.getFirstMp3()));
+    	 
     		}
     	}
     	else  { //nu avem favorites, fara recomandari
