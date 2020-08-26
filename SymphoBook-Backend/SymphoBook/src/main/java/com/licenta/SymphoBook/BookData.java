@@ -21,7 +21,9 @@ import org.springframework.stereotype.Component;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.UserRecord;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.DatabaseReference.CompletionListener;
 import com.google.gson.Gson;
 
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -89,6 +91,10 @@ public class BookData implements CommandLineRunner {
 		    Thread.sleep(10000);
 		    t.join();
 		Map<String, Object> oldFavorite = profile.getOldFavorites();
+		for(int i=0;i<oldFavorite.size();++i)
+		{
+			System.out.println(oldFavorite.get(Integer.toString(i)));
+		}
 	    String favoriteBook=repository.findById(IdBook).orElse(null).getTitle();
 		ListFavorites=profile.getListFavorites();
 		if(ListFavorites.contains(favoriteBook))
@@ -96,8 +102,7 @@ public class BookData implements CommandLineRunner {
 			error="Book already exists in Favorites!";
 			return error;
 		}
-		else
-		{
+		
 		if (oldFavorite.size()==0)
 		{
 		oldFavorite.put(Integer.toString(oldFavorite.size()),favoriteBook);
@@ -105,17 +110,21 @@ public class BookData implements CommandLineRunner {
 		else
 			if(oldFavorite.size()>0)
 			{
-				oldFavorite.put(Integer.toString(oldFavorite.size()-1),favoriteBook);
+				oldFavorite.put(Integer.toString(oldFavorite.size()),favoriteBook);
 			}
-		final Iterator<Entry<String, Object>> iter = oldFavorite.entrySet().iterator();
+		/*final Iterator<Entry<String, Object>> iter = oldFavorite.entrySet().iterator();
 		final HashSet<Object> valueSet = new HashSet<Object>();
 		while (iter.hasNext()) {
 		final Entry<String, Object> next = iter.next();
 		if (!valueSet.add(next.getValue())) {
 		iter.remove();
 		}
-		}
+		}*/
 		
+		for(int i=0;i<oldFavorite.size();++i)
+		{
+			System.out.println("noua lista+="+oldFavorite.get(Integer.toString(i)));
+		}
 	/*	Set <String> oldFavoriteSet = oldFavorite.keySet();
 		oldFavorite.clear();
 		for (int i=0;i<oldFavoriteSet.size();++i)
@@ -138,12 +147,19 @@ public class BookData implements CommandLineRunner {
   DatabaseReference refAddUserDescription = fbs.getDb()
           .getReference("users");
 //  refAddUserDescription.child(userRecord.getUid()).updateChildrenAsync(favorite);
-  refAddUserDescription.child(userRecord.getUid()).child("Favorites").setValueAsync(oldFavorite);
+  refAddUserDescription.child(userRecord.getUid()).child("Favorites").updateChildren(oldFavorite,new DatabaseReference.CompletionListener() {
+	
+	@Override
+	public void onComplete(DatabaseError error, DatabaseReference ref) {
+		// TODO Auto-generated method stub
+		
+	}
+});
 		  return error;
 		
 		}
 	
-	}
+
 	
 	public String deleteBookFromFavorite(String uid, String Title) throws FirebaseAuthException, InterruptedException
 	{

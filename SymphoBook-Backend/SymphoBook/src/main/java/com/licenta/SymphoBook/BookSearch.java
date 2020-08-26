@@ -447,10 +447,13 @@ public HashMap<String, Integer> procesare( String description)
     	for(i=0;i<C;++i)
     		for (j=0;j<D;++j)
     			Tfidf_transpose[i][j]=Tfidf[j][i];
+   
+    		
     	
     	//S=Tfidf*Tfidf_transpose
     	
     	S=new double[D][D];
+    	
     	for(i=0;i<D;i++)
     	
     		
@@ -459,18 +462,33 @@ public HashMap<String, Integer> procesare( String description)
     			S[i][j]=0;
     			for(int k =0;k<C;k++)
     				{S[i][j]+=Tfidf[j][k]*Tfidf_transpose[k][j];
+    				if(i==7 && S[i][j]>1)
+    					{System.out.println("Col ="+k+" Linia="+j+" val="+Tfidf[j][k]);
     				
-    				
+    					System.out.println("Tfidf Linia="+i+" Col="+j+" Val="+Tfidf[i][j]);	
+    					
+    					System.out.println("Tfidf_transpose Linia="+i+" Col="+j+" Val="+Tfidf_transpose[i][j]);	
+    	    			
+    					}
     				}
     		}
     	
+
+    	for(i=0;i<D;i++)
     	
+    	{	
+    	
+    			System.out.print("Linia i=" +i + " "+ S[i][i]);
+    			
+           System.out.println();
+    	}
 
     }
     
     public List<Element> getRecommendedBooks(String uid) throws InterruptedException
     {
     	int i, j;
+    	
     	List<Element> homepage = new ArrayList<Element>(D);
     	for(i=0;i<D;i++)
     	{
@@ -519,7 +537,8 @@ public HashMap<String, Integer> procesare( String description)
 		    {
 		    	System.out.println("Favories"+"["+f+"]="+  	Favorites.get(f));
 		    }
-
+		    	
+		    		
 		    	calculate_similarities();
 		    Element e = new Element(0,0);
 		    
@@ -536,7 +555,7 @@ public HashMap<String, Integer> procesare( String description)
 		    		
 		    	}
 		    	}
-		//    System.out.println("size homepage="+homepage.size()+" last el="+homepage.get(homepage.size()-1).id+" "+homepage.get(homepage.size()-1).score);
+		   System.out.println("size homepage="+homepage.size()+" last el="+homepage.get(homepage.size()-1).id+" "+homepage.get(homepage.size()-1).score);
 		    
 	   
 		    Collections.sort(homepage, new Comparator<Element>() {
@@ -559,6 +578,7 @@ public HashMap<String, Integer> procesare( String description)
     {
     	Gson gson = new Gson();
     	Books b;
+    	
     	List<Element> homepage=getRecommendedBooks(uid);
   
     	String jsonBooksFrontPage="";
@@ -590,6 +610,12 @@ public HashMap<String, Integer> procesare( String description)
     		}
     	}
     	jsonBooksFrontPage=gson.toJson(bookHomepageList);
+    	for(int i=0;i<homepage.size();++i)
+    	{
+    		homepage.set(i, new Element(0,0));
+    	}
+    	for(int i=0;i<Favorites.size();++i)
+    	System.out.println("Favorites="+Favorites.get(i));
     	return jsonBooksFrontPage;
     	
     }

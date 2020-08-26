@@ -105,7 +105,8 @@ public void readData(String uid) {
 			                String PhoneNumber=dataSnapshot.child("PhoneNumber").getValue(String.class);
 			                for(DataSnapshot snapshot:dataSnapshot.child("Favorites").getChildren())
 				              {
-			                	
+			                	 String favorite=snapshot.getValue(String.class);
+				            	  if(!ListFavorites.contains(favorite))
 				            	  ListFavorites.add(snapshot.getValue(String.class));
 				              }
 			                UserProfile.put("DisplayName", DisplayName);
@@ -137,7 +138,7 @@ public void readData(String uid) {
 public void run()
 {
 		readData(uid);
-		readDataFavorites(uid);
+	//	readDataFavorites(uid);
 }
 	
 
