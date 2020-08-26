@@ -15,11 +15,12 @@ public class RetriveDataFromDbUserProfile  implements Runnable {
 	public List<String> ListFavorites = new ArrayList<String>();
 		String uid;
 	String Description;
+	int done;
 	public  RetriveDataFromDbUserProfile() {}
 public  RetriveDataFromDbUserProfile(String uid)
 	{
 		this.uid=uid;
-		
+		this.done=0;
 	}
 public Map<String, Object> getUserProfile()
 {
@@ -34,8 +35,10 @@ public List<String> getListFavorites ()
 public Map<String,Object> getOldFavorites()
 {
 	Map<String,Object> oldFavorites=new HashMap<String,Object>();
+	
 	for(int i=0;i<ListFavorites.size();++i)
 	{
+		
 		oldFavorites.put(Integer.toString(i),ListFavorites.get(i));
 	}
 
@@ -138,6 +141,7 @@ public void readData(String uid) {
 public void run()
 {
 		readData(uid);
+		 done =1;
 	//	readDataFavorites(uid);
 }
 	

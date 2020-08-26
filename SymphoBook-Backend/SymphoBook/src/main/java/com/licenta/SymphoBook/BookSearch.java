@@ -463,25 +463,25 @@ public HashMap<String, Integer> procesare( String description)
     			for(int k =0;k<C;k++)
     				{S[i][j]+=Tfidf[j][k]*Tfidf_transpose[k][j];
     				if(i==7 && S[i][j]>1)
-    					{System.out.println("Col ="+k+" Linia="+j+" val="+Tfidf[j][k]);
+    					{//System.out.println("Col ="+k+" Linia="+j+" val="+Tfidf[j][k]);
     				
-    					System.out.println("Tfidf Linia="+i+" Col="+j+" Val="+Tfidf[i][j]);	
+    				//	System.out.println("Tfidf Linia="+i+" Col="+j+" Val="+Tfidf[i][j]);	
     					
-    					System.out.println("Tfidf_transpose Linia="+i+" Col="+j+" Val="+Tfidf_transpose[i][j]);	
+    					//System.out.println("Tfidf_transpose Linia="+i+" Col="+j+" Val="+Tfidf_transpose[i][j]);	
     	    			
     					}
     				}
     		}
     	
 
-    	for(i=0;i<D;i++)
+    /*	for(i=0;i<D;i++)
     	
     	{	
     	
     			System.out.print("Linia i=" +i + " "+ S[i][i]);
     			
            System.out.println();
-    	}
+    	}*/
 
     }
     
@@ -494,7 +494,7 @@ public HashMap<String, Integer> procesare( String description)
     	{
     		homepage.add(i, new Element(i,0));
     	}
-    	System.out.println("Size homepage="+homepage.size());
+    	//System.out.println("Size homepage="+homepage.size());
     	BookWishlist OldWishlist = new BookWishlist();
    		OldWishlist=wishlistRepository.findById(uid).orElse(null);
    		
@@ -535,7 +535,7 @@ public HashMap<String, Integer> procesare( String description)
 		    
 		    for(int f=0;f<Favorites.size();++f)
 		    {
-		    	System.out.println("Favories"+"["+f+"]="+  	Favorites.get(f));
+		    //	System.out.println("Favories"+"["+f+"]="+  	Favorites.get(f));
 		    }
 		    	
 		    		
@@ -555,7 +555,7 @@ public HashMap<String, Integer> procesare( String description)
 		    		
 		    	}
 		    	}
-		   System.out.println("size homepage="+homepage.size()+" last el="+homepage.get(homepage.size()-1).id+" "+homepage.get(homepage.size()-1).score);
+		//   System.out.println("size homepage="+homepage.size()+" last el="+homepage.get(homepage.size()-1).id+" "+homepage.get(homepage.size()-1).score);
 		    
 	   
 		    Collections.sort(homepage, new Comparator<Element>() {
@@ -564,12 +564,12 @@ public HashMap<String, Integer> procesare( String description)
 		    	return Double.compare(e1.score, e2.score);}
 		    	});
 	   Collections.reverse(homepage);
-	   for (Element book: homepage)
+	 /*  for (Element book: homepage)
 		{
 		
 		
 		System.out.println("book="+book.getId()+ " score="+book.getScore() );
-		}
+		}*/
 	   return homepage;
     	
     	

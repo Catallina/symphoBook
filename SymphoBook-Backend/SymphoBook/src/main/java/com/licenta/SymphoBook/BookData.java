@@ -88,9 +88,10 @@ public class BookData implements CommandLineRunner {
 	
 		Thread t=new Thread(profile);
 		   t.start();
-		    Thread.sleep(10000);
+		    Thread.sleep(4000);
 		    t.join();
-		Map<String, Object> oldFavorite = profile.getOldFavorites();
+		    Map<String, Object> oldFavorite = profile.getOldFavorites();
+		  
 		for(int i=0;i<oldFavorite.size();++i)
 		{
 			System.out.println(oldFavorite.get(Integer.toString(i)));
@@ -172,7 +173,7 @@ public class BookData implements CommandLineRunner {
 		RetriveDataFromDbUserProfile profile = new RetriveDataFromDbUserProfile(uid);
 		Thread t=new Thread(profile);
 		   t.start();
-		    Thread.sleep(10000);
+		    Thread.sleep(5000);
 		    t.join();
 		    
 	   Books favoriteBook=repository.findByTitle(Title);
