@@ -77,9 +77,7 @@ export class ImagePickerComponent implements OnInit {
       loaderEl.present();
         (<any>window).OCRAD(document.getElementById('image'), text => {
           loaderEl.dismiss();
-          alert(text);
           this.getText.emit(text);
-          console.log(text);
         });
     });
   }

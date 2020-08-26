@@ -48,7 +48,7 @@ export class BookDetailsEffects {
   getBookGroup$ = this.actions$.pipe(
     ofType(BookDetailsActionType.GET_BOOK_GROUP),
     switchMap((action: GetBookGroupAction) => {
-      return this.bookService.getBook$().pipe(
+      return this.bookService.getBook$(action.payload.userId).pipe(
           map((details: BookGroupModel[]) => {
             return new GetBookGroupSuccessAction({ bookGroup: details});
             }
@@ -147,8 +147,9 @@ export class BookDetailsEffects {
       ofType(BookDetailsActionType.SEARCH_BOOK),
       switchMap((action: SearchBookAction) => {
         const query = action.payload.query;
+        const filter = action.payload.filterType
   
-        return this.bookService.searchBook$(query).pipe(
+        return this.bookService.searchBook$(filter, query).pipe(
           map((response: any) => {
             if (response && response.length > 0) {
               return new SearchBookSuccessAction({ bookList: response });

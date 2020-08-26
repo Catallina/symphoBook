@@ -1,11 +1,12 @@
 <ion-header [translucent]="true">
   <ion-toolbar class="align-header" >
+    <ion-select slot="start" (ionChange)="selectFilterType()" [(ngModel)]="filter">	
+      <ion-select-option *ngFor="let item of selectFilter" [value]="item">{{ item }}</ion-select-option>	
+    </ion-select>
     <ion-searchbar 
       [(ngModel)]="searchInput"
       [debounce]=1000
       inputmode="text"
-      type="text"
-      pattern="[a-zA-Z ]*"
       search-icon="recording-outline"
       clear-icon="close-circle-outline"
       (ionChange)="onSearchInput($event)"
@@ -35,33 +36,28 @@
       >
         <p>Nothing found!</p>
       </ion-col>
-      <ion-col
-        size-md="6"
-        offset-md="3"
-        *ngIf="loadedBook && loadedBook.length> 0"
-      >
-      <ion-virtual-scroll
-        [items]="loadedBook"
-        approxItemHeight="70px">
-        <ion-list
-          *virtualItem="let book ">
-          <ion-item
-              detail
-              (click)="onSelectedBook(book.id)"
-              [routerLink]="['/', 'books', 'tabs', 'discover', book.id]"
-            >
-              <ion-thumbnail slot="start">
-                <img [src]="book.photo">
-            </ion-thumbnail>
-          
-            <ion-label>
-              <h5>{{ book.title }}</h5>
-              <p>{{ book.author }}</p>
-            </ion-label>
-          </ion-item>
-        </ion-list>
-        </ion-virtual-scroll>
-      </ion-col>
     </ion-row>
   </ion-grid>
+  <ion-virtual-scroll
+    *ngIf="loadedBook && loadedBook.length> 0"
+    [items]="loadedBook"
+    approxItemHeight="70px">
+    <ion-list
+      *virtualItem="let book ">
+      <ion-item
+          detail
+          (click)="onSelectedBook(book.id)"
+          [routerLink]="['/', 'books', 'tabs', 'discover', book.id]"
+        >
+          <ion-thumbnail slot="start">
+            <img [src]="book.photo">
+        </ion-thumbnail>
+      
+        <ion-label>
+          <h5>{{ book.title }}</h5>
+          <p>{{ book.author }}</p>
+        </ion-label>
+      </ion-item>
+    </ion-list>
+  </ion-virtual-scroll>
 </ion-content>

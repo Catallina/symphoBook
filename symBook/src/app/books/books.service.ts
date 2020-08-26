@@ -118,10 +118,10 @@ export class BooksService {
     return details;
   }
 
-  public getBook$(): Observable<BookGroupModel[]> {
+  public getBook$(userId: string): Observable<BookGroupModel[]> {
 
     //return of(this.mapToBookList(this.responseData))
-    return this.http.get<any>(environment.apiUrl + ApiEndpointsUrl.book)
+    return this.http.get<any>(environment.apiUrl + ApiEndpointsUrl.book + `?uid=${userId}`)
       .pipe(
         map(response => {
           return this.mapToBookList(response);
@@ -211,14 +211,25 @@ export class BooksService {
   }
 
   
-  public searchBook$(query: string): Observable<BookGroupModel[]> {
+  public searchBook$(filterType: string, query: string): Observable<BookGroupModel[]> {
 
-    const data = `?query=${query}`
+    const data = `?query=${query}&filter=${filterType}`
     return this.http.get<any>(environment.apiUrl + ApiEndpointsUrl.search + data)
       .pipe(
         map(response => {
           return this.mapToBookList(response);
         })
       );
+  }
+
+  public getNotification$(): Observable<BookGroupModel[]> {
+    return of(this.mapToBookList(this.responseData))
+    // const data = `?query=${query}`
+    // return this.http.get<any>(environment.apiUrl + ApiEndpointsUrl.search + data)
+    //   .pipe(
+    //     map(response => {
+    //       return this.mapToBookList(response);
+    //     })
+    //   );
   }
 }

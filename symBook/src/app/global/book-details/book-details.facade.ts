@@ -33,8 +33,8 @@ export class BookDetailsFacade {
     ) {}
 
     //ACTIONS
-    public getBookGroup(): void {
-        this.bookStore.dispatch(new BookDetailsActions.GetBookGroupAction());
+    public getBookGroup(userId: string): void {
+        this.bookStore.dispatch(new BookDetailsActions.GetBookGroupAction({userId: userId}));
     }
 
     public getBookGroupSuccess(bookGroup: BookGroupModel[]): void {
@@ -53,8 +53,8 @@ export class BookDetailsFacade {
         this.bookStore.dispatch(new BookDetailsActions.GetBookDetailsErrorAction());
     }
 
-    public searchBook(query: string): void {
-        this.bookStore.dispatch(new BookDetailsActions.SearchBookAction({query: query}));
+    public searchBook(query: string, filterType: string): void {
+        this.bookStore.dispatch(new BookDetailsActions.SearchBookAction({query: query, filterType: filterType}));
     }
 
     public searchBookSuccess(bookList: BookGroupModel[]): void {
