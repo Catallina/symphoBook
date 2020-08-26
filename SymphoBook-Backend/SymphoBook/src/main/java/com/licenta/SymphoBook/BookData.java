@@ -112,14 +112,14 @@ public class BookData implements CommandLineRunner {
 			{
 				oldFavorite.put(Integer.toString(oldFavorite.size()),favoriteBook);
 			}
-		/*final Iterator<Entry<String, Object>> iter = oldFavorite.entrySet().iterator();
+		final Iterator<Entry<String, Object>> iter = oldFavorite.entrySet().iterator();
 		final HashSet<Object> valueSet = new HashSet<Object>();
 		while (iter.hasNext()) {
 		final Entry<String, Object> next = iter.next();
 		if (!valueSet.add(next.getValue())) {
 		iter.remove();
 		}
-		}*/
+		}
 		
 		for(int i=0;i<oldFavorite.size();++i)
 		{
