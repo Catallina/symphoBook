@@ -536,7 +536,7 @@ public HashMap<String, Integer> procesare( String description)
 		    		
 		    	}
 		    	}
-		    System.out.println("size homepage="+homepage.size()+" last el="+homepage.get(homepage.size()-1).id+" "+homepage.get(homepage.size()-1).score);
+		//    System.out.println("size homepage="+homepage.size()+" last el="+homepage.get(homepage.size()-1).id+" "+homepage.get(homepage.size()-1).score);
 		    
 	   
 		    Collections.sort(homepage, new Comparator<Element>() {
@@ -584,7 +584,7 @@ public HashMap<String, Integer> procesare( String description)
     	else  { //nu avem favorites, fara recomandari
     		for (Books book: repository.findAll())
     		{		
-    			System.out.println("book="+book.getId()+" "+book.getTitle()+" "+book.getPhoto()+" "+book.getAuthor()+" "+book.getFirstMp3());
+    			//System.out.println("book="+book.getId()+" "+book.getTitle()+" "+book.getPhoto()+" "+book.getAuthor()+" "+book.getFirstMp3());
     			bookHomepageList.add(new BookHomepage(book.getId(),book.getTitle(),book.getPhoto(),book.getAuthor(),book.getFirstMp3()));
 
     		}
