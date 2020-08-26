@@ -3,9 +3,8 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { takeWhile } from 'rxjs/operators';
 
 import { BookDetailsFacade } from '@syb/global/book-details/book-details.facade';
-import { BookListModel } from '@syb/shared/models/book-list.model';
 import { BookGroupModel } from './models/book-group.model';
-import { pipe } from 'rxjs';
+import { AuthService } from '@syb/auth/auth.service';
 
 @Component({
   selector: 'syb-places',
@@ -27,11 +26,14 @@ export class BooksPage implements OnInit, OnDestroy {
   constructor(
     private bookFacade: BookDetailsFacade,
     private bookService: BooksService,
+    private authService: AuthService,
   ) { }
 
   ngOnInit() {
     this.isAlive = true;
-    //his.bookFacade.getBookGroup();
+    this.authService.userId.subscribe((userId) =>{
+      this.bookFacade.getBookGroup(userId);
+    })
 
     this.bookService.getNotification$().pipe(takeWhile(() => this.isAlive)).subscribe((book: BookGroupModel[]) => {
       this.bookGroup = book;
