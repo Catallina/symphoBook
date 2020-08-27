@@ -36,20 +36,15 @@ public class BookData implements CommandLineRunner {
 	private BookWishlistRepository wishlistRepository;
 	@Autowired
 	private BookJournalRepository journalRepository;
+	@Autowired
+	private UserRepository userRepository;
 	Gson gson = new Gson();
 	List<String>ListIdBook;
 	BookWishlist OldWishlist;
 	BookJournal OldJournal; 
 	FireBaseService fbs = ConnectToBd.Connection();
 	public BookData() {}
-	public static <K, V> K getKey(Map<K, V> map, V value) {
-		for (Map.Entry<K, V> entry : map.entrySet()) {
-			if (value.equals(entry.getValue())) {
-				return entry.getKey();
-			}
-		}
-		return null;
-	}
+
 	public String getJsonAllBooksFrontPage()
 	{
 		
@@ -86,133 +81,84 @@ public class BookData implements CommandLineRunner {
 			
 		return jsonBooksId;
 	}
-	public String putFavoriteTitle(String uid,String IdBook) throws FirebaseAuthException, InterruptedException
-	{	
-		String error="Added";
-		List<String> ListFavorites;
-		
-		
-		RetriveDataFromDbUserProfile profile = new RetriveDataFromDbUserProfile(uid);
 	
-		Thread t=new Thread(profile);
-		   t.start();
-		    Thread.sleep(4000);
-		    t.join();
-		    Map<String, Object> oldFavorite = profile.getOldFavorites();
-		  
+	
+	
+	public String putFavoriteTitle(String uid, String IdBook)
+	{
 		
-	    String favoriteBook=repository.findById(IdBook).orElse(null).getTitle();
-		ListFavorites=profile.getListFavorites();
-		if(ListFavorites.contains(favoriteBook))
+		
+		String error="Added";
+		//List<String> ListBook =new ArrayList<String>();
+	     User bookFavorites;
+		 bookFavorites= new User();
+		 List<String> bookTitle=new ArrayList<String>();
+		 
+		 bookFavorites=userRepository.findById(uid).orElse(null);
+		bookTitle.addAll(bookFavorites.getFavorites());
+	
+		if(bookTitle.contains(repository.findById(IdBook).orElse(null).getTitle()))
 		{
 			error="Book already exists in Favorites!";
 			return error;
 		}
-		
-		if (oldFavorite.size()==0)
-		{
-		oldFavorite.put(Integer.toString(oldFavorite.size()),favoriteBook);
-		}
+			
 		else
-			if(oldFavorite.size()>0)
-			{
-				oldFavorite.put(Integer.toString(oldFavorite.size()),favoriteBook);
-			}
-		final Iterator<Entry<String, Object>> iter = oldFavorite.entrySet().iterator();
-		final HashSet<Object> valueSet = new HashSet<Object>();
-		while (iter.hasNext()) {
-		final Entry<String, Object> next = iter.next();
-		if (!valueSet.add(next.getValue())) {
-		iter.remove();
-		}
+		{
+		
+		
+
+		
+		String favorite=repository.findById(IdBook).orElse(null).getTitle();
+		bookTitle.add(favorite);
+		bookFavorites.setFavorites(bookTitle);
+		
+		
+		userRepository.save(bookFavorites);
+		return error;
+
 		}
 		
-	
-	
-		UserRecord userRecord;
-		userRecord = FirebaseAuth.getInstance().getUser(uid);
-		   System.out.println("Successfully fetched user data: " + userRecord.getUid());
-  DatabaseReference refAddUserDescription = fbs.getDb()
-          .getReference("users");
-
-  refAddUserDescription.child(userRecord.getUid()).child("Favorites").updateChildren(oldFavorite,new DatabaseReference.CompletionListener() {
-	
-	@Override
-	public void onComplete(DatabaseError error, DatabaseReference ref) {
-		// TODO Auto-generated method stub
 		
 	}
-});
-		  return error;
-		
-		}
+	
+	
+	
 	
 
 	
-	public String deleteBookFromFavorite(String uid, String Title) throws FirebaseAuthException, InterruptedException
+	public String deleteBookFromFavorite(String uid, String Title)
 	{
+		
+	
+		String error="The Favorites is already deleted!";
+	
+	     User bookFavorites;
+		 bookFavorites= new User();
+		 List<String> bookTitle=new ArrayList<String>();
+		 bookFavorites=userRepository.findById(uid).orElse(null);
+		 bookTitle.addAll(bookFavorites.getFavorites());
+		 String bookToDelete=repository.findByTitle(Title).getTitle();
+		if(bookTitle.contains(bookToDelete))
+		{
+			bookTitle.remove(bookToDelete);
+			bookFavorites.setFavorites(bookTitle);
+			userRepository.save(bookFavorites);
+			error="Deleted!";
+		}
+			
 
-		String error="Book is already deleted!";
-		List<String> ListFavorites;
 		
-		//Map<String, Object> favorite = new HashMap<String,Object>();
+
 		
-		RetriveDataFromDbUserProfile profile = new RetriveDataFromDbUserProfile(uid);
-		Thread t=new Thread(profile);
-		   t.start();
-		    Thread.sleep(5000);
-		    t.join();
-		    
-	   Books favoriteBook=repository.findByTitle(Title);
-	   Map<String, Object> oldFavorite = profile.getOldFavorites();
-	   for(int i=0;i<oldFavorite.size();++i)
-		{
-			System.out.println("lista veche+="+oldFavorite.get(Integer.toString(i)));
-		}
-		//ListFavorites=profile.getListFavorites();////!
-		if(oldFavorite.containsValue(favoriteBook.getTitle()))
-			{
 		
-		String key =getKey(oldFavorite, favoriteBook.getTitle());
-		oldFavorite.remove(key);
-	/*	if(ListFavorites.contains(favoriteBook.getTitle()))
-		{
-			ListFavorites.remove(favoriteBook.getTitle());
-			
-			int i = 0;
-			Map<String, Object> mapFavorites = new HashMap<String,Object>();
-			for(String title : ListFavorites){
-				mapFavorites.put(String.valueOf(i),title);
-			}*/
-			//favorite.put("Favorites",ListFavorites);
+		return error;
+
+		
+		
+	}
 	
-	
-			}
-		for(int i=0;i<oldFavorite.size();++i)
-		{
-			System.out.println("noua lista+="+oldFavorite.get(Integer.toString(i)));
-		}
-			UserRecord userRecord;
-			userRecord = FirebaseAuth.getInstance().getUser(uid);
-			   System.out.println("Successfully fetched user data: " + userRecord.getUid());
-	  DatabaseReference refAddUserDescription = fbs.getDb()
-	          .getReference("users");
-	  refAddUserDescription.child(userRecord.getUid()).child("Favorites").setValue(oldFavorite, new DatabaseReference.CompletionListener() {
-		
-		@Override
-		public void onComplete(DatabaseError error, DatabaseReference ref) {
-			// TODO Auto-generated method stub
-			
-		}
-	});
-	  		error="Deleted!";
-			  return error;
-		}
-		
-		
-		
-		
-	
+
 	
 	
 	

@@ -22,6 +22,8 @@ public class CreateAccount {
 	private BookWishlistRepository wishlistRepository;
 	@Autowired
 	private BookJournalRepository journalRepository;
+	@Autowired
+	private UserRepository userRepository;
 	CreateAccountActivity createAccountActivityInstance;
 	/*1*/FireBaseService fbs = ConnectToBd.Connection();
 	Map<String, String> errors = new HashMap<String,String>();
@@ -40,6 +42,9 @@ public class CreateAccount {
 			wishlistRepository.save(wishlist);
 			BookJournal journal = new BookJournal(createAccountActivityInstance.getUserRecord().getUid(),new ArrayList<String>());
 			journalRepository.save(journal);
+			User  user =new User(createAccountActivityInstance.getUserRecord().getUid(),new ArrayList<String>(),DisplayName,Email,PhoneNumber);
+			userRepository.save(user);
+			
 			
 		}  catch (FirebaseAuthException e1) {
 			
@@ -84,24 +89,12 @@ public class CreateAccount {
 		  
 		}
 		  
-		  //return (createAccountActivityInstance.getUserRecord()!=null);
+
 		  return errorMessage;
 	}
 	
-   /* public Boolean addDetailsforAccount(String Description,String Love, String Birthday,  String Favorites)
-    {
-    	
-  	  UsersDescription userDescription=new UsersDescription(Description,Love,Birthday,Favorites);
-  	  DatabaseReference refAddUserDescription = fbs.getDb()
-               .getReference("users");
-  	  refAddUserDescription.child(createAccountActivityInstance.getUserRecord().getUid()).updateChildrenAsync(userDescription.getUserMapDescription());
-  	  return (createAccountActivityInstance.getUserRecord()!=null);
-    }*/
-    
-    
-    
-	//p
-    public Boolean addDetailsforAccountAfter(String Description,String Love, String DisplayName, String Birthday,String uid) throws FirebaseAuthException
+
+   /* public Boolean addDetailsforAccountAfter(String Description,String Love, String DisplayName, String Birthday,String uid) throws FirebaseAuthException
     {
     	  UsersDescription userDescription=new UsersDescription(Description,Love,DisplayName,Birthday);
     	  UserRecord userRecord;
@@ -116,5 +109,23 @@ public class CreateAccount {
     	
     }
 	
-
+*/
+	
+	public Boolean addDetailsforAccountAfter(String Description,String Love, String DisplayName, String Birthday,String uid) 
+    {
+		
+	
+		User user = userRepository.findById(uid).orElse(null);
+		user.setDescription(Description);
+		user.setLove(Love);
+		user.setUserDisplayName(DisplayName);
+		user.setBirthday(Birthday);
+		userRepository.save(user);
+		return user!=null;
+		
+    	
+    	  
+    	
+    }
+	
 }

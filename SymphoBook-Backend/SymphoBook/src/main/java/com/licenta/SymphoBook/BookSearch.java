@@ -40,6 +40,9 @@ public class BookSearch {
 	@Autowired
 	private BookWishlistRepository wishlistRepository;
 	
+	@Autowired
+	private UserRepository userRepository;
+	
 	 MongoClient mongoClient = MongoClients.create("mongodb://localhost:27017");
 	 MongoDatabase db = mongoClient.getDatabase("SymphoBook");
 
@@ -506,28 +509,29 @@ public HashMap<String, Integer> procesare( String description)
    			
    		}
    		
+   	
+   		User user= new User();
+   		Books bookIdFromTitle;
+   		user=userRepository.findById(uid).orElse(null);
    		
-   		RetriveDataFromDbUserProfile profile = new RetriveDataFromDbUserProfile(uid);
-		Thread t=new Thread(profile);
-		   t.start();
-		    Thread.sleep(10000);
-		    t.join();
-		    Books bookFromTitle;
-		    List<String> ListFavorites = profile.getListFavorites();
-		    if (ListFavorites.size() != 0)
-		    {
-		   
-		    for(i=0;i<ListFavorites.size();++i)
-		    {
-		   
-		    	bookFromTitle = repository.findByTitle(ListFavorites.get(i));
-		    	//remove duplicates
-		    	if (!Favorites.contains(Integer.parseInt(bookFromTitle.getId())))
-		    			Favorites.add(Integer.parseInt(bookFromTitle.getId()));
-		    	
-		    }
-		    
-		    }
+   		List<String>bookTitleFavorite=new ArrayList<String>();
+   		
+   		if(user.getFavorites()!=null)
+   		{
+   			bookTitleFavorite=user.getFavorites();
+   		if(user!=null)
+   		{
+   			for(i=0;i<bookTitleFavorite.size();++i)
+   			{
+   				bookIdFromTitle=repository.findByTitle(bookTitleFavorite.get(i));
+   				if(!Favorites.contains(Integer.parseInt(bookIdFromTitle.getId())))
+   					{
+   					Favorites.add(Integer.parseInt(bookIdFromTitle.getId()));
+   					}
+   			}
+   		}
+   		}
+   		
 		    ///Check if we have favs
 		    if(Favorites.size() == 0) {
 		    	return null; // it's empty here
@@ -610,6 +614,7 @@ public HashMap<String, Integer> procesare( String description)
     		}
     	}
     	jsonBooksFrontPage=gson.toJson(bookHomepageList);
+   if(homepage!=null)
     	for(int i=0;i<homepage.size();++i)
     	{
     		homepage.set(i, new Element(0,0));
