@@ -60,10 +60,6 @@ export class DiscoverPage implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.authService.userId.subscribe((userId) =>{
-      this.bookFacade.getBookGroup(userId);
-    })
-
     this.getDocuments();
 
     this.bookFacade.getStoreBookId$().pipe(takeWhile(() => this.isAlive)).subscribe((bookId: string) => {
@@ -134,7 +130,8 @@ export class DiscoverPage implements OnInit, OnDestroy {
     setTimeout(() => {
       this.getDocuments()
       event.target.complete();
-      if (this.bookDetails.length === 500) {
+      
+      if (this.bookDetails && this.bookDetails.length === 500) {
         event.target.disabled = true;
       }
     }, 1500);
