@@ -19,7 +19,7 @@ public class ProfileController {
 	}
 	
 	@GetMapping("users/profile")
-	String profile(@RequestParam String uid) throws InterruptedException
+	String profile(@RequestParam String uid) 
 	{
 		return profile.getJsonUserProfile(uid);
 	}

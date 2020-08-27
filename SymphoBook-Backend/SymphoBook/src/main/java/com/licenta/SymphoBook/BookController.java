@@ -2,6 +2,7 @@ package com.licenta.SymphoBook;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.google.gson.Gson;
 @RestController
+@Component
 public class BookController {
 
 	
@@ -44,7 +46,7 @@ public class BookController {
 		return ResponseEntity.status(HttpStatus.OK).body(jsonBooksId);
 	}
 	@PostMapping("book/addfavorite")
-	ResponseEntity<String> addToFavorite(@RequestParam String uid, @RequestParam String IdBook) throws FirebaseAuthException, InterruptedException
+	ResponseEntity<String> addToFavorite(@RequestParam String uid, @RequestParam String IdBook) 
 	{
 		Gson g = new Gson();
 		String jsonFavorites = book.putFavoriteTitle(uid,IdBook);
@@ -112,14 +114,14 @@ public class BookController {
 	
 
 	@DeleteMapping("book/favoritedelete")
-	ResponseEntity<String> deleteBookFavorite(@RequestParam String uid,@RequestParam String Title) throws FirebaseAuthException, InterruptedException
+	ResponseEntity<String> deleteBookFavorite(@RequestParam String uid,@RequestParam String Title) 
 	{
 		Gson g = new Gson();
 		String jsonDeleteFavorite="";
 		
 		Title.replace("%20", " ");
 		jsonDeleteFavorite=book.deleteBookFromFavorite(uid, Title);
-		if(jsonDeleteFavorite=="The Journal is already deleted!")
+		if(jsonDeleteFavorite=="The Favorites is already deleted!")
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(g.toJson(jsonDeleteFavorite));
 		
 		return ResponseEntity.status(HttpStatus.OK).body(g.toJson(jsonDeleteFavorite));

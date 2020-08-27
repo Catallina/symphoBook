@@ -27,7 +27,7 @@ public class CreateAccountActivity {
 	public void CreateNewAccount(String Email, String Password, String PhoneNumber, String DisplayName) throws FirebaseAuthException {
 
 		
-		users us = new users(DisplayName,Email,Password,PhoneNumber);
+		User us = new User(DisplayName,Email,Password,PhoneNumber);
 		 UserMap = new HashMap<String,String>();
 		UserMap.put("DisplayName", DisplayName);
 		UserMap.put("Email", Email);

@@ -45,8 +45,7 @@ private final BookSearch book;
 	ResponseEntity<String> getBooks( String uid) throws InterruptedException
 	{
 		
-	//	return new ResponseEntity<>(book.getJsonAllBooksFrontPage(),HttpStatus.OK);
-		//System.out.println(book.getJsonAllBooksFrontPage());
+	
 		return ResponseEntity.status(HttpStatus.OK).body(book.getJsonRecommendedBooks( uid));
 	}
 	@GetMapping("book/search")
