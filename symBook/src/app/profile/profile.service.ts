@@ -25,12 +25,12 @@ export class ProfileService {
     if (profileDetails) {
       mappedList = new ProfileModel({
         name: profileDetails.DisplayName,
-        love: profileDetails.Love,
+        love: profileDetails.love,
         email: profileDetails.Email,
-        birthday: profileDetails.Birthday,
+        birthday: profileDetails.birthday,
         phoneNumber: profileDetails.PhoneNumber,
-        description: profileDetails.Description,
-        favoriteBook: profileDetails.Favorites,
+        description: profileDetails.description,
+        favoriteBook: profileDetails.favorites,
       });
     }
 
