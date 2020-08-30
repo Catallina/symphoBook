@@ -39,12 +39,19 @@ public class BookData implements CommandLineRunner {
 	@Autowired
 	private UserRepository userRepository;
 	Gson gson = new Gson();
+	List<BookHomepage> bookHomepageList;
 	List<String>ListIdBook;
 	BookWishlist OldWishlist;
 	BookJournal OldJournal; 
 	FireBaseService fbs = ConnectToBd.Connection();
 	public BookData() {}
 
+	
+	
+	
+	
+	
+	
 	public String getJsonAllBooksFrontPage()
 	{
 		
@@ -52,7 +59,7 @@ public class BookData implements CommandLineRunner {
 		String jsonBooksFrontPage="";
 
 		
-	List<BookHomepage> bookHomepageList = new ArrayList<BookHomepage>();
+    bookHomepageList = new ArrayList<BookHomepage>();
 	for (Books book: repository.findAll())
 		{
 		

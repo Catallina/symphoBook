@@ -1,10 +1,13 @@
 package com.licenta.SymphoBook;
 
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -33,6 +36,10 @@ public class BookController {
 		return ResponseEntity.status(HttpStatus.OK).body(book.getJsonAllBooksFrontPage());
 		
 	}*/
+	
+	
+	
+	
 	@GetMapping("homepage/book")   //http://localhost:8080/homepage/book?id=
 	ResponseEntity<String> getBookFromId(@RequestParam String id)
 	{	Gson g = new Gson();

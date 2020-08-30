@@ -33,6 +33,21 @@ public class Books {
 	@Field
 	public List<String> tags;
 	
+	public Books(String id, String photo, String title, String description, int chapters, String language, String year,
+			String author, List<String> mp3, String totalTime, List<String> tags) {
+		super();
+		this.id = id;
+		this.photo = photo;
+		this.title = title;
+		this.description = description;
+		this.chapters = chapters;
+		this.language = language;
+		this.year = year;
+		this.author = author;
+		this.mp3 = mp3;
+		this.totalTime = totalTime;
+		this.tags = tags;
+	}
 	public List<String> getTags() {
 		return tags;
 	}
