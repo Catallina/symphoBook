@@ -13,9 +13,9 @@ public class BookWishlist {
 	
 
 	@Id
-	public String uid;
+	 String uid;
 	@Field
-	public List<String> ListIdBook;
+	 List<String> ListIdBook;
 	
 	
 	public BookWishlist() {

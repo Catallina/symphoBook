@@ -4,11 +4,11 @@ import org.springframework.data.mongodb.core.mapping.Field;
 
 public class BookHomepage {
 
-	public String id;
-	public String title;
-	public String photo;
-	public String author;
-	public String mp3Url;
+	 String id;
+	 String title;
+	 String photo;
+	 String author;
+	 String mp3Url;
 	
 	public BookHomepage() {}
 	

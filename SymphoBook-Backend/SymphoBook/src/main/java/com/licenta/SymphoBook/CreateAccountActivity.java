@@ -28,17 +28,14 @@ public class CreateAccountActivity {
 
 		
 		User us = new User(DisplayName,Email,Password,PhoneNumber);
-		 UserMap = new HashMap<String,String>();
-		UserMap.put("DisplayName", DisplayName);
-		UserMap.put("Email", Email);
-		UserMap.put("PhoneNumber", PhoneNumber);
+		
 		
 		CreateRequest request = new CreateRequest()
 			    .setEmail(us.getUserEmail())
 			    .setEmailVerified(false)
 			    .setPassword(us.getUserPassword())
-			    .setPhoneNumber(us.getUserPhoneNumber())
-			    .setDisplayName(us.getUserDisplayName())
+			   // .setPhoneNumber(us.getUserPhoneNumber())
+			  //  .setDisplayName(us.getUserDisplayName())
 			    .setDisabled(false);
 	
 

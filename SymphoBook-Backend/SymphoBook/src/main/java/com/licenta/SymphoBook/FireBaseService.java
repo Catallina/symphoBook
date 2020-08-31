@@ -27,7 +27,7 @@ public class FireBaseService {
      //   );
 
     	
-    	serviceAccount = new FileInputStream("src/main/resources/symphobook-43327-firebase-adminsdk-ky152-4a2b608712.json");
+    	serviceAccount = new FileInputStream("src//main//resources//symphobook-43327-firebase-adminsdk-ky152-4a2b608712.json");
         credentials = GoogleCredentials.fromStream(serviceAccount);
         options = new FirebaseOptions.Builder().setStorageBucket("symphobook-43327.appspot.com")
                 .setCredentials(credentials)

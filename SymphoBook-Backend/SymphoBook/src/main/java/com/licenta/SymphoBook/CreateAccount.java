@@ -81,35 +81,13 @@ public class CreateAccount {
 					errorMessage="Password is too short";
 					
 				}
-			
-		if(errorMessage=="Created")
-		{
-		DatabaseReference refAddUser = fbs.getDb().getReference("users");
-		  refAddUser.child(createAccountActivityInstance.getUserRecord().getUid()).setValueAsync(createAccountActivityInstance.getUserMap());
-		  
-		}
+		
 		  
 
 		  return errorMessage;
 	}
 	
 
-   /* public Boolean addDetailsforAccountAfter(String Description,String Love, String DisplayName, String Birthday,String uid) throws FirebaseAuthException
-    {
-    	  UsersDescription userDescription=new UsersDescription(Description,Love,DisplayName,Birthday);
-    	  UserRecord userRecord;
-				userRecord = FirebaseAuth.getInstance().getUser(uid);
-				   System.out.println("Successfully fetched user data: " + userRecord.getUid());
-    	  DatabaseReference refAddUserDescription = fbs.getDb()
-                  .getReference("users");
-    	  refAddUserDescription.child(userRecord.getUid()).updateChildrenAsync(userDescription.getUserMapDescription());
-    	  return (userRecord.getUid()!=null);
-    	  
-    	  
-    	
-    }
-	
-*/
 	
 	public Boolean addDetailsforAccountAfter(String Description,String Love, String DisplayName, String Birthday,String uid) 
     {

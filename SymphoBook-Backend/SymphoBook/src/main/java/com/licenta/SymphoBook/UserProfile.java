@@ -24,6 +24,7 @@ public class UserProfile  {
 		user=userRepository.findById(uid).orElse(null);
 		
 		jsonUserProfile=gson.toJson(user);
+		
 		return jsonUserProfile;
 
 	}

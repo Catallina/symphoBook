@@ -12,24 +12,24 @@ import org.springframework.data.mongodb.core.mapping.Field;
 public class User {
 
 	@Id
-	public String uid;
+	 String uid;
 	@Field
-	public String DisplayName;
+	 String DisplayName;
 	@Field
-	public String Email;
+	 String Email;
 	@Field
-	public String Password;
+	 String Password;
 	@Field
-	public String PhoneNumber;
+	 String PhoneNumber;
 	@Field
-	public String description;
+	 String description;
 	@Field
-	public String love;
+	 String love;
 	@Field
-	public String birthday;
+	 String birthday;
 	@Field
-	public List<String> favorites;
-//	public Map<String, Object> UserMapDescription ;
+	 List<String> favorites;
+
 	
 	
 	

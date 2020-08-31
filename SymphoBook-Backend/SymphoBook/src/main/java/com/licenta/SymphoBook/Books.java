@@ -11,27 +11,27 @@ import org.springframework.data.mongodb.core.mapping.Field;
 public class Books {
 	
 	@Id
-	public String id;
+	 String id;
 	@Field
-	public String photo;
+	 String photo;
 	@Field
-	public String title;
+	 String title;
 	@Field
-	public String description;
+	 String description;
 	@Field
-	public int chapters;
+	int chapters;
 	@Field
-	public String language;
+	 String language;
 	@Field
-	public String year;
+	 String year;
 	@Field
-	public String author;
+	 String author;
 	@Field
-	public List<String>mp3;
+	 List<String>mp3;
 	@Field
-	public String totalTime;
+	 String totalTime;
 	@Field
-	public List<String> tags;
+	 List<String> tags;
 	
 	public Books(String id, String photo, String title, String description, int chapters, String language, String year,
 			String author, List<String> mp3, String totalTime, List<String> tags) {

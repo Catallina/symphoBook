@@ -290,7 +290,7 @@ public class BookSearch {
 		return result;
 	}
 
-	public Set<String> booleanSearch(String query) {
+	public Set<String> booleanSearch(String query) { // abc and edf
 
 		String[] splitQuery = query.split("\\s+");
 		List<String> stopwords = StopWordList.getStopwords();
@@ -442,7 +442,7 @@ public class BookSearch {
 
 		// S=Tfidf*Tfidf_transpose
 
-		S = new Double[D][D]; // MIRIAM
+		S = new Double[D][D]; 
 		for (int k = 0; k < D; k++) {
 			for (int e = 0; e < D; e++) {
 				double sum = 0.0;
