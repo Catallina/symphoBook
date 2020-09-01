@@ -1,7 +1,9 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">SymphoBook</string>
+    <string name="app_name">symBook</string>
     <string name="title_activity_main">SymphoBook</string>
     <string name="package_name">io.ionic.starter</string>
     <string name="custom_url_scheme">io.ionic.starter</string>
+    <string name="fb_app_id">io.ionic.starter</string>
+    <string name="fb_app_name">symBook</string>
 </resources>

@@ -60,7 +60,7 @@ export class DiscoverPage implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.getDocuments();
+    this.getBooks();
 
     this.bookFacade.getStoreBookId$().pipe(takeWhile(() => this.isAlive)).subscribe((bookId: string) => {
       this.bookId = bookId;
@@ -112,7 +112,7 @@ export class DiscoverPage implements OnInit, OnDestroy {
     return this.duration;
   }
 
-  getDocuments() {
+  getBooks() {
     this.loadingCtrl.create({
       message: 'Loading Content. Please Wait...'
     }).then(loadingEl => {
@@ -128,7 +128,7 @@ export class DiscoverPage implements OnInit, OnDestroy {
   
   loadData(event) {
     setTimeout(() => {
-      this.getDocuments()
+      this.getBooks()
       event.target.complete();
       
       if (this.bookDetails && this.bookDetails.length === 500) {
