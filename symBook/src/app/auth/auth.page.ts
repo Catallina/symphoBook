@@ -86,7 +86,6 @@ export class AuthPage implements OnInit {
           }, (errRes) => {
             loadingEl.dismiss();
             const code = errRes.error;
-            console.warn(errRes);
             let message = 'Could not sign you up, please try again.';
             if (code === 'Email already exists') {
               message = 'This email address exists already!';

@@ -51,15 +51,15 @@ export class ProfilePage implements OnInit, OnDestroy {
     });
 
     this.profileStore.favoriteBook$.pipe(takeWhile(() => this.isAlive))
-    .subscribe((book: string[]) => {
-      if (book) {
-        this.favoriteBook = book;
-        
-        this.favoriteBook  = book.filter(function (el) {
-          return el != null;
-        });
-      }
-  });
+      .subscribe((book: string[]) => {
+        if (book) {
+          this.favoriteBook = book;
+          
+          this.favoriteBook  = book.filter(function (el) {
+            return el != null;
+          });
+        }
+    });
 
     this.bookFacade.getStoreCurrentFile$().pipe(takeWhile(() => this.isAlive))
       .subscribe((book: any) => {

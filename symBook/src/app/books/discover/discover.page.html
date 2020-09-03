@@ -30,26 +30,10 @@
                 <ion-card-header>
                     <ion-card-title>Books for you</ion-card-title>
                 </ion-card-header>
-                <ion-img [src]="bookDetails[0].photo"></ion-img>
+                <ion-img src="assets/image/logo.png"></ion-img>
                 <ion-card-content>
-                    <p>{{ bookDetails[0].title }}</p>
+                    <p>SymphoBook</p>
                 </ion-card-content>
-                <div>
-                    <ion-button
-                    (click)="onSelectedBook(bookDetails[0].id)"
-                    fill="clear"
-                    color="primary"
-                    [routerLink]="[
-                        '/',
-                        'books',
-                        'tabs',
-                        'discover',
-                        bookDetails[0].id
-                    ]"
-                    >
-                    More
-                    </ion-button>
-                </div>
                 </ion-card>
             </ion-col>
         </ion-row>

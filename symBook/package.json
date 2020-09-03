@@ -77,7 +77,11 @@
   "description": "An Ionic project",
   "cordova": {
     "plugins": {
-      "cordova-android-support-gradle-release": {}
+      "cordova-android-support-gradle-release": {},
+      "cordova-plugin-facebook4": {
+        "APP_ID": "io.ionic.starter",
+        "APP_NAME": "symBook"
+      }
     }
   }
 }

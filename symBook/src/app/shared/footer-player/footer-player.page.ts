@@ -46,7 +46,7 @@ export class FooterPlayerPage implements OnInit {
   ngOnInit() {
     this.isAlive = true;
     
-    this.getDocuments();
+    this.getBooks();
 
     this.bookFacade.getStoreTimeSec$().pipe(
       filter(value => value !== undefined),
@@ -69,7 +69,7 @@ export class FooterPlayerPage implements OnInit {
 
   }
 
-  getDocuments() {
+  getBooks() {
     this.loadingCtrl.create({
       message: 'Loading Content. Please Wait...'
     }).then(loadingEl => {

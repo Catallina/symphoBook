@@ -1,5 +1,3 @@
-import { GetLastBookErrorAction } from './book-details.actions';
-import { selectedBookIdState, bookGroupState } from './book-details.selectors';
 import { BookListModel } from '@syb/shared/models/book-list.model';
 import { Injectable } from '@angular/core';
 import { of } from 'rxjs';
@@ -19,7 +17,8 @@ import {
   GetLastBookSuccessAction, 
   SearchBookSuccessAction, 
   SearchBookAction,
-  SearchBookErrorAction
+  SearchBookErrorAction,
+  GetLastBookErrorAction
 } from '@syb/global/book-details/book-details.actions';
 import { BookDetailsFacade } from '@syb/global/book-details/book-details.facade';
 

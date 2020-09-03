@@ -31,8 +31,10 @@ export class BooksPage implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.isAlive = true;
-    this.authService.userId.subscribe((userId) =>{
-      this.bookFacade.getBookGroup(userId);
+    this.authService.userId.subscribe((userId) => {
+      if (userId) {
+        this.bookFacade.getBookGroup(userId);
+      }
     })
 
     this.bookService.getNotification$().pipe(takeWhile(() => this.isAlive)).subscribe((book: BookGroupModel[]) => {
