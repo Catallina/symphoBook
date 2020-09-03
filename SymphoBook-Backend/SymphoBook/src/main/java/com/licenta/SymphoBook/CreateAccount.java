@@ -37,7 +37,7 @@ public class CreateAccount {
 		
 		
 		try {
-			createAccountActivityInstance.CreateNewAccount(Email, Password, PhoneNumber, DisplayName);
+			createAccountActivityInstance.CreateNewAccount(Email, Password);
 			BookWishlist wishlist = new BookWishlist(createAccountActivityInstance.getUserRecord().getUid(),new ArrayList<String>());
 			wishlistRepository.save(wishlist);
 			BookJournal journal = new BookJournal(createAccountActivityInstance.getUserRecord().getUid(),new ArrayList<String>());

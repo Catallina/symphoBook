@@ -20,14 +20,15 @@ public class CreateAccountActivity {
 	
 	public static 	UserRecord userRecord;
 	
-	public Map<String,String> UserMap;
-	public String uidUser;
-	public CreateAccountActivity() {}
+	 Map<String,String> UserMap;
+	 String uidUser;
+	User us;
+	CreateAccountActivity() {}
 	
-	public void CreateNewAccount(String Email, String Password, String PhoneNumber, String DisplayName) throws FirebaseAuthException {
+	public void CreateNewAccount(String Email, String Password) throws FirebaseAuthException {
 
 		
-		User us = new User(DisplayName,Email,Password,PhoneNumber);
+		User us = new User(Email,Password);
 		
 		
 		CreateRequest request = new CreateRequest()
@@ -56,9 +57,9 @@ public class CreateAccountActivity {
 	{
 		return userRecord;
 	}
-	public HashMap<String,String> getUserMap()
+	public User getUser()
 	{
-		return (HashMap<String, String>) UserMap;
+		return us;
 	}
 
 

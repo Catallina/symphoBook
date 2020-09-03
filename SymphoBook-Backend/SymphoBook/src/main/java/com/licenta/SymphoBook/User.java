@@ -46,12 +46,11 @@ public class User {
 		this.uid=uid;
 		this.favorites=favorites;
 	}
-	public User (String DisplayName, String Email,String Password, String PhoneNumber)
+	public User (String Email, String Password)
 	{
-		this.DisplayName=DisplayName;
 		this.Email=Email;
 		this.Password=Password;
-		this.PhoneNumber=PhoneNumber;
+	
 		
 	}
 	

@@ -1,5 +1,8 @@
 package com.licenta.SymphoBook;
 
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,10 +21,19 @@ public class ProfileController {
 		this.profile=profile;
 	}
 	
-	@GetMapping("users/profile")
+	/*@GetMapping("users/profile")
 	String profile(@RequestParam String uid) 
-	{
+	{ 
+		
+		
 		return profile.getJsonUserProfile(uid);
+	}*/
+	@GetMapping("users/profile") 
+	ResponseEntity<String> profile( String uid) 
+	{
+		
+		HttpHeaders responseHeaders = new HttpHeaders(); responseHeaders.set("Access-Control-Allow-Origin", "*");
+		return ResponseEntity.status(HttpStatus.OK).headers(responseHeaders).body(profile.getJsonUserProfile( uid));
 	}
 	
 	

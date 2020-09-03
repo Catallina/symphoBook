@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -36,6 +37,7 @@ private final BookSearch book;
 	ResponseEntity<String> putBook(@RequestParam String uid,@RequestParam String photo, @RequestParam String title, @RequestParam String description,@RequestParam int chapters, @RequestParam String language,@RequestParam String year,
 			@RequestParam	String author, @RequestParam List<String> mp3, @RequestParam String totalTime, @RequestParam List<String> tags)
 	{
+		HttpHeaders responseHeaders = new HttpHeaders(); responseHeaders.set("Access-Control-Allow-Origin", "*");
 		Gson gson=new Gson();
 		String jsonBook;
 		if(uid.equals("1gLJZWy7DFTFIbGZXOvznQtSpZ83"))
@@ -44,13 +46,13 @@ private final BookSearch book;
 			
 			if(jsonBook.equals("Book already exists!"))
 			{
-				return ResponseEntity.status(HttpStatus.CONFLICT).body(gson.toJson(jsonBook));
+				return ResponseEntity.status(HttpStatus.CONFLICT).headers(responseHeaders).body(gson.toJson(jsonBook));
 			}
 			
 			book.getIdsDescriptionsandTagsfromBooks();
 			book.indirectIndex();
 			book.calculateSimilarities();
-			return ResponseEntity.status(HttpStatus.OK).body(gson.toJson(jsonBook));
+			return ResponseEntity.status(HttpStatus.OK).headers(responseHeaders).body(gson.toJson(jsonBook));
 		}
 		return ResponseEntity.status(HttpStatus.FORBIDDEN).body("You don't have rights!");
 	}
@@ -58,30 +60,30 @@ private final BookSearch book;
 	ResponseEntity<String> getBooks( String uid) throws InterruptedException
 	{
 		
-	
-		return ResponseEntity.status(HttpStatus.OK).body(book.getJsonRecommendedBooks( uid));
+		HttpHeaders responseHeaders = new HttpHeaders(); responseHeaders.set("Access-Control-Allow-Origin", "*");
+		return ResponseEntity.status(HttpStatus.OK).headers(responseHeaders).body(book.getJsonRecommendedBooks( uid));
 	}
 	@GetMapping("book/search")
-	ResponseEntity<String> getBooleanSearch(@RequestParam String query,@RequestParam String filter)
+	ResponseEntity<String> getSearch(@RequestParam String query,@RequestParam String filter)
 	{	query.replace("%20"," ");
 		query.replace(" "," and ");
 		query=query.toLowerCase();
-		
+		HttpHeaders responseHeaders = new HttpHeaders(); responseHeaders.set("Access-Control-Allow-Origin", "*");
 		switch(filter) {
 		
 		case "General": if(book.getBooksFromBooleanSearch(query, filter).equals("[]"))
-								return ResponseEntity.status(HttpStatus.NOT_FOUND).body(book.getBooksFromBooleanSearch(query,filter));
+								return ResponseEntity.status(HttpStatus.NOT_FOUND).headers(responseHeaders).body(book.getBooksFromBooleanSearch(query,filter));
 							
 						else
-							return ResponseEntity.status(HttpStatus.OK).body(book.getBooksFromBooleanSearch(query,filter));
+							return ResponseEntity.status(HttpStatus.OK).headers(responseHeaders).body(book.getBooksFromBooleanSearch(query,filter));
 		
 		case "Title":    if(book.SearchByTitle(query, filter).equals("[]"))
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(book.SearchByTitle(query,filter));
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).headers(responseHeaders).body(book.SearchByTitle(query,filter));
 						else
-							return ResponseEntity.status(HttpStatus.OK).body(book.SearchByTitle(query,filter));
+							return ResponseEntity.status(HttpStatus.OK).headers(responseHeaders).body(book.SearchByTitle(query,filter));
 							
 		
-		default : return ResponseEntity.status(HttpStatus.NOT_FOUND).body(" ");
+		default : return ResponseEntity.status(HttpStatus.NOT_FOUND).headers(responseHeaders).body(" ");
 		}
 	}
 		

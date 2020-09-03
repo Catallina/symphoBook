@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -31,26 +32,28 @@ public class CreateUserController {
 	@PostMapping("users/createaccount") // POST /users/createaccount?Email=a@b.com&Password=abc&PhoneNumber=123&DisplayName=a
 	ResponseEntity<String> createaccount(@RequestParam String Email, @RequestParam String Password, @RequestParam String PhoneNumber, @RequestParam String DisplayName)
 			{
+		HttpHeaders responseHeaders = new HttpHeaders(); responseHeaders.set("Access-Control-Allow-Origin", "*");
 		PhoneNumber = "+"+PhoneNumber;
 						String eroareamea = newUser.newAccount(Email,Password,PhoneNumber, DisplayName);
 						switch(eroareamea) {
-						case"Created": return new ResponseEntity<>(eroareamea,HttpStatus.OK);
+						case"Created": return ResponseEntity.status(HttpStatus.OK).headers(responseHeaders).body(eroareamea);
 												
-						case "Email already exists": return new ResponseEntity<>(eroareamea,HttpStatus.FORBIDDEN);
+						case "Email already exists": return ResponseEntity.status(HttpStatus.FORBIDDEN).headers(responseHeaders).body(eroareamea);
 												
-						case "Invalid Phone Number": return new ResponseEntity<>(eroareamea,HttpStatus.FORBIDDEN);
+						case "Invalid Phone Number": return ResponseEntity.status(HttpStatus.FORBIDDEN).headers(responseHeaders).body(eroareamea);
 													
-						case"Password is too short": return new ResponseEntity<>(eroareamea,HttpStatus.FORBIDDEN);
+						case"Password is too short": return ResponseEntity.status(HttpStatus.FORBIDDEN).headers(responseHeaders).body(eroareamea);
 													
-						default : return new ResponseEntity<>("",HttpStatus.FORBIDDEN);
+						default :return ResponseEntity.status(HttpStatus.FORBIDDEN).headers(responseHeaders).body("");
 						}
 					
 			}
 
-	@PutMapping("users/adddetails") // POST http://localhost:8080/users/adddetails?Description=ab&Love=abc&Birthday=ab&uid=aaaaa
+	@PutMapping("users/adddetails") // Put http://localhost:8080/users/adddetails?Description=ab&Love=abc&Birthday=ab&uid=aaaaa
 	ResponseEntity<Boolean> addDetailsAfter(@RequestParam(required=false) String Description,@RequestParam(required=false) String Love,@RequestParam String DisplayName, @RequestParam(required=false) String Birthday,@RequestParam String uid) throws FirebaseAuthException
-	{
-		return ResponseEntity.status(HttpStatus.OK).body(newUser.addDetailsforAccountAfter(Description,Love,DisplayName,Birthday,uid));
+	{ 	
+		HttpHeaders responseHeaders = new HttpHeaders(); responseHeaders.set("Access-Control-Allow-Origin", "*");
+		return ResponseEntity.status(HttpStatus.OK).headers(responseHeaders).body(newUser.addDetailsforAccountAfter(Description,Love,DisplayName,Birthday,uid));
 		
 	}
 }
